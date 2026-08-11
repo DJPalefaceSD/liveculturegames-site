@@ -1,0 +1,141 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Live Culture Games</title>
+<meta name="description" content="Live Culture Games is a game studio in Escondido, California.">
+<meta property="og:title" content="Live Culture Games">
+<meta property="og:description" content="A game studio in Escondido, California.">
+<meta property="og:type" content="website">
+<meta property="og:url" content="https://liveculturegames.com/">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='7' fill='%23f2a8c4'/%3E%3Ctext x='16' y='23' font-family='Georgia,serif' font-size='19' font-weight='700' text-anchor='middle' fill='%23511f33'%3EL%3C/text%3E%3C/svg%3E">
+<style>
+  /* ─────────────────────────────────────────────────────────────
+     HOLDING PAGE — deliberately almost nothing.
+
+     The real liveculturegames.com is his wife's to design; she owns
+     the brand and it is cute and pink. This page must not pre-empt
+     any of that, so it commits to exactly one thing she has already
+     decided — the pink — and otherwise gets out of the way.
+
+     Its whole job is that a stranger who receives a cold email from
+     ryan@liveculturegames.com and types the domain into a browser
+     finds a real company instead of a registrar's advert.
+     ───────────────────────────────────────────────────────────── */
+  :root {
+    --bg:    #fff4f8;
+    --card:  #ffffff;
+    --edge:  #f6cddd;
+    --ink:   #3b1c2a;
+    --dim:   #7c5567;
+    --pink:  #e0699a;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root:not([data-theme="light"]) {
+      --bg:   #1b1016;
+      --card: #241620;
+      --edge: #3d2531;
+      --ink:  #fbeaf1;
+      --dim:  #cba3b6;
+      --pink: #f2a8c4;
+    }
+  }
+  * { box-sizing: border-box; }
+  body {
+    margin: 0;
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 1.5rem;
+    background: var(--bg);
+    color: var(--ink);
+    font-family: Georgia, "Iowan Old Style", "Times New Roman", serif;
+    line-height: 1.6;
+    -webkit-font-smoothing: antialiased;
+  }
+  main {
+    background: var(--card);
+    border: 1px solid var(--edge);
+    border-radius: 14px;
+    padding: 2.6rem 2rem 2.2rem;
+    max-width: 30rem;
+    width: 100%;
+    text-align: center;
+    box-shadow: 0 12px 34px -22px rgba(90, 30, 60, .5);
+  }
+  .mark {
+    width: 3.4rem;
+    height: 3.4rem;
+    margin: 0 auto 1.2rem;
+    border-radius: 12px;
+    background: var(--pink);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.9rem;
+    font-weight: 700;
+    color: var(--card);
+    line-height: 1;
+  }
+  h1 {
+    font-size: clamp(1.7rem, 6.5vw, 2.2rem);
+    line-height: 1.15;
+    letter-spacing: -.02em;
+    margin: 0 0 .9rem;
+    font-weight: 700;
+  }
+  p { margin: 0 0 1rem; color: var(--dim); font-size: 1.03rem; }
+  p:last-of-type { margin-bottom: 0; }
+  .soon {
+    display: inline-block;
+    font-family: ui-monospace, "Cascadia Mono", Consolas, monospace;
+    font-size: .62rem;
+    letter-spacing: .16em;
+    text-transform: uppercase;
+    color: var(--pink);
+    border: 1px solid var(--edge);
+    border-radius: 999px;
+    padding: .4rem .85rem;
+    margin: 0 0 1.4rem;
+  }
+  .rule { height: 1px; background: var(--edge); margin: 1.7rem 0 1.4rem; border: 0; }
+  a { color: var(--pink); }
+  a:hover, a:focus-visible { color: var(--ink); }
+  .contact {
+    font-family: ui-monospace, "Cascadia Mono", Consolas, monospace;
+    font-size: .95rem;
+    word-break: break-all;
+  }
+  footer {
+    margin-top: 1.5rem;
+    font-family: ui-monospace, "Cascadia Mono", Consolas, monospace;
+    font-size: .62rem;
+    letter-spacing: .12em;
+    text-transform: uppercase;
+    color: var(--dim);
+    opacity: .8;
+  }
+</style>
+</head>
+<body>
+<main>
+  <div class="mark" aria-hidden="true">L</div>
+  <p class="soon">Site coming soon</p>
+  <h1>Live Culture Games</h1>
+  <p>
+    A small game studio in Escondido, California, working on its first
+    title — a management simulation about a hundred years of comic book
+    publishing.
+  </p>
+  <hr class="rule">
+  <!-- ⚠️ ryan@ deliberately, not hello@. hello@ is an alias that does not
+       exist yet (it needs admin.google.com, which only Ryan can reach). A
+       published address that bounces is worse than a personal one. Swap
+       this line the day the alias is live. -->
+  <p class="contact"><a href="mailto:ryan@liveculturegames.com">ryan@liveculturegames.com</a></p>
+  <footer>© 2026 Live Culture Games</footer>
+</main>
+</body>
+</html>
