@@ -108,6 +108,19 @@
     font-size: .95rem;
     word-break: break-all;
   }
+  /* The first thing to play: a filled pink button, because an underlined line is not a control at a glance. */
+  .play {
+    display: inline-block;
+    background: var(--pink);
+    color: var(--card);
+    text-decoration: none;
+    font-weight: 700;
+    border-radius: 12px;
+    padding: .75rem 1.2rem;
+    min-height: 2.6rem;
+    margin: .4rem 0 0;
+  }
+  .play:hover, .play:focus-visible { color: var(--card); filter: brightness(1.06); }
   footer {
     margin-top: 1.5rem;
     font-family: ui-monospace, "Cascadia Mono", Consolas, monospace;
@@ -128,6 +141,7 @@
     A small game studio in Escondido, California, working on its first
     title — a deep simulation about 100 years of popular culture.
   </p>
+  <p><a class="play" href="/figure-bench/">Build a hero on the Figure Bench</a></p>
   <hr class="rule">
   <!-- ⚠️ ryan@ deliberately, not hello@. hello@ is an alias that does not
        exist yet (it needs admin.google.com, which only Ryan can reach). A

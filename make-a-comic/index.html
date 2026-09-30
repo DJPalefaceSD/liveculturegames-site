@@ -1,0 +1,802 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="robots" content="noindex">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Make a Comic</title>
+<meta name="description" content="Make your own golden-age comic: a hero, a villain, a year of story and a cover. From Comic Book Studio Simulator by Live Culture Games.">
+<meta property="og:title" content="Make a Comic · Comic Book Studio Simulator">
+<meta property="og:description" content="Make your own golden-age comic: a hero, a villain, a year of story and a cover. From Comic Book Studio Simulator by Live Culture Games.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Bitter:wght@400;500;600;700&family=Josefin+Sans:wght@700&display=swap" rel="stylesheet">
+<style>
+/* The game's own look: dark desk, mint for the act, purple for the step you are on,
+   gold for what you made. Tokens only; both themes. */
+:root {
+  --bg: #0f1218; --panel: #1a2030; --panel2: #232b3e; --ink: #ecebe6; --dim: #a3abba;
+  --mint: #5ed6a0; --mint-ink: #0c2a1c; --creative: #a98bf0; --creative-ink: #1b1030;
+  --gold: #f2c230; --info: #5aa8ff; --info-ink: #06203d; --quiet: #3a4458; --line: #2e3850;
+  --paper: #f4efe4;
+}
+@media (prefers-color-scheme: light) {
+  :root:not([data-theme="dark"]) {
+    --bg: #f3efe6; --panel: #ffffff; --panel2: #ece6da; --ink: #1c1f26; --dim: #5a6070;
+    --mint: #2fae78; --mint-ink: #ffffff; --creative: #6b4fc8; --creative-ink: #ffffff;
+    --gold: #9a6a00; --info: #2a6fd0; --info-ink: #ffffff; --quiet: #d6d0c4; --line: #d6d0c4;
+  }
+}
+:root[data-theme="dark"] { color-scheme: dark; }
+* { box-sizing: border-box; }
+html, body { margin: 0; }
+body { background: var(--bg); color: var(--ink); font: 18px/1.45 "Bitter", Georgia, serif; }
+.wrap { max-width: 1240px; margin: 0 auto; padding: 16px; }
+header.top { display: flex; align-items: baseline; gap: .8rem; flex-wrap: wrap; margin: .4rem 0 1rem; }
+header.top h1 { margin: 0; font-size: 2.1rem; color: var(--creative); font-weight: 600; }
+header.top .by { color: var(--dim); }
+.tabs { display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 14px; }
+.tab { min-height: 2.8rem; padding: .35rem .95rem; border: 0; border-radius: 10px; font: 600 1rem "Bitter", Georgia, serif; letter-spacing: .04em;
+  background: var(--quiet); color: var(--ink); cursor: pointer; }
+.tab.done { background: var(--mint); color: var(--mint-ink); }
+.tab.on { background: var(--creative); color: var(--creative-ink); }
+.layout { display: grid; grid-template-columns: 330px 1fr; gap: 18px; align-items: start; }
+@media (max-width: 860px) { .layout { grid-template-columns: 1fr; } .comic { order: 2; } }
+.comic, .panel { background: var(--panel); border-radius: 14px; padding: 18px; }
+.comic { border: 2px solid var(--gold); position: sticky; top: 12px; }
+@media (max-width: 860px) { .comic { position: static; } }
+.comic h2 { margin: 0 0 .6rem; color: var(--gold); font-size: 1.4rem; letter-spacing: .04em; }
+.cover-frame svg, .printed-cover svg { width: 100%; height: auto; display: block; border-radius: 4px; box-shadow: 0 8px 24px rgba(0,0,0,.35); }
+.facts { margin: .9rem 0 0; }
+.facts dt { color: var(--dim); font-size: .8rem; letter-spacing: .08em; margin-top: .55rem; }
+.facts dd { margin: 0; }
+.panel { border: 2px solid var(--creative); outline: none; }
+.step-title { margin: 0 0 1rem; color: var(--creative); font-size: 1.9rem; font-weight: 600; }
+.split { display: grid; grid-template-columns: 240px 1fr; gap: 18px; align-items: start; }
+@media (max-width: 640px) { .split { grid-template-columns: 1fr; } .figure-frame { max-width: 240px; margin: 0 auto; } }
+.figure-frame svg { width: 100%; height: auto; display: block; border-radius: 10px; }
+.row { margin-bottom: .9rem; }
+.lab { color: var(--dim); font-size: .8rem; letter-spacing: .08em; margin-bottom: .3rem; }
+.pills { display: flex; flex-wrap: wrap; gap: 6px; }
+.pill { min-height: 2.6rem; padding: .3rem .8rem; border: 0; border-radius: 999px; background: var(--panel2); color: var(--ink);
+  font: 500 .95rem "Bitter", Georgia, serif; cursor: pointer; }
+.pill:hover { filter: brightness(1.15); }
+.pill.on { background: var(--creative); color: var(--creative-ink); font-weight: 700; }
+.pill.sw .dots { display: inline-flex; gap: 2px; margin-right: .45rem; vertical-align: -2px; }
+.pill.sw .dots i { width: 12px; height: 12px; border-radius: 50%; display: inline-block; box-shadow: 0 0 0 1px rgba(0,0,0,.35); }
+.namebox { display: flex; gap: 8px; }
+.namebox input { flex: 1; min-width: 0; min-height: 2.8rem; padding: .3rem .8rem; border-radius: 10px; border: 2px solid var(--info);
+  background: var(--bg); color: var(--ink); font: 600 1.25rem "Bitter", Georgia, serif; text-transform: uppercase; }
+.namebox input::placeholder { color: var(--ink); opacity: .75; }
+.btn { min-height: 2.8rem; padding: .35rem 1.1rem; border: 0; border-radius: 10px; font: 600 1rem "Bitter", Georgia, serif; cursor: pointer;
+  text-decoration: none; display: inline-flex; align-items: center; justify-content: center; }
+.btn.go { background: var(--mint); color: var(--mint-ink); }
+.btn.info { background: var(--info); color: var(--info-ink); }
+.btn.quiet { background: var(--quiet); color: var(--ink); }
+.btn:hover { filter: brightness(1.1); }
+.btn:focus-visible, .pill:focus-visible, .tab:focus-visible, input:focus-visible { outline: 3px solid var(--gold); outline-offset: 2px; }
+.acts, .nav { display: flex; flex-wrap: wrap; gap: 10px; margin-top: 1rem; }
+.nav { justify-content: space-between; border-top: 1px solid var(--line); padding-top: 1rem; margin-top: 1.4rem; }
+.nav .btn.go { margin-left: auto; }
+details.more { margin: .4rem 0; }
+details.more summary { min-height: 2.6rem; display: flex; align-items: center; cursor: pointer; color: var(--info); font-weight: 600; }
+.sentence { font-size: 1.5rem; margin: 0 0 1.2rem; }
+.sentence .v { color: #ff7a7a; } .sentence .p { color: var(--gold); }
+.dim { color: var(--dim); } .small { font-size: .85rem; }
+.cards { display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 12px; }
+.card { background: var(--panel2); border-radius: 12px; padding: 14px; }
+.card-h { color: var(--creative); font-weight: 700; font-size: 1.2rem; letter-spacing: .05em; }
+.card .line { margin: .4rem 0 0; font-style: italic; }
+.mark { display: flex; align-items: center; gap: 14px; }
+.btn.go.shimmer { width: 100%; font-size: 1.35rem; min-height: 3.4rem; margin-top: 1rem; letter-spacing: .08em; }
+/* The glint: the game's #1136, a BioShock pickup. A band crosses, then rests. */
+.shimmer { position: relative; overflow: hidden; }
+.shimmer::after { content: ""; position: absolute; inset: 0; pointer-events: none;
+  background: linear-gradient(105deg, transparent 35%, rgba(255,255,240,.55) 50%, transparent 65%);
+  transform: translateX(-120%); animation: glint 3.2s ease-in-out infinite; }
+@keyframes glint { 0% { transform: translateX(-120%); } 45% { transform: translateX(120%); } 100% { transform: translateX(120%); } }
+@media (prefers-reduced-motion: reduce) { .shimmer::after { animation: none; } }
+/* The printed #1 */
+.printed { position: fixed; inset: 0; background: rgba(5,7,10,.82); display: flex; align-items: center; justify-content: center; padding: 16px; z-index: 10; overflow: auto; }
+.printed[hidden] { display: none; }
+.printed-box { background: var(--panel); border: 2px solid var(--gold); border-radius: 16px; padding: 20px; max-width: 900px; width: 100%;
+  display: grid; grid-template-columns: 300px 1fr; gap: 22px; position: relative; }
+@media (max-width: 700px) { .printed-box { grid-template-columns: 1fr; } .printed-cover { max-width: 280px; margin: 0 auto; } }
+#printed-body { display: contents; }
+.printed-words h2.gold { color: var(--gold); margin: 0 0 .3rem; font-size: 1.6rem; letter-spacing: .03em; }
+.printed-words .num { font-weight: 700; } .printed-words .critic { font-style: italic; color: var(--info); }
+.cta { margin-top: 1.2rem; }
+.cta .btn { width: 100%; }
+.soon { background: var(--panel2); border-radius: 10px; padding: .8rem 1rem; }
+.close { position: absolute; top: 10px; right: 10px; }
+footer { color: var(--dim); text-align: center; margin: 2rem 0 1rem; font-size: .9rem; }
+/* Phone: grid children may shrink below their content, so nothing pushes the page sideways. */
+.layout > *, .split > *, .cards > * { min-width: 0; }
+body { overflow-x: hidden; overflow-wrap: anywhere; }
+/* A pill on a card needs a ground that is not the card's own colour. */
+.card .pill:not(.on) { background: var(--quiet); }
+
+
+</style>
+</head>
+<body>
+<div class="wrap">
+<header class="top"><h1>Make a Comic</h1><span class="by">a hero, a villain, a year of story, and a cover · from Comic Book Studio Simulator</span></header>
+<nav class="tabs" id="steps" aria-label="Steps"></nav>
+<div class="layout">
+<aside class="comic"><h2>YOUR COMIC</h2><div id="comic"></div></aside>
+<main class="panel" id="panel" tabindex="-1"></main>
+</div>
+<footer>Live Culture Games · Comic Book Studio Simulator</footer>
+</div>
+<div class="printed" id="printed" hidden tabindex="-1" role="dialog" aria-label="Your first issue"><div class="printed-box"><button type="button" class="btn quiet close" data-act="close-printed">Close</button><div id="printed-body"></div></div></div>
+
+<script>
+(function () {
+"use strict";
+// ---------- deterministic picks ----------
+function hash(s){var h=2166136261;for(var i=0;i<s.length;i++){h^=s.charCodeAt(i);h=Math.imul(h,16777619)}return h>>>0}
+function pick(arr,seed,salt){return arr[hash(seed+'|'+salt)%arr.length]}
+function shade(hex,f){var n=parseInt(hex.slice(1),16),r=(n>>16)&255,g=(n>>8)&255,b=n&255;function c(x){return Math.max(0,Math.min(255,Math.round(x*f)))}return '#'+((1<<24)+(c(r)<<16)+(c(g)<<8)+c(b)).toString(16).slice(1)}
+function esc(s){return String(s).replace(/[&<>"]/g,function(ch){return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[ch]})}
+
+// ---------- tables ----------
+var SKIN=[['#f3d2b8','#cfa184'],['#e7b893','#b98262'],['#d9a67c','#a8764f'],['#b57a52','#86542f'],['#8d5a3b','#613a23'],['#5e3a26','#3e2416']];
+var HAIRC={black:'#161212',brown:'#5a3620',auburn:'#8a3a1a',ginger:'#c0601f',blond:'#d9b25a',white:'#e8e4da',grey:'#8a8f96',blue:'#2c5aa8',green:'#3f7a2c'};
+var PALETTES={'noir ice':['#16264a','#8cc4ea','#f2c230'],'ink & gold':['#1d3f8f','#f2c230','#e9e7e2'],'pillarbox':['#c8102e','#1b2a4a','#f2c230'],
+ 'violet night':['#7b3fb8','#1b1030','#ff7ac0'],'bottle & brass':['#1f6b3a','#c9a04a','#f0e6c8'],'candy':['#ff4fa3','#4fd0ff','#fff2a8'],
+ 'signal':['#f2c230','#232323','#e8492f'],'newsprint':['#cfc6ae','#2a2520','#c8102e'],'ember':['#e8492f','#2a1410','#f2c230'],'jade':['#1a8f8a','#0b2e2c','#ffe066']};
+var HOUSE_FAMILY={halcyon:['ink & gold','noir ice','signal','ember'],patriot:['pillarbox','ember','ink & gold','newsprint'],prism:['violet night','candy','jade','ember'],vertex:['ember','newsprint','violet night','noir ice'],portadder:['bottle & brass','jade','newsprint'],pennant:['ember','violet night','candy'],nickel:['newsprint','signal','bottle & brass'],dragonfruit:['candy','signal','jade'],newmedia:['signal','jade','noir ice'],basement:['newsprint','noir ice','jade'],foilwrap:['candy','jade','violet night'],player:['noir ice']};
+var GENRE_BG={'Adventure':['#f2c230','#1b2a4a'],'Crime':['#3a404e','#0d1016'],'Horror':['#5a2f6a','#120a18'],'Romance':['#ff7ab0','#5a1030'],'Science Fiction':['#1a8f8a','#08151e'],'War':['#a8964a','#2a2412'],'Western':['#e8904a','#4a2410'],'Teen Humour':['#4fd0ff','#ff4fa3'],'Satire':['#f2c230','#e8492f']};
+// 16 species, his list plus the three he kept: "no dlc now, you can add those"
+var SPECIES=['human','monkey','gorilla','bigfoot','dog','cat','bat','bird','zombie','skeleton','ghost','muck monster','robot','alien','brute','lizard'];
+var FURRY={monkey:'brown',gorilla:'black',bigfoot:'auburn',dog:'blond',cat:'ginger',bat:'black',bird:'blue'};
+var SP_SKIN={zombie:['#a3b38c','#72825e'],skeleton:['#ece6d6','#bdb4a0'],alien:['#9fc9a8','#6f9a7a'],robot:['#b8c0c8','#7d858f'],brute:['#7fae5a','#56813a'],lizard:['#6ab04c','#3f7a2c'],ghost:['#e8f0f4','#b8c8d0'],'muck monster':['#5f6f32','#3b471d']};
+
+// ---------- the fields ----------
+var HERO_FIELDS=[
+ {k:'kind',label:'What kind of hero',opts:['Mystery man','Soldier','Scientist','Vigilante','Visitor from elsewhere','Magician','Detective','Kid wonder','Villain']},
+ {k:'power',label:'What they can do',opts:['Force field','Flight','Great strength','Speed','Unseen','Fire','Ice','Mind-reading','Gadgets','Just grit']},
+ {k:'stops',label:'What stops them',opts:['It does not last','Water','Their past','Silver','Bright light','Their true name','A promise']},
+ {k:'palette',label:'Their colours',opts:Object.keys(PALETTES),sw:true},
+ {k:'where',label:'Where they stand',opts:['Anywhere at all','The river docks','Uptown','The rooftops','The desert road','Another world']}];
+var FIG_FIELDS=[
+ {k:'species',label:'What they are',opts:SPECIES},
+ {k:'outfit',label:'Outfit',opts:['costume','detective','military','suit','lab coat','western','robe','bare']},
+ {k:'facing',label:'Facing',opts:['forward','back']},
+ {k:'style',label:'Look',opts:['full','silhouette']},
+ {k:'pose',label:'Pose',opts:['stand','hips','fist','point','wave','stride']},
+ {k:'build',label:'Build',opts:['slim','heroic','broad']},
+ {k:'scene',label:'Behind them',opts:['sunburst','city','moon','sky','flames']},
+ {k:'c1',label:'Suit colour',color:true},{k:'c2',label:'Trim colour',color:true},{k:'c3',label:'Accent colour',color:true},
+ {k:'silc',label:'Silhouette colour',color:true},{k:'edge',label:'Silhouette edge',color:true},
+ {k:'skin',label:'Skin (people)',opts:['0','1','2','3','4','5'],swSkin:true},
+ {k:'hair',label:'Hair (people)',opts:['short','bob','spiky','curls','bun','slick','bald']},
+ {k:'hairc',label:'Hair or fur colour',opts:Object.keys(HAIRC),swHair:true},
+ {k:'brows',label:'Brows',opts:['calm','stern','raised']},
+ {k:'eyes',label:'Eyes',opts:['plain','mask','goggles','glasses','visor']},
+ {k:'mouth',label:'Mouth',opts:['set','smile','grin','smirk']},
+ {k:'facial',label:'Facial hair',opts:['none','moustache','beard']},
+ {k:'head',label:'On their head',opts:['none','fedora','top hat','wide brim','cap','helmet','headband','halo','headset']},
+ {k:'cape',label:'Cape, coat or wings',opts:['none','cape','long coat','wings']},
+ {k:'emblem',label:'Chest (costume)',opts:['none','star','bolt','cross','ring','initial']},
+ {k:'scarf',label:'Scarf',opts:['none','scarf']}];
+var COV_FIELDS=[
+ {k:'title',label:'Title on the masthead',text:true},
+ {k:'issue',label:'Issue',opts:['1','2','12','47','100']},
+ {k:'year',label:'Year on the stand',opts:['1938','1950','1962','1975','1988','1995','2008','2025']},
+ {k:'scene',label:'Behind them',opts:['city','sunburst','moon','sky','flames']},
+ {k:'band',label:'Masthead',opts:['band','box','open']},
+ {k:'figure',label:'Figure',opts:['full figure','silhouette']}];
+var MARK_FIELDS=[
+ {k:'studio',label:'Studio name',text:true},
+ {k:'shape',label:'Shape',opts:['shield','circle','diamond','banner','star']},
+ {k:'letters',label:'Letters',opts:['initials','first word','none']},
+ {k:'mcol',label:'Colours',opts:Object.keys(PALETTES),sw:true},
+ {k:'edge',label:'Edge',opts:['single','double','none']}];
+var BENCH_FIELDS={hero:HERO_FIELDS,figure:FIG_FIELDS,cover:COV_FIELDS,mark:MARK_FIELDS};
+
+// Canon he authored: HELD from the start, because it is his.
+var CANON={};
+
+// ---------- state: embedded in the page, saved by republishing ----------
+var STATE={st:{},notes:'',cnotes:{}};
+try{var raw=document.getElementById('cs-state');if(raw&&raw.textContent.trim())STATE=JSON.parse(raw.textContent)}catch(e){}
+STATE.st=STATE.st||{};STATE.cnotes=STATE.cnotes||{};STATE.notes=STATE.notes||'';
+var SAVED=JSON.stringify(STATE);
+function initials(s){return s.replace(/[^A-Za-z ]/g,'').split(/\s+/).filter(Boolean).slice(0,2).map(function(w){return w[0].toUpperCase()}).join('')||'?'}
+
+function slot(c,b){STATE.st[c.id]=STATE.st[c.id]||{};if(!STATE.st[c.id][b]){var canon=(CANON[c.id]||{})[b]||{};STATE.st[c.id][b]={roll:0,held:Object.assign({},canon)}}return STATE.st[c.id][b]}
+function val(c,b,k){var s=slot(c,b);if(k in s.held)return s.held[k];return derive(b,k,c,s.roll)}
+function values(c,b){var o={};BENCH_FIELDS[b].forEach(function(f){o[f.k]=val(c,b,f.k)});return o}
+function palOf(c){return [val(c,'figure','c1'),val(c,'figure','c2'),val(c,'figure','c3')]}
+
+// ---------- AUTO ----------
+function derive(bench,k,c,roll){
+ var seed=c.id+'#'+(roll||0),villain=c.role==='villain',n=c.name;
+ if(bench==='hero'){
+  if(k==='kind')return villain?'Villain':pick(HERO_FIELDS[0].opts.slice(0,8),seed,k);
+  if(k==='palette')return roll?pick(Object.keys(PALETTES),seed,k):pick(HOUSE_FAMILY[c.house]||['noir ice'],c.id,'pal');
+  var f=HERO_FIELDS.filter(function(x){return x.k===k})[0];return pick(f.opts,seed,k);
+ }
+ if(bench==='figure'){
+  var era=c.year,sp=k==='species'?'':val(c,'figure','species'),outfit;
+  if(k==='species'){if(villain)return pick(['human','human','zombie','skeleton','alien','robot','muck monster','brute','lizard','ghost'],c.id+roll,'sp');if(c.genre==='Science Fiction')return pick(['human','human','human','robot','alien'],c.id+roll,'sp');return 'human'}
+  if(k==='outfit'){
+   if(/\bagent\b|\bmr\b|vance|diplomat/i.test(n))return 'suit';
+   if(/doctor|\bdr\b/i.test(n))return 'lab coat';
+   if(/reverend|father|parish|choir|vigil/i.test(n))return 'robe';
+   if(/deputy|sheriff|marshal|dust/i.test(n))return 'western';
+   if(/\blt\b|sgt|sergeant|colonel|private|marine|muster/i.test(n))return 'military';
+   if(sp==='gorilla'||sp==='bigfoot'||sp==='muck monster'||sp==='ghost')return 'bare';
+   if(villain)return pick(['costume','costume','suit','robe','bare'],seed,k);
+   return era<1950?pick(['costume','costume','detective','suit'],seed,k):'costume';
+  }
+  if(k==='facing')return 'forward';
+  if(k==='style')return 'full';
+  if(k==='c1'||k==='c2'||k==='c3'){var P=PALETTES[val(c,'hero','palette')]||PALETTES['noir ice'];return P[+k[1]-1]}
+  if(k==='silc')return '#0b0f14';
+  if(k==='edge'){var P2=PALETTES[val(c,'hero','palette')]||PALETTES['noir ice'];return P2[2]}
+  if(k==='scene')return pick(({'Crime':['city','moon'],'Horror':['moon','flames'],'Science Fiction':['sky','sunburst'],'War':['flames','sky','sunburst'],'Western':['sky','sunburst']})[c.genre]||['sunburst','city','sky'],seed,k);
+  if(k==='hairc'&&FURRY[sp])return FURRY[sp];
+  if(k==='head'){outfit=val(c,'figure','outfit');if(outfit==='detective')return 'fedora';if(outfit==='military')return 'helmet';if(outfit==='western')return 'wide brim';
+   if(sp!=='human')return 'none';
+   if(era<1950)return pick(['none','top hat','fedora','cap','none'],seed,k);if(era<1990)return pick(['none','helmet','headband','none'],seed,k);return pick(['none','headset','helmet','none'],seed,k)}
+  if(k==='cape'){if(sp==='bat'||sp==='bird')return 'wings';outfit=val(c,'figure','outfit');if(outfit!=='costume')return 'none';return era<1970?pick(['cape','none','cape'],seed,k):pick(['none','cape'],seed,k)}
+  if(k==='facial')return pick(['none','none','none','moustache','beard'],seed,k);
+  if(k==='eyes')return villain?pick(['glasses','visor','plain','mask'],seed,k):pick(['plain','plain','mask','goggles'],seed,k);
+  if(k==='brows')return villain?'stern':pick(['calm','stern','raised'],seed,k);
+  if(k==='mouth')return villain?'smirk':pick(['set','smile','grin','smirk'],seed,k);
+  if(k==='scarf')return pick(['none','none','scarf'],seed,k);
+  var f2=FIG_FIELDS.filter(function(x){return x.k===k})[0];return f2.opts?pick(f2.opts,seed,k):'';
+ }
+ if(bench==='cover'){
+  if(k==='title')return c.book||c.name;
+  if(k==='issue')return roll?pick(['1','2','12','47','100'],seed,k):'1';
+  if(k==='year'){var ys=COV_FIELDS[2].opts.map(Number),best=ys[0];ys.forEach(function(y){if(Math.abs(y-c.year)<Math.abs(best-c.year))best=y});return String(best)}
+  if(k==='scene')return val(c,'figure','scene');
+  if(k==='band')return pick(['band','band','box','open'],seed,k);
+  if(k==='figure')return val(c,'figure','style')==='silhouette'?'silhouette':'full figure';
+ }
+ if(bench==='mark'){
+  if(k==='studio')return c.houseName.replace(' (yours)','');
+  if(k==='shape')return pick(['shield','circle','diamond','banner','star'],c.house+'#'+(roll||0),k);
+  if(k==='letters')return 'initials';
+  if(k==='mcol')return roll?pick(Object.keys(PALETTES),c.house+'#'+roll,k):(HOUSE_FAMILY[c.house]||['noir ice'])[0];
+  if(k==='edge')return pick(['single','double'],c.house+'#'+(roll||0),k);
+ }
+ return '';
+}
+
+// ---------- drawing: heads ----------
+var UID=0;
+var HEAD='M150 72 C204 72 224 116 221 166 C218 214 196 252 150 260 C104 252 82 214 79 166 C76 116 96 72 150 72 Z';
+var SHADE='M150 72 C204 72 224 116 221 166 C218 214 196 252 150 260 C171 230 178 200 175 166 C172 122 168 92 150 72 Z';
+var BRUTE='M150 84 C214 84 234 124 232 170 C230 222 206 262 150 266 C94 262 70 222 68 170 C66 124 86 84 150 84 Z';
+var ALIEN='M150 40 C228 40 246 104 236 156 C228 208 188 262 150 266 C112 262 72 208 64 156 C54 104 72 40 150 40 Z';
+function skinOf(f){if(SP_SKIN[f.species])return SP_SKIN[f.species];if(FURRY[f.species]){var fc=HAIRC[f.hairc]||'#5a3620';return [fc,shade(fc,.7)]}return SKIN[+f.skin]||SKIN[1]}
+function clipShade(id,path,sk,skd,extra){return '<path d="'+path+'" fill="'+sk+'"/><clipPath id="'+id+'"><path d="'+path+'"/></clipPath><g clip-path="url(#'+id+')"><path d="'+SHADE+'" fill="'+skd+'" transform="translate(0 '+(path===ALIEN?-20:0)+')"/>'+(extra||'')+'</g>'}
+function browsSvg(f,y,col){var b=f.brows==='stern'?5:f.brows==='raised'?-4:0;return '<path d="M99 '+(y-b)+' Q121 '+(y-8-b)+' 141 '+(y+b)+'" fill="none" stroke="'+col+'" stroke-width="7" stroke-linecap="round"/><path d="M159 '+(y+b)+' Q179 '+(y-8-b)+' 201 '+(y-b)+'" fill="none" stroke="'+col+'" stroke-width="7" stroke-linecap="round"/>'}
+function roundEyes(y,r,iris){return '<circle cx="122" cy="'+y+'" r="'+r+'" fill="#f4efe4"/><circle cx="178" cy="'+y+'" r="'+r+'" fill="#f4efe4"/><circle cx="124" cy="'+y+'" r="'+(r*.55)+'" fill="'+(iris||'#1a1a1a')+'"/><circle cx="180" cy="'+y+'" r="'+(r*.55)+'" fill="'+(iris||'#1a1a1a')+'"/><circle cx="126" cy="'+(y-3)+'" r="2" fill="#fff"/><circle cx="182" cy="'+(y-3)+'" r="2" fill="#fff"/>'}
+function eyesHuman(f,pal){
+ var y=160,lx=121,rx=179,s='';
+ function al(x){return 'M'+(x-17)+' '+y+' Q'+x+' '+(y-13)+' '+(x+17)+' '+y+' Q'+x+' '+(y+10)+' '+(x-17)+' '+y+' Z'}
+ if(f.eyes==='visor')return '<path d="M80 144 L220 144 L214 176 L86 176 Z" fill="'+pal[1]+'"/><path d="M92 152 L208 152 L204 160 L96 160 Z" fill="#ff4a4a" opacity=".9"/>'+browsSvg(f,136,'#1b1410');
+ if(f.eyes==='glasses')return '<rect x="96" y="143" width="50" height="34" rx="6" fill="#113d22" stroke="#111" stroke-width="5"/><rect x="154" y="143" width="50" height="34" rx="6" fill="#113d22" stroke="#111" stroke-width="5"/><path d="M146 156 L154 156" stroke="#111" stroke-width="5"/>'+[0,1,2].map(function(i){return '<path d="M103 '+(151+i*8)+' h'+(22+(i%2)*12)+' M161 '+(151+i*8)+' h'+(28-(i%2)*10)+'" stroke="#7CFC9A" stroke-width="3"/>'}).join('')+browsSvg(f,136,'#1b1410');
+ if(f.eyes==='mask')s+='<path d="M76 146 Q150 118 224 146 L220 178 Q186 186 150 172 Q114 186 80 178 Z" fill="'+pal[0]+'"/>';
+ s+='<path d="'+al(lx)+'" fill="#f4efe4"/><path d="'+al(rx)+'" fill="#f4efe4"/><circle cx="'+(lx+2)+'" cy="'+y+'" r="6.5" fill="#1a1a1a"/><circle cx="'+(rx+2)+'" cy="'+y+'" r="6.5" fill="#1a1a1a"/><circle cx="'+(lx+4)+'" cy="'+(y-2)+'" r="1.8" fill="#fff"/><circle cx="'+(rx+4)+'" cy="'+(y-2)+'" r="1.8" fill="#fff"/>';
+ s+='<path d="M'+(lx-18)+' '+(y-1)+' Q'+lx+' '+(y-15)+' '+(lx+18)+' '+(y-1)+'" fill="none" stroke="#111" stroke-width="3.5"/><path d="M'+(rx-18)+' '+(y-1)+' Q'+rx+' '+(y-15)+' '+(rx+18)+' '+(y-1)+'" fill="none" stroke="#111" stroke-width="3.5"/>';
+ if(f.eyes==='goggles')s+='<rect x="86" y="146" width="128" height="10" fill="#3a2a1a"/><circle cx="121" cy="160" r="21" fill="#7fd3e6" fill-opacity=".55" stroke="#3a2a1a" stroke-width="6"/><circle cx="179" cy="160" r="21" fill="#7fd3e6" fill-opacity=".55" stroke="#3a2a1a" stroke-width="6"/>';
+ return s+browsSvg(f,136,'#1b1410');
+}
+function mouthSvg(v,dark){
+ if(v==='smile')return '<path d="M128 222 Q150 240 172 222" fill="none" stroke="#3a1712" stroke-width="5" stroke-linecap="round"/>';
+ if(v==='grin')return '<path d="M126 218 Q150 246 174 218 Z" fill="#3a1712"/><path d="M130 220 Q150 230 170 220 L168 224 Q150 232 132 224 Z" fill="#f4efe4"/>';
+ if(v==='smirk')return '<path d="M132 226 Q154 230 172 216" fill="none" stroke="#3a1712" stroke-width="5" stroke-linecap="round"/>';
+ return '<path d="M130 226 L170 226" stroke="#3a1712" stroke-width="5" stroke-linecap="round"/><path d="M140 235 Q150 239 160 235" fill="none" stroke="'+dark+'" stroke-width="4"/>';
+}
+function hairBack(v,col){
+ if(v==='bob')return '<path d="M70 150 C66 70 110 48 150 48 C196 48 236 72 230 150 C236 200 226 238 206 250 L206 160 L94 160 L94 250 C74 238 64 200 70 150 Z" fill="'+col+'"/>';
+ if(v==='curls')return '<g fill="'+col+'">'+[[92,96],[120,70],[150,62],[180,70],[208,96],[222,130],[78,130],[226,170],[74,170]].map(function(p){return '<circle cx="'+p[0]+'" cy="'+p[1]+'" r="30"/>'}).join('')+'</g>';
+ if(v==='slick')return '<path d="M78 150 C74 84 110 60 150 60 C192 60 228 84 222 150 L222 190 L206 190 L204 124 L96 124 L94 190 L78 190 Z" fill="'+col+'"/>';
+ if(v==='bun')return '<circle cx="150" cy="44" r="24" fill="'+col+'"/>';
+ return '';
+}
+function hairFront(v,col){
+ if(v==='short')return '<path d="M82 132 C84 84 118 62 150 62 C184 62 216 84 218 132 C200 110 176 100 150 104 C124 100 100 110 82 132 Z" fill="'+col+'"/>';
+ if(v==='bob')return '<path d="M84 128 C88 80 120 62 150 62 C186 62 214 82 216 128 C196 104 170 96 150 110 C130 96 104 104 84 128 Z" fill="'+col+'"/>';
+ if(v==='spiky')return '<path d="M82 132 L94 84 L108 110 L120 70 L134 104 L150 62 L166 104 L180 70 L192 110 L206 84 L218 132 C200 110 170 104 150 108 C130 104 100 110 82 132 Z" fill="'+col+'"/>';
+ if(v==='curls')return '<path d="M86 124 Q150 92 214 124 L214 110 Q150 80 86 110 Z" fill="'+col+'"/>';
+ if(v==='bun'||v==='slick')return '<path d="M82 128 C92 80 128 66 150 66 C178 66 208 80 218 128 C196 104 172 98 150 104 C128 98 104 104 82 128 Z" fill="'+col+'"/>';
+ return '';
+}
+function headwear(v,pal){
+ if(v==='top hat')return '<rect x="72" y="104" width="156" height="14" rx="4" fill="#0b0b0b"/><path d="M100 106 L104 14 Q150 4 196 14 L200 106 Z" fill="#0b0b0b"/><rect x="102" y="84" width="96" height="11" fill="'+pal[2]+'"/>';
+ if(v==='fedora')return '<ellipse cx="150" cy="108" rx="96" ry="16" fill="#d9a441"/><path d="M92 108 C92 64 116 48 150 48 C184 48 208 64 208 108 Z" fill="#d9a441"/><path d="M120 50 Q150 70 180 50" fill="none" stroke="#b5862a" stroke-width="6"/><rect x="94" y="92" width="112" height="12" fill="#3a2a12"/>';
+ if(v==='wide brim')return '<ellipse cx="150" cy="104" rx="108" ry="18" fill="#2a1d14"/><path d="M96 104 C98 54 120 40 150 40 C180 40 202 54 204 104 Z" fill="#2a1d14"/><rect x="98" y="88" width="104" height="10" fill="#140d08"/>';
+ if(v==='cap')return '<path d="M84 118 C86 70 118 54 150 54 C182 54 214 70 216 118 Z" fill="'+pal[1]+'"/><path d="M84 116 Q150 100 236 124 L230 132 Q150 112 84 126 Z" fill="'+pal[1]+'"/>';
+ if(v==='helmet')return '<path d="M74 150 C70 72 110 46 150 46 C190 46 230 72 226 150 L214 150 C212 96 186 76 150 76 C114 76 88 96 86 150 Z" fill="#56643a"/><path d="M66 150 Q150 128 234 150 L232 160 Q150 138 68 160 Z" fill="#46532e"/>';
+ if(v==='headband')return '<path d="M84 118 Q150 90 216 118 L216 132 Q150 104 84 132 Z" fill="'+pal[2]+'"/>';
+ if(v==='halo')return '<ellipse cx="150" cy="40" rx="58" ry="12" fill="none" stroke="#f2c230" stroke-width="7"/>';
+ if(v==='headset')return '<path d="M66 150 Q70 96 150 88 Q230 96 234 150" fill="none" stroke="#222" stroke-width="7"/><rect x="58" y="146" width="20" height="36" rx="6" fill="#222"/><rect x="222" y="146" width="20" height="36" rx="6" fill="#222"/>';
+ return '';
+}
+function head(f,pal){
+ var sp=f.species,back=f.facing==='back',sk=skinOf(f),id='h'+(UID++),s='';
+ var hw=headwear(f.head,pal);
+ // ---- animals ----
+ if(sp==='monkey'||sp==='gorilla'||sp==='bigfoot'){
+  var fur=sk[0],furD=sk[1],face=sp==='gorilla'?'#4a4a4a':sp==='bigfoot'?'#b98a5e':'#d9a77a',faceD=shade(face,.8);
+  if(sp==='monkey')s+='<circle cx="68" cy="158" r="30" fill="'+fur+'"/><circle cx="232" cy="158" r="30" fill="'+furD+'"/><circle cx="68" cy="158" r="17" fill="'+face+'"/><circle cx="232" cy="158" r="17" fill="'+faceD+'"/>';
+  if(sp==='bigfoot')s+='<path d="M70 150 L56 170 L74 176 L60 200 L84 196 L78 226 L104 212 L110 250 L130 232 L150 262 L170 232 L190 250 L196 212 L222 226 L216 196 L240 200 L226 176 L244 170 L230 150 Z" fill="'+fur+'"/>';
+  s+='<ellipse cx="150" cy="160" rx="'+(sp==='gorilla'?88:80)+'" ry="92" fill="'+fur+'"/><path d="M150 68 C200 70 232 110 232 160 C232 214 196 250 150 252 C172 220 180 190 178 160 C176 118 170 90 150 68 Z" fill="'+furD+'"/>';
+  if(back)return s+hw;
+  if(sp==='gorilla')s+='<path d="M96 150 C96 118 120 110 150 116 C180 110 204 118 204 150 C210 188 196 238 150 244 C104 238 90 188 96 150 Z" fill="'+face+'"/><rect x="92" y="126" width="116" height="18" rx="9" fill="#2a2a2a"/>'+roundEyes(156,7)+'<ellipse cx="150" cy="190" rx="26" ry="14" fill="'+faceD+'"/><circle cx="140" cy="190" r="5" fill="#111"/><circle cx="160" cy="190" r="5" fill="#111"/><path d="M122 222 Q150 230 178 222" fill="none" stroke="#111" stroke-width="5" stroke-linecap="round"/>';
+  else if(sp==='bigfoot')s+='<path d="M108 140 C108 118 130 112 150 118 C170 112 192 118 192 140 C198 178 184 232 150 236 C116 232 102 178 108 140 Z" fill="'+face+'"/>'+roundEyes(156,7)+browsSvg(f,138,furD)+'<path d="M140 186 L150 200 L160 186 Z" fill="'+faceD+'"/><path d="M126 216 Q150 226 174 216" fill="none" stroke="#2a1a0e" stroke-width="5" stroke-linecap="round"/>';
+  else{s+='<path d="M150 108 C120 92 86 108 92 146 C96 168 108 176 116 186 C104 204 108 240 150 244 C192 240 196 204 184 186 C192 176 204 168 208 146 C214 108 180 92 150 108 Z" fill="'+face+'"/><ellipse cx="150" cy="212" rx="40" ry="28" fill="'+faceD+'" opacity=".55"/>'+roundEyes(150,9)+browsSvg(f,128,furD)+'<ellipse cx="141" cy="196" rx="5" ry="3.5" fill="#3a1712"/><ellipse cx="159" cy="196" rx="5" ry="3.5" fill="#3a1712"/>'+(f.mouth==='grin'||f.mouth==='smile'?'<path d="M124 220 Q150 242 176 220" fill="none" stroke="#3a1712" stroke-width="5" stroke-linecap="round"/>':'<path d="M128 224 Q150 232 172 222" fill="none" stroke="#3a1712" stroke-width="5" stroke-linecap="round"/>')}
+  return s+hw;
+ }
+ if(sp==='dog'||sp==='cat'||sp==='bat'){
+  var F=sk[0],FD=sk[1];
+  if(sp==='dog')s+='<path d="M84 110 C56 116 52 200 70 226 C86 220 98 180 102 130 Z" fill="'+FD+'"/><path d="M216 110 C244 116 248 200 230 226 C214 220 202 180 198 130 Z" fill="'+FD+'"/>';
+  if(sp==='cat')s+='<path d="M86 124 L94 50 L140 96 Z" fill="'+F+'"/><path d="M214 124 L206 50 L160 96 Z" fill="'+FD+'"/><path d="M96 110 L100 70 L126 96 Z" fill="#f2a8b8"/><path d="M204 110 L200 70 L174 96 Z" fill="#e090a2"/>';
+  if(sp==='bat')s+='<path d="M86 128 L64 18 L132 92 Z" fill="'+F+'"/><path d="M214 128 L236 18 L168 92 Z" fill="'+FD+'"/><path d="M92 112 L78 44 L120 92 Z" fill="'+shade(F,1.5)+'"/><path d="M208 112 L222 44 L180 92 Z" fill="'+shade(FD,1.5)+'"/>';
+  s+=clipShade(id,HEAD,F,FD);
+  if(back)return s+hw;
+  if(sp==='dog')s+='<ellipse cx="150" cy="208" rx="46" ry="36" fill="'+shade(F,1.25)+'"/>'+roundEyes(152,10)+browsSvg(f,132,FD)+'<ellipse cx="150" cy="190" rx="16" ry="11" fill="#1a1a1a"/><path d="M150 200 L150 218 M130 222 Q150 232 170 222" fill="none" stroke="#1a1a1a" stroke-width="4" stroke-linecap="round"/>'+(f.mouth==='grin'?'<path d="M142 226 Q150 250 158 226 Z" fill="#e0607a"/>':'');
+  if(sp==='cat')s+='<ellipse cx="122" cy="160" rx="16" ry="12" fill="#a8d86a"/><ellipse cx="178" cy="160" rx="16" ry="12" fill="#a8d86a"/><rect x="119" y="149" width="6" height="22" rx="3" fill="#111"/><rect x="175" y="149" width="6" height="22" rx="3" fill="#111"/>'+browsSvg(f,138,FD)+'<path d="M142 192 L158 192 L150 202 Z" fill="#e0809a"/><path d="M150 202 Q142 214 132 208 M150 202 Q158 214 168 208" fill="none" stroke="#1a1a1a" stroke-width="3.5" stroke-linecap="round"/><path d="M96 200 L128 204 M96 214 L128 210 M204 200 L172 204 M204 214 L172 210" stroke="#1a1a1a" stroke-width="2.5"/>';
+  if(sp==='bat')s+='<ellipse cx="150" cy="206" rx="34" ry="26" fill="'+shade(F,1.5)+'"/>'+roundEyes(158,8,'#b01818')+browsSvg(f,138,'#050505')+'<path d="M140 190 L150 180 L160 190 L150 198 Z" fill="#1a1a1a"/><path d="M132 216 Q150 226 168 216" fill="none" stroke="#1a1a1a" stroke-width="4"/><path d="M138 218 L142 232 L146 219 Z M154 219 L158 232 L162 218 Z" fill="#fff"/>';
+  return s+hw;
+ }
+ if(sp==='bird'){
+  var B=sk[0],BD=sk[1];
+  s+='<path d="M130 70 L140 30 L150 64 L162 26 L168 70 Z" fill="'+BD+'"/>'+clipShade(id,HEAD,B,BD);
+  if(back)return s+hw;
+  s+='<circle cx="112" cy="156" r="18" fill="#f4efe4"/><circle cx="188" cy="156" r="18" fill="#f4efe4"/><circle cx="114" cy="156" r="9" fill="#111"/><circle cx="190" cy="156" r="9" fill="#111"/><circle cx="117" cy="152" r="3" fill="#fff"/><circle cx="193" cy="152" r="3" fill="#fff"/>'+browsSvg(f,132,BD)+'<path d="M126 180 L174 180 L150 232 Z" fill="#f29a1f"/><path d="M150 180 L174 180 L150 232 Z" fill="#c9780f"/><path d="M130 196 L170 196" stroke="#8a520a" stroke-width="3"/>';
+  return s+hw;
+ }
+ // ---- the undead and the strange ----
+ if(sp==='skeleton'){
+  var bone=sk[0],boneD=sk[1],SK='M150 70 C208 70 230 112 228 160 C226 196 214 214 200 222 L196 252 L104 252 L100 222 C86 214 74 196 72 160 C70 112 92 70 150 70 Z';
+  s+=clipShade(id,SK,bone,boneD);
+  if(back)return s+hw;
+  s+='<ellipse cx="119" cy="160" rx="23" ry="21" fill="#111"/><ellipse cx="181" cy="160" rx="23" ry="21" fill="#111"/><circle cx="123" cy="162" r="4" fill="#e8492f"/><circle cx="185" cy="162" r="4" fill="#e8492f"/><path d="M150 186 L140 210 L160 210 Z" fill="#111"/><path d="M104 226 L196 226" stroke="#111" stroke-width="4"/>'+[0,1,2,3,4,5,6].map(function(i){return '<line x1="'+(114+i*12)+'" y1="226" x2="'+(114+i*12)+'" y2="250" stroke="#111" stroke-width="3"/>'}).join('')+'<path d="M92 196 Q104 212 118 214 M208 196 Q196 212 182 214" fill="none" stroke="'+boneD+'" stroke-width="4"/>';
+  return s+hw;
+ }
+ if(sp==='robot'){
+  s+='<rect x="84" y="78" width="132" height="176" rx="26" fill="'+sk[0]+'"/><path d="M150 78 L190 78 Q216 78 216 104 L216 228 Q216 254 190 254 L150 254 Z" fill="'+sk[1]+'"/><line x1="150" y1="78" x2="150" y2="36" stroke="#555" stroke-width="6"/><circle cx="150" cy="32" r="9" fill="'+pal[2]+'"/>';
+  if(!back)s+='<rect x="96" y="140" width="108" height="30" rx="8" fill="#111"/><rect x="104" y="150" width="92" height="10" rx="5" fill="#ff4a4a"/><g fill="#555">'+[0,1,2,3,4].map(function(i){return '<rect x="'+(114+i*16)+'" y="206" width="9" height="20" rx="2"/>'}).join('')+'</g>';
+  else s+='<g fill="#666">'+[0,1,2].map(function(i){return '<circle cx="'+(120+i*30)+'" cy="160" r="6"/>'}).join('')+'</g>';
+  return s+hw;
+ }
+ if(sp==='alien'){
+  s+=clipShade(id,ALIEN,sk[0],sk[1]);
+  if(f.head==='none')s+='<path d="M120 50 Q104 20 96 8" fill="none" stroke="'+sk[1]+'" stroke-width="5"/><circle cx="96" cy="8" r="7" fill="'+pal[2]+'"/><path d="M180 50 Q196 20 204 8" fill="none" stroke="'+sk[1]+'" stroke-width="5"/><circle cx="204" cy="8" r="7" fill="'+pal[2]+'"/>';
+  if(back)return s+hw;
+  s+='<path d="M86 150 Q112 126 142 158 Q116 184 86 150 Z" fill="#0b0b0b"/><path d="M214 150 Q188 126 158 158 Q184 184 214 150 Z" fill="#0b0b0b"/><circle cx="116" cy="150" r="4" fill="#fff"/><circle cx="186" cy="150" r="4" fill="#fff"/><path d="M144 206 Q150 210 156 206" fill="none" stroke="#1a2a1a" stroke-width="4" stroke-linecap="round"/><circle cx="146" cy="190" r="2" fill="#1a2a1a"/><circle cx="154" cy="190" r="2" fill="#1a2a1a"/>';
+  return s+hw;
+ }
+ if(sp==='muck monster'){
+  var M=sk[0],MD=sk[1];
+  s+='<path d="M88 150 C80 96 112 66 150 64 C194 62 222 98 214 150 C218 170 226 190 218 204 C214 222 222 240 210 250 C202 236 204 222 196 232 C190 252 176 262 166 250 C160 238 150 262 138 252 C128 242 116 256 104 240 C96 226 84 218 86 196 C80 180 90 168 88 150 Z" fill="'+M+'"/><path d="M150 64 C194 62 222 98 214 150 C218 170 226 190 218 204 C214 222 222 240 210 250 C202 236 204 222 196 232 C190 252 176 262 166 250 C170 200 178 140 150 64 Z" fill="'+MD+'"/>';
+  if(back)return s+hw;
+  s+='<ellipse cx="124" cy="156" rx="13" ry="10" fill="#f2e33a"/><ellipse cx="178" cy="150" rx="11" ry="9" fill="#f2e33a"/><circle cx="124" cy="156" r="4" fill="#111"/><circle cx="178" cy="150" r="4" fill="#111"/><path d="M122 214 Q150 202 180 216 Q170 226 150 222 Q132 226 122 214 Z" fill="#1d2410"/><circle cx="104" cy="120" r="6" fill="'+MD+'"/><circle cx="200" cy="112" r="5" fill="'+shade(M,1.3)+'"/>';
+  return s+hw;
+ }
+ // ---- people and people-shaped: human, zombie, brute, lizard, ghost ----
+ var human=sp==='human',hc=HAIRC[f.hairc]||'#222';
+ var HD=sp==='brute'?BRUTE:HEAD;
+ var covered=f.head==='top hat'||f.head==='wide brim'||f.head==='helmet'||f.head==='fedora';
+ var hairOk=(human||sp==='zombie')&&f.hair!=='bald'&&!covered;
+ if(sp!=='lizard'&&sp!=='ghost')s+='<ellipse cx="80" cy="168" rx="11" ry="17" fill="'+sk[0]+'"/><ellipse cx="220" cy="168" rx="11" ry="17" fill="'+sk[1]+'"/>';
+ if(hairOk)s+=hairBack(f.hair,sp==='zombie'?shade(hc,.8):hc);
+ var extra='';
+ if(sp==='lizard')extra=[0,1,2,3,4,5].map(function(i){return '<circle cx="'+(100+(i%3)*50)+'" cy="'+(110+Math.floor(i/3)*110)+'" r="7" fill="'+sk[1]+'"/>'}).join('');
+ if(!back)extra+='<path d="M150 262 C120 258 100 240 92 222 C118 236 182 236 208 222 C200 240 180 258 150 262 Z" fill="'+sk[1]+'" opacity=".55"/>';
+ if(!back&&human&&f.facial==='beard')extra+='<path d="M86 196 C100 262 200 262 214 196 C200 232 180 242 150 244 C120 242 100 232 86 196 Z" fill="'+hc+'"/>';
+ if(sp==='zombie')extra+='<path d="M170 96 L186 120 M176 104 L168 110 M182 112 L174 118" stroke="#3a4a2a" stroke-width="3"/>';
+ s+=clipShade(id,HD,sk[0],sk[1],extra);
+ if(sp==='lizard')s+='<path d="M150 58 L162 84 L150 80 L138 84 Z M150 30 L160 58 L150 54 L140 58 Z" fill="'+sk[1]+'"/>';
+ if(back){if(hairOk)s+='<clipPath id="'+id+'b"><path d="'+HD+'"/></clipPath><g clip-path="url(#'+id+'b)"><rect x="60" y="40" width="180" height="'+(f.hair==='short'||f.hair==='spiky'?130:f.hair==='slick'?150:200)+'" fill="'+hc+'"/></g>';return s+hw}
+ if(sp==='ghost')return s+'<ellipse cx="121" cy="160" rx="16" ry="22" fill="#111"/><ellipse cx="179" cy="160" rx="16" ry="22" fill="#111"/><ellipse cx="150" cy="226" rx="12" ry="16" fill="#111"/>'+hw;
+ if(sp==='lizard')return s+'<ellipse cx="121" cy="158" rx="18" ry="13" fill="#f2d33a"/><ellipse cx="179" cy="158" rx="18" ry="13" fill="#f2d33a"/><rect x="118" y="146" width="6" height="24" rx="3" fill="#111"/><rect x="176" y="146" width="6" height="24" rx="3" fill="#111"/><circle cx="142" cy="198" r="3" fill="#1a2a12"/><circle cx="158" cy="198" r="3" fill="#1a2a12"/><path d="M118 224 Q150 236 182 224" fill="none" stroke="#1a2a12" stroke-width="5" stroke-linecap="round"/>'+hw;
+ s+='<path d="M150 168 L160 204 Q152 210 142 206" fill="'+sk[1]+'"/>';
+ if(sp==='zombie')s+='<ellipse cx="121" cy="160" rx="16" ry="11" fill="#e8e8d0"/><circle cx="181" cy="160" r="6.5" fill="#1a1a1a"/><ellipse cx="179" cy="160" rx="16" ry="11" fill="none" stroke="#1a1a1a" stroke-width="3"/>'+browsSvg(f,136,'#2a2a1a')+'<path d="M128 228 Q140 222 150 230 Q160 222 172 232" fill="none" stroke="#2a1a12" stroke-width="5" stroke-linecap="round"/>';
+ else s+=eyesHuman(sp==='brute'?Object.assign({},f,{brows:'stern'}):f,pal)+mouthSvg(f.mouth,sk[1]);
+ if(sp==='brute')s+='<path d="M126 232 L132 216 L138 232 Z M162 232 L168 216 L174 232 Z" fill="#f4efe4"/><path d="M92 134 Q150 112 208 134 L208 144 Q150 124 92 144 Z" fill="'+sk[1]+'"/>';
+ if(human&&(f.facial==='moustache'||f.facial==='beard'))s+='<path d="M124 214 Q150 204 176 214 Q164 222 150 216 Q136 222 124 214 Z" fill="'+hc+'"/>';
+ if(hairOk)s+=hairFront(f.hair,sp==='zombie'?shade(hc,.8):hc);
+ return s+hw;
+}
+
+// ---------- drawing: the body ----------
+var POSES={
+ stand:{l:[[96,134],[82,206],[80,272]],r:[[204,134],[218,206],[220,272]],legs:[[128,284],[124,470],[172,284],[176,470]]},
+ hips:{l:[[96,134],[58,196],[104,250]],r:[[204,134],[242,196],[196,250]],legs:[[128,284],[116,470],[172,284],[184,470]]},
+ fist:{l:[[96,134],[82,206],[80,272]],r:[[204,134],[240,96],[232,34]],legs:[[128,284],[118,470],[172,284],[182,470]]},
+ point:{l:[[96,134],[70,200],[100,248]],r:[[204,134],[252,150],[292,138]],legs:[[128,284],[116,470],[172,284],[184,470]]},
+ wave:{l:[[96,134],[58,196],[104,250]],r:[[204,134],[240,106],[252,46]],legs:[[128,284],[122,470],[172,284],[178,470]]},
+ stride:{l:[[96,134],[70,204],[60,262]],r:[[204,134],[232,200],[246,258]],legs:[[128,284],[92,470],[172,284],[212,470]]}};
+function outfitColours(f,pal,c){
+ var sk=skinOf(f),hand=sk[0],o=f.outfit,m=pal[0],t=pal[1],a=pal[2];
+ if(o==='detective')return {legs:'#2b2b33',torso:'#e2b53a',arms:'#e2b53a',hands:hand,boots:'#161616',belt:'#a8801f',long:'#e2b53a',lapel:'#c3961f'};
+ if(o==='military')return {legs:'#5b6b3a',torso:'#5b6b3a',arms:'#5b6b3a',hands:hand,boots:'#1f1a14',belt:'#6b4a2a',pockets:'#4a5830'};
+ if(o==='suit')return {legs:'#23262e',torso:'#23262e',arms:'#23262e',hands:hand,boots:'#111',shirt:'#f4efe4',tie:a};
+ if(o==='lab coat')return {legs:'#2f3440',torso:'#f4f1ea',arms:'#f4f1ea',hands:hand,boots:'#222',long:'#f4f1ea',lapel:'#d8d3c8'};
+ if(o==='western')return {legs:'#3a4a6a',torso:'#6b4a2a',arms:'#6b4a2a',hands:'#5a3a1f',boots:'#4a2e18',long:'#6b4a2a',bandana:a,belt:'#2a1a0e'};
+ if(o==='robe')return {legs:m,torso:m,arms:m,hands:hand,boots:m,robe:m,belt:a};
+ if(o==='bare')return {legs:sk[0],torso:sk[0],arms:sk[0],hands:sk[1],boots:sk[1],bare:true};
+ return {legs:m,torso:m,arms:m,hands:c.role==='villain'?'#111':t,boots:t,belt:a,costume:true};
+}
+function body(f,pal,c){
+ var B={slim:[46,34,22,30],heroic:[60,42,26,36],broad:[74,54,32,44]}[f.build]||[60,42,26,36];
+ var P=POSES[f.pose]||POSES.stand,sk=skinOf(f),back=f.facing==='back',O=outfitColours(f,pal,c),sp=f.species;
+ var accent=pal[2],second=pal[1],s='';
+ // behind the body: wings, cape, tails
+ if(f.cape==='wings'){var W=sp==='bird'?sk[0]:shade(sk[0],.75);s+='<path d="M100 132 L6 70 L22 150 L2 196 L44 188 L40 250 L84 212 Z" fill="'+W+'"/><path d="M200 132 L294 70 L278 150 L298 196 L256 188 L260 250 L216 212 Z" fill="'+shade(W,.8)+'"/>'}
+ if(sp==='monkey')s+='<path d="M196 270 C250 300 262 360 236 330 C214 300 230 270 214 280" fill="none" stroke="'+sk[0]+'" stroke-width="12" stroke-linecap="round"/>';
+ if(sp==='cat')s+='<path d="M190 280 C250 300 250 380 226 400" fill="none" stroke="'+sk[0]+'" stroke-width="12" stroke-linecap="round"/>';
+ if(sp==='dog')s+='<path d="M186 276 L226 250" stroke="'+sk[0]+'" stroke-width="14" stroke-linecap="round"/>';
+ if(sp==='lizard')s+='<path d="M170 280 C230 330 250 420 290 470 L270 480 C230 430 200 360 150 300 Z" fill="'+sk[1]+'"/>';
+ if(!back&&f.cape==='cape')s+='<path d="M98 126 Q52 300 30 492 L270 492 Q248 300 202 126 Z" fill="'+accent+'"/><path d="M150 140 Q200 300 270 492 L200 492 Q178 300 150 150 Z" fill="#000" opacity=".22"/>';
+ if(!back&&f.cape==='long coat')s+='<path d="M94 128 L206 128 L236 430 L64 430 Z" fill="'+second+'"/><path d="M150 128 L206 128 L236 430 L160 430 Z" fill="#000" opacity=".25"/>';
+ // legs and boots
+ var L=P.legs;
+ function leg(x1,y1,x2,y2){return '<line x1="'+x1+'" y1="'+y1+'" x2="'+x2+'" y2="'+y2+'" stroke="'+O.legs+'" stroke-width="'+B[3]+'" stroke-linecap="round"/><line x1="'+(x1+(x2-x1)*.72)+'" y1="'+(y1+(y2-y1)*.72)+'" x2="'+x2+'" y2="'+y2+'" stroke="'+O.boots+'" stroke-width="'+(B[3]+4)+'" stroke-linecap="round"/>'}
+ if(!O.robe)s+=leg(L[0][0],L[0][1],L[1][0],L[1][1])+leg(L[2][0],L[2][1],L[3][0],L[3][1]);
+ // long garments in front of the legs
+ if(O.robe)s+='<path d="M'+(150-B[1])+' 250 L'+(150+B[1])+' 250 L'+(150+B[1]+44)+' 488 L'+(150-B[1]-44)+' 488 Z" fill="'+O.robe+'"/><path d="M150 250 L'+(150+B[1])+' 250 L'+(150+B[1]+44)+' 488 L150 488 Z" fill="#000" opacity=".2"/>';
+ if(O.long){var hem=f.outfit==='western'?440:380;s+='<path d="M'+(150-B[1]-4)+' 240 L148 240 L140 '+hem+' L'+(150-B[1]-30)+' '+hem+' Z" fill="'+O.long+'"/><path d="M152 240 L'+(150+B[1]+4)+' 240 L'+(150+B[1]+30)+' '+hem+' L160 '+hem+' Z" fill="'+shade(O.long,.82)+'"/>'}
+ // hips and torso
+ if(!O.robe)s+='<path d="M104 250 L196 250 L200 292 L100 292 Z" fill="'+O.legs+'"/>';
+ s+='<path d="M'+(150-B[0])+' 124 L'+(150+B[0])+' 124 L'+(150+B[1])+' 252 L'+(150-B[1])+' 252 Z" fill="'+O.torso+'"/><path d="M150 124 L'+(150+B[0])+' 124 L'+(150+B[1])+' 252 L150 252 Z" fill="#000" opacity=".2"/>';
+ if(!back){
+  if(O.shirt)s+='<path d="M132 124 L168 124 L150 180 Z" fill="'+O.shirt+'"/><path d="M146 132 L154 132 L158 176 L150 188 L142 176 Z" fill="'+O.tie+'"/>';
+  if(O.lapel)s+='<path d="M'+(150-B[0]+14)+' 124 L150 196 L140 124 Z M'+(150+B[0]-14)+' 124 L150 196 L160 124 Z" fill="'+O.lapel+'"/>';
+  if(O.pockets)s+='<rect x="'+(150-B[1]+2)+'" y="150" width="30" height="26" rx="3" fill="'+O.pockets+'"/><rect x="'+(150+B[1]-32)+'" y="150" width="30" height="26" rx="3" fill="'+O.pockets+'"/><rect x="'+(150-B[0])+'" y="124" width="22" height="10" fill="'+O.pockets+'"/><rect x="'+(150+B[0]-22)+'" y="124" width="22" height="10" fill="'+O.pockets+'"/>';
+  if(O.bandana)s+='<path d="M124 124 L176 124 L150 162 Z" fill="'+O.bandana+'"/>';
+  if(O.bare&&sp==='skeleton')s+=[0,1,2,3].map(function(i){return '<path d="M'+(118)+' '+(146+i*20)+' Q150 '+(140+i*20)+' 182 '+(146+i*20)+'" fill="none" stroke="'+sk[1]+'" stroke-width="7"/>'}).join('')+'<rect x="146" y="130" width="8" height="120" fill="'+sk[1]+'"/>';
+  if(O.bare&&(sp==='bigfoot'||sp==='gorilla'))s+='<path d="M'+(150-B[1]+10)+' 170 Q150 150 '+(150+B[1]-10)+' 170 L'+(150+B[1]-14)+' 230 Q150 244 '+(150-B[1]+14)+' 230 Z" fill="'+shade(sk[0],1.35)+'"/>';
+  if(O.bare&&sp==='muck monster')s+='<path d="M110 200 L112 224 L118 206 M170 180 L172 214 L178 190 M140 236 L142 262 L148 240" stroke="'+sk[1]+'" stroke-width="6" stroke-linecap="round"/>';
+  if(sp==='robot'&&O.costume)s+='<g fill="#000" opacity=".22"><rect x="120" y="140" width="60" height="8"/><rect x="120" y="160" width="60" height="8"/><circle cx="150" cy="210" r="10"/></g>';
+ }
+ if(O.belt&&!O.bare)s+='<rect x="104" y="244" width="92" height="14" fill="'+O.belt+'"/><rect x="142" y="242" width="16" height="18" fill="'+(O.costume?second:'#c9a04a')+'"/>';
+ // emblem, costume only, only from the front
+ var e=(!back&&O.costume)?f.emblem:'none';
+ if(e==='star')s+='<path d="M150 150 L159 170 L181 172 L164 186 L170 208 L150 196 L130 208 L136 186 L119 172 L141 170 Z" fill="'+accent+'"/>';
+ if(e==='bolt')s+='<path d="M156 146 L130 184 L148 184 L140 214 L172 172 L154 172 L166 146 Z" fill="'+accent+'"/>';
+ if(e==='cross')s+='<rect x="142" y="150" width="16" height="50" fill="#d32f2f"/><rect x="125" y="167" width="50" height="16" fill="#d32f2f"/>';
+ if(e==='ring')s+='<circle cx="150" cy="178" r="24" fill="none" stroke="'+accent+'" stroke-width="8"/>';
+ if(e==='initial')s+='<circle cx="150" cy="178" r="26" fill="'+accent+'"/><text x="150" y="190" text-anchor="middle" font-family="Georgia,serif" font-weight="700" font-size="34" fill="'+pal[0]+'">'+esc(initials(c.name)[0])+'</text>';
+ // arms and hands
+ function arm(pts){var a=pts[0],b=pts[1],h=pts[2];return '<polyline points="'+a+' '+b+' '+h+'" fill="none" stroke="'+O.arms+'" stroke-width="'+B[2]+'" stroke-linecap="round" stroke-linejoin="round"/><line x1="'+(b[0]+(h[0]-b[0])*.45)+'" y1="'+(b[1]+(h[1]-b[1])*.45)+'" x2="'+h[0]+'" y2="'+h[1]+'" stroke="'+(O.costume?O.hands:O.arms)+'" stroke-width="'+(B[2]+2)+'" stroke-linecap="round"/><circle cx="'+h[0]+'" cy="'+h[1]+'" r="'+(B[2]*.58)+'" fill="'+O.hands+'"/>'}
+ var dx=B[0]-54;function sh(pts,sg){return pts.map(function(q,i){return [q[0]+sg*dx*(i===0?1:.6),q[1]]})}
+ s+=arm(sh(P.l,-1))+arm(sh(P.r,1));
+ if(back&&f.cape==='cape')s+='<path d="M98 126 Q70 300 52 480 L248 480 Q230 300 202 126 Z" fill="'+accent+'"/><path d="M150 130 Q196 300 248 480 L196 480 Q176 300 150 140 Z" fill="#000" opacity=".2"/>';
+ if(back&&(f.cape==='long coat'))s+='<path d="M92 126 L208 126 L236 430 L64 430 Z" fill="'+second+'"/><path d="M150 126 L208 126 L236 430 L150 430 Z" fill="#000" opacity=".22"/>';
+ // neck, scarf, head
+ s+='<rect x="136" y="104" width="28" height="26" fill="'+sk[1]+'"/>';
+ if(f.scarf==='scarf')s+='<path d="M112 118 Q150 136 188 118 L194 138 Q150 156 106 138 Z" fill="#8cc4ea"/><path d="M172 132 L196 200 L214 192 L188 128 Z" fill="#6fb0de"/>';
+ s+='<g transform="translate(75 -12) scale(0.5)">'+head(f,pal)+'</g>';
+ return s;
+}
+function sceneBg(kind,c,w,h,pal){
+ var g=GENRE_BG[c.genre]||GENRE_BG.Adventure,id='b'+(UID++),cx=w/2,cy=h*.38,s='';
+ s+='<defs><pattern id="'+id+'" width="9" height="9" patternUnits="userSpaceOnUse"><circle cx="4.5" cy="4.5" r="1.8" fill="#fff" opacity=".18"/></pattern></defs><rect width="'+w+'" height="'+h+'" fill="'+g[1]+'"/>';
+ if(kind==='sunburst'||kind==='flames'){var d='';for(var i=0;i<16;i++){var a1=i*2*Math.PI/16,a2=(i*2+1)*Math.PI/16;d+='M'+cx+' '+cy+' L'+(cx+900*Math.cos(a1))+' '+(cy+900*Math.sin(a1))+' L'+(cx+900*Math.cos(a2))+' '+(cy+900*Math.sin(a2))+' Z '}s+='<path d="'+d+'" fill="'+(kind==='flames'?'#e8492f':g[0])+'"/>'}
+ if(kind==='moon')s+='<circle cx="'+(w*.68)+'" cy="'+(h*.22)+'" r="'+(w*.2)+'" fill="#f3e3b0"/>';
+ if(kind==='sky')s+='<rect width="'+w+'" height="'+h+'" fill="#6fb3e3"/><rect y="'+(h*.62)+'" width="'+w+'" height="'+(h*.38)+'" fill="#9fd0f0"/>'+[.2,.55,.8].map(function(x,i){return '<ellipse cx="'+(w*x)+'" cy="'+(h*(.18+i*.08))+'" rx="'+(w*.14)+'" ry="'+(h*.03)+'" fill="#fff" opacity=".6"/>'}).join('');
+ if(kind==='city'||kind==='moon'){for(var j=0;j<7;j++){var bw=w/7*.8,bx=j*w/7+(w/7-bw)/2,bh=h*(.3+((hash(c.id+j)%100)/100)*.35);s+='<rect x="'+bx+'" y="'+(h-bh)+'" width="'+bw+'" height="'+bh+'" fill="'+pal[1]+'" opacity=".85"/>';for(var q=0;q<5;q++){if(hash(c.id+j+'w'+q)%3===0)s+='<rect x="'+(bx+bw*.3)+'" y="'+(h-bh+18+q*28)+'" width="'+(bw*.18)+'" height="12" fill="'+pal[2]+'"/>'}}}
+ return s+'<rect width="'+w+'" height="'+h+'" fill="url(#'+id+')"/>';
+}
+function silWrap(inner,f){var id='s'+(UID++);return '<defs><filter id="'+id+'" x="-5%" y="-5%" width="110%" height="110%"><feMorphology in="SourceAlpha" operator="dilate" radius="3" result="d"/><feFlood flood-color="'+f.edge+'"/><feComposite in2="d" operator="in" result="e"/><feFlood flood-color="'+f.silc+'"/><feComposite in2="SourceAlpha" operator="in" result="f"/><feMerge><feMergeNode in="e"/><feMergeNode in="f"/></feMerge></filter></defs><g filter="url(#'+id+')">'+inner+'</g>'}
+function ghostly(inner,f){if(f.species!=='ghost')return inner;var id='g'+(UID++);return '<defs><linearGradient id="'+id+'" x1="0" y1="0" x2="0" y2="1"><stop offset=".45" stop-color="#fff"/><stop offset=".95" stop-color="#fff" stop-opacity="0"/></linearGradient><mask id="'+id+'m"><rect width="300" height="520" fill="url(#'+id+')"/></mask></defs><g mask="url(#'+id+'m)" opacity=".92">'+inner+'</g>'}
+function placed(f,pal,c,tr){var g='<g transform="'+tr+'">'+body(f,pal,c)+'</g>';return f.style==='silhouette'?silWrap(g,f):ghostly(g,f)}
+function figureSVG(c){var f=values(c,'figure'),pal=palOf(c);return '<svg viewBox="0 0 300 500" role="img" aria-label="'+esc(c.name)+'">'+sceneBg(f.scene,c,300,500,pal)+placed(f,pal,c,'translate(9 26) scale(0.94)')+'</svg>'}
+function markSVG(c,size){
+ var m=values(c,'mark'),pal=PALETTES[m.mcol]||PALETTES['noir ice'];
+ var txt=m.letters==='initials'?initials(m.studio):m.letters==='first word'?m.studio.split(' ')[0].toUpperCase().slice(0,7):'';
+ var shapes={shield:'M50 6 L92 20 L92 52 C92 76 72 90 50 96 C28 90 8 76 8 52 L8 20 Z',circle:'M50 6 A44 44 0 1 1 49.9 6 Z',diamond:'M50 4 L96 50 L50 96 L4 50 Z',banner:'M4 22 L96 22 L88 50 L96 78 L4 78 L12 50 Z',star:'M50 4 L62 36 L96 38 L69 58 L79 92 L50 72 L21 92 L31 58 L4 38 L38 36 Z'};
+ var d=shapes[m.shape]||shapes.shield,s='<svg viewBox="0 0 100 100" width="'+(size||100)+'" height="'+(size||100)+'"><path d="'+d+'" fill="'+pal[1]+'"/>';
+ if(m.edge!=='none')s+='<path d="'+d+'" fill="none" stroke="'+pal[2]+'" stroke-width="'+(m.edge==='double'?7:4)+'"/>';
+ if(m.edge==='double')s+='<path d="'+d+'" fill="none" stroke="'+pal[1]+'" stroke-width="2.5"/>';
+ if(txt)s+='<text x="50" y="'+(txt.length>3?58:62)+'" text-anchor="middle" font-family="Georgia,serif" font-weight="700" font-size="'+(txt.length>3?Math.max(12,56/txt.length*1.6):34)+'" fill="'+pal[2]+'">'+esc(txt)+'</text>';
+ return s+'</svg>';
+}
+function coverSVG(c){
+ var v=values(c,'cover'),pal=palOf(c),yr=+v.year,f=values(c,'figure');
+ var price=yr<1962?'10¢':yr<1970?'12¢':yr<1980?'25¢':yr<1990?'75¢':yr<2000?'$1.95':yr<2015?'$2.99':'$3.99';
+ var W=400,H=600,s='<svg viewBox="0 0 '+W+' '+H+'" role="img" aria-label="cover">'+sceneBg(v.scene,c,W,H,pal);
+ s+=placed(Object.assign({},f,{style:v.figure==='silhouette'?'silhouette':'full'}),pal,c,'translate(70 150) scale(0.9)');
+ var t=String(v.title||c.name).toUpperCase(),fs=Math.min(40,Math.floor(470/Math.max(6,t.length))),fitW=W-116;
+ var fit=t.length*fs*0.78>fitW?' textLength="'+fitW+'" lengthAdjust="spacingAndGlyphs"':'';
+ if(v.band==='band')s+='<rect width="'+W+'" height="84" fill="'+pal[2]+'"/>';
+ if(v.band==='box')s+='<rect x="14" y="14" width="'+(W-28)+'" height="70" fill="'+pal[1]+'" stroke="'+pal[2]+'" stroke-width="5"/>';
+ s+='<g transform="translate(18 10)">'+markSVG(c,64).replace('<svg ','<svg x="0" y="0" ')+'</g>';
+ s+='<text x="92" y="'+(v.band==='open'?64:58)+'"'+fit+' text-anchor="start" font-family="Josefin Sans,Futura,Century Gothic,sans-serif" font-weight="700" letter-spacing="3" font-size="'+fs+'" fill="'+(v.band==='band'?pal[0]:pal[2])+'"'+(v.band==='open'?' stroke="#111" stroke-width="1.5"':'')+'>'+esc(t)+'</text>';
+ s+='<g transform="translate(28 110)"><path d="M34 0 L68 34 L34 68 L0 34 Z" fill="#fff"/><text x="34" y="36" text-anchor="middle" font-family="Georgia,serif" font-size="'+(v.issue.length>2?22:28)+'" fill="#111">'+esc(v.issue)+'</text><text x="34" y="54" text-anchor="middle" font-family="Georgia,serif" font-size="11" fill="#111">'+price+'</text></g>';
+ return s+'</svg>';
+}
+function heroCard(c){var h=values(c,'hero');return figureSVG(c)+'<div style="padding:.6rem .2rem 0"><b style="font-size:1.1rem">'+esc(c.name)+'</b><div style="color:var(--dim)">'+esc(h.kind)+' · '+esc(h.power)+' · stopped by '+esc(h.stops.toLowerCase())+'</div></div>'}
+
+
+/* MAKE A COMIC — the promo walk, for the Live Culture Games site.
+   His ask, 29 Sep 2026: "Make a Make a Comic tool just like the one in the game but
+   make it HTML/js so I can host on the LCG site as a promotional item? Maybe we can
+   do a series of them."
+   The drawing core (figures, covers, marks) is lifted from the Creation Suite
+   prototype by build.js at build time: one source for how a hero looks. This file
+   is the walk: HERO · VILLAIN · CONFLICT · STORY SPINE · COVER · RUN THE BOOK. */
+
+// ---------- config: one line each ----------
+// The Steam store page. Empty until the App ID exists: the button then says
+// "Coming to Steam" and links nowhere.
+var STEAM_URL = '';
+var GAME_NAME = 'Comic Book Studio Simulator';
+var STORE_KEY = 'lcg-make-a-comic-v1';
+
+// ---------- the game's own words ----------
+// His short lists (data/storyline_short_lists.json), the four story cards, his river towns.
+var VERBS = {open: ['fight', 'track', 'spies on'], turn: ['captures', 'threatens', 'hurt'], close: ['rescue', 'save', 'heal', 'help', 'destroy']};
+var CARDS = [['promise', 'PROMISE', '#1–#3', 'open'], ['pressure', 'PRESSURE', '#4–#6', 'turn'], ['turn', 'TURN', '#7–#9', 'turn'], ['payoff', 'PAYOFF', '#10–#12', 'close']];
+var PLACES = ['Brookfield', 'Coldwater', 'Port Adder', 'the Blackmarsh', 'the river docks', 'Uptown'];
+var GENRES = Object.keys(GENRE_BG);
+var ERAS = [['1938', 'The golden age opens'], ['1950', 'Heroes start to meet'], ['1970', 'Heroes can die'], ['1995', 'The collectors arrive']];
+var STEPS = [['hero', 'HERO'], ['villain', 'VILLAIN'], ['conflict', 'CONFLICT'], ['spine', 'STORY SPINE'], ['cover', 'COVER'], ['run', 'RUN THE BOOK']];
+
+// Names: two halves, picked by hash, so ROLL walks a fixed sequence (no dice).
+var FIRST = ['The Crimson', 'Captain', 'The Silver', 'Doctor', 'The Night', 'Lady', 'The Iron', 'Major', 'The Amber', 'Kid', 'The Emerald', 'Professor'];
+var LAST = ['Comet', 'Lantern', 'Sentinel', 'Tempest', 'Falcon', 'Marvel', 'Specter', 'Torch', 'Vanguard', 'Wildcat', 'Meteor', 'Owl'];
+var VFIRST = ['The Grey', 'Baron', 'Mister', 'The Hollow', 'Count', 'The Rust', 'Madame', 'The Black'];
+var VLAST = ['Hand', 'Gloom', 'Tick', 'Monarch', 'Vulture', 'Mirror', 'Lockjaw', 'Widow'];
+var STUDIO_A = ['Raven', 'Lucky', 'Atlas', 'Beacon', 'Harbor', 'Comet', 'Keystone', 'Silver Star'];
+var STUDIO_B = ['Comics', 'Publications', 'Press', 'Magazines', 'Periodicals'];
+
+// ---------- the book ----------
+var BOOK = null;
+function fresh() {
+  var seed = 'm' + Date.now();
+  var hero = {id: seed + '-h', name: '', role: 'lead', genre: 'Adventure', year: 1938, house: 'player', houseName: '', also: [], book: ''};
+  var villain = {id: seed + '-v', name: '', role: 'villain', genre: 'Adventure', year: 1938, house: 'player', houseName: '', also: []};
+  return {seed: seed, step: 'hero', visited: {hero: true}, hero: hero, villain: villain,
+    heroRoll: 0, villainRoll: 0, studioRoll: 0, studio: '', title: '', genre: 'Adventure', year: '1938',
+    stake: 'Brookfield', threat: 'threatens', spine: null, printed: false, st: {}};
+}
+function nameFrom(a, b, seed, roll) { return pick(a, seed, 'a' + roll) + ' ' + pick(b, seed, 'b' + roll); }
+function heroName() { return BOOK.hero.name || nameFrom(FIRST, LAST, BOOK.seed, BOOK.heroRoll); }
+function villainName() { return BOOK.villain.name || nameFrom(VFIRST, VLAST, BOOK.seed + 'v', BOOK.villainRoll); }
+function studioName() { return BOOK.studio || nameFrom(STUDIO_A, STUDIO_B, BOOK.seed + 's', BOOK.studioRoll); }
+function title() { return BOOK.title || heroName(); }
+// Keep the drawing core's characters in step with the walk before every draw.
+function sync() {
+  [BOOK.hero, BOOK.villain].forEach(function (c) { c.genre = BOOK.genre; c.year = +BOOK.year; c.houseName = studioName(); });
+  BOOK.hero.drawnName = heroName(); BOOK.villain.drawnName = villainName();
+  BOOK.hero.book = title();
+  var cov = slot(BOOK.hero, 'cover').held;
+  cov.title = title(); cov.issue = '1'; cov.year = BOOK.year;
+  if (!BOOK.spine) BOOK.spine = CARDS.map(function (c, i) { return {does: VERBS[c[3]][0], main: i === 1 ? 'villain' : 'hero'}; });
+}
+function nm(c) { return c === BOOK.hero ? heroName() : villainName(); }
+function other(who) { return who === 'hero' ? 'villain' : 'hero'; }
+// The short lists are his base verbs; a sentence needs them said of one person.
+function says(v) { if (/ on$/.test(v) || /s$/.test(v)) return v; return v + 's'; }
+function whoName(who) { return who === 'hero' ? heroName() : villainName(); }
+
+// ---------- save: this browser only ----------
+function store() { try { BOOK.st = STATE.st; localStorage.setItem(STORE_KEY, JSON.stringify(BOOK)); } catch (e) {} }
+function load() {
+  try { var raw = localStorage.getItem(STORE_KEY); if (raw) { var b = JSON.parse(raw); if (b && b.hero && b.villain) { BOOK = b; STATE.st = b.st || {}; return; } } } catch (e) {}
+  BOOK = fresh(); STATE.st = {};
+}
+
+// ---------- small drawing helpers ----------
+function el(id) { return document.getElementById(id); }
+function h(tag, cls, html) { return '<' + tag + (cls ? ' class="' + cls + '"' : '') + '>' + (html || '') + '</' + tag + '>'; }
+function pills(group, opts, chosen, labels) {
+  return '<div class="pills" role="group">' + opts.map(function (o, i) {
+    return '<button type="button" class="pill' + (String(o) === String(chosen) ? ' on' : '') + '" data-g="' + esc(group) + '" data-v="' + esc(o) + '" aria-pressed="' + (String(o) === String(chosen)) + '">' + esc(labels ? labels[i] : o) + '</button>';
+  }).join('') + '</div>';
+}
+function swatches(group, chosen) {
+  return '<div class="pills">' + Object.keys(PALETTES).map(function (k) {
+    var p = PALETTES[k];
+    return '<button type="button" class="pill sw' + (k === chosen ? ' on' : '') + '" data-g="' + group + '" data-v="' + esc(k) + '" aria-pressed="' + (k === chosen) + '"><span class="dots">' + p.map(function (c) { return '<i style="background:' + c + '"></i>'; }).join('') + '</span>' + esc(k) + '</button>';
+  }).join('') + '</div>';
+}
+function row(label, inner) { return '<div class="row"><div class="lab">' + esc(label) + '</div>' + inner + '</div>'; }
+function nameRow(label, id, value, placeholder) {
+  return row(label, '<div class="namebox"><input id="' + id + '" value="' + esc(value) + '" placeholder="' + esc(placeholder) + '" maxlength="28" autocomplete="off"><button type="button" class="btn info" data-act="roll-' + id + '">Roll</button></div>');
+}
+
+// ---------- the panels ----------
+function figOpts(k) { return FIG_FIELDS.filter(function (f) { return f.k === k; })[0].opts; }
+function characterPanel(c, who) {
+  var hv = values(c, 'hero'), fv = values(c, 'figure');
+  var named = who === 'hero' ? BOOK.hero.name : BOOK.villain.name;
+  var s = h('h2', 'step-title', who === 'hero' ? 'Who is your hero?' : 'Who stands against them?');
+  s += '<div class="split"><div class="figure-frame">' + figureSVG(Object.assign({}, c, {name: nm(c)})) + '</div><div class="fields">';
+  s += nameRow('NAME', 'name-' + who, named, nm(c));
+  if (who === 'hero') s += row('WHAT KIND', pills(who + ':hero:kind', HERO_FIELDS[0].opts.slice(0, 8), hv.kind));
+  s += row('WHAT THEY CAN DO', pills(who + ':hero:power', HERO_FIELDS[1].opts, hv.power));
+  if (who === 'hero') s += row('WHAT STOPS THEM', pills(who + ':hero:stops', HERO_FIELDS[2].opts, hv.stops));
+  s += row('THEIR COLOURS', swatches(who + ':hero:palette', hv.palette));
+  s += '<details class="more"' + (who === 'hero' ? ' open' : '') + '><summary>How they look</summary>';
+  s += row('WHAT THEY ARE', pills(who + ':figure:species', SPECIES, fv.species));
+  s += row('OUTFIT', pills(who + ':figure:outfit', figOpts('outfit'), fv.outfit));
+  s += row('POSE', pills(who + ':figure:pose', figOpts('pose'), fv.pose));
+  s += row('BUILD', pills(who + ':figure:build', figOpts('build'), fv.build));
+  s += row('ON THEIR HEAD', pills(who + ':figure:head', figOpts('head'), fv.head));
+  s += row('CAPE, COAT OR WINGS', pills(who + ':figure:cape', figOpts('cape'), fv.cape));
+  s += row('EYES', pills(who + ':figure:eyes', figOpts('eyes'), fv.eyes));
+  s += row('CHEST', pills(who + ':figure:emblem', figOpts('emblem'), fv.emblem));
+  s += row('SKIN', pills(who + ':figure:skin', figOpts('skin'), fv.skin, ['lightest', 'light', 'medium', 'tan', 'brown', 'deep']));
+  s += row('HAIR', pills(who + ':figure:hair', figOpts('hair'), fv.hair));
+  s += '</details>';
+  s += '<div class="acts"><button type="button" class="btn info" data-act="roll-' + who + '">Roll everything</button></div>';
+  return s + '</div></div>';
+}
+function conflictPanel() {
+  var s = h('h2', 'step-title', 'What is at stake?');
+  s += '<p class="sentence">' + h('b', 'v', esc(villainName())) + ' ' + esc(BOOK.threat) + ' ' + h('b', 'p', esc(BOOK.stake)) + '.</p>';
+  s += row('WHAT THE VILLAIN DOES', pills('threat', VERBS.turn.concat(['destroy']), BOOK.threat));
+  s += row('WHERE', pills('stake', PLACES, BOOK.stake));
+  return s;
+}
+function spinePanel() {
+  var s = h('h2', 'step-title', 'Your first twelve issues') + '<p class="dim">Four cards. Each one is a quarter of the year.</p><div class="cards">';
+  BOOK.spine.forEach(function (card, i) {
+    var c = CARDS[i];
+    s += '<div class="card"><div class="card-h">' + c[1] + '</div><div class="dim small">' + c[2] + '</div>';
+    s += row('WHO ACTS', pills('spine:' + i + ':main', ['hero', 'villain'], card.main, [heroName(), villainName()]));
+    s += row('DOES', pills('spine:' + i + ':does', VERBS[c[3]], card.does));
+    s += '<p class="line">' + esc(whoName(card.main)) + ' ' + esc(says(card.does)) + ' ' + esc(whoName(other(card.main))) + '.</p></div>';
+  });
+  return s + '</div>';
+}
+function coverPanel() {
+  var v = values(BOOK.hero, 'cover');
+  var s = h('h2', 'step-title', 'What sells issue #1?');
+  s += row('TITLE ON THE MASTHEAD', '<div class="namebox"><input id="title" value="' + esc(BOOK.title) + '" placeholder="' + esc(heroName()) + '" maxlength="24" autocomplete="off"></div>');
+  s += row('ON THE STAND IN', pills('year', ERAS.map(function (e) { return e[0]; }), BOOK.year, ERAS.map(function (e) { return e[0] + ' · ' + e[1]; })));
+  s += row('BEHIND THEM', pills('hero:figure:scene', figOpts('scene'), values(BOOK.hero, 'figure').scene));
+  s += row('MASTHEAD', pills('hero:cover:band', COV_FIELDS[4].opts, v.band, ['colour band', 'boxed', 'open']));
+  s += row('THE FIGURE', pills('hero:cover:figure', COV_FIELDS[5].opts, v.figure));
+  return s;
+}
+function runPanel() {
+  var s = h('h2', 'step-title', 'Run the book');
+  s += nameRow('YOUR STUDIO', 'studio', BOOK.studio, studioName());
+  s += row('GENRE', pills('genre', GENRES, BOOK.genre));
+  s += row('YOUR MARK', '<div class="mark">' + markSVG(BOOK.hero, 88) + '<button type="button" class="btn info" data-act="roll-mark">Roll the mark</button></div>');
+  s += '<button type="button" class="btn go shimmer" data-act="greenlight">GREENLIGHT</button>';
+  return s;
+}
+var PANELS = {hero: function () { return characterPanel(BOOK.hero, 'hero'); }, villain: function () { return characterPanel(BOOK.villain, 'villain'); }, conflict: conflictPanel, spine: spinePanel, cover: coverPanel, run: runPanel};
+
+// ---------- your comic: always beside the step ----------
+function yourComic() {
+  var s = '<div class="cover-frame">' + coverSVG(Object.assign({}, BOOK.hero, {name: heroName()})) + '</div>';
+  s += '<dl class="facts">';
+  s += '<dt>HERO</dt><dd>' + esc(heroName()) + ' · ' + esc(values(BOOK.hero, 'hero').power) + '</dd>';
+  if (BOOK.visited.villain) s += '<dt>VILLAIN</dt><dd>' + esc(villainName()) + ' · ' + esc(values(BOOK.villain, 'hero').power) + '</dd>';
+  if (BOOK.visited.conflict) s += '<dt>AT STAKE</dt><dd>' + esc(villainName()) + ' ' + esc(BOOK.threat) + ' ' + esc(BOOK.stake) + '</dd>';
+  if (BOOK.visited.spine) s += '<dt>STORY</dt><dd>' + BOOK.spine.map(function (c) { return esc(whoName(c.main)) + ' ' + esc(says(c.does)) + ' ' + esc(whoName(other(c.main))); }).join(' · ') + '</dd>';
+  return s + '</dl>';
+}
+
+// ---------- the printed #1: every word derived from what was chosen ----------
+var CRITICS = ['Walt Emery', 'June Castellano', 'Hal Brixton', 'Ruth Okafor', 'Benny Zhang', 'Marta Voss'];
+var PRAISE = ['a book with a spine', 'the best first issue this month', 'a hero worth a dime', 'pulp with a heartbeat', 'a real page-turner'];
+function printedLines() {
+  var key = heroName() + villainName() + BOOK.stake + BOOK.genre + BOOK.year + JSON.stringify(BOOK.spine);
+  var n = hash(key), copies = 28000 + (n % 34) * 1000, sold = Math.round(copies * (0.62 + (n >> 8) % 30 / 100));
+  return {
+    headline: title().toUpperCase() + ' #1 HITS THE STAND',
+    when: 'On sale ' + BOOK.year + ' · ' + studioName(),
+    synopsis: esc(heroName()) + ' faces ' + esc(villainName()) + ', who ' + esc(BOOK.threat) + ' ' + esc(BOOK.stake) + '. ' +
+      BOOK.spine.map(function (c, i) { return CARDS[i][1].charAt(0) + CARDS[i][1].slice(1).toLowerCase() + ': ' + esc(whoName(c.main)) + ' ' + esc(says(c.does)) + ' ' + esc(whoName(other(c.main))) + '.'; }).join(' '),
+    numbers: 'Printed ' + copies.toLocaleString() + ' · sold ' + sold.toLocaleString(),
+    critic: '“' + pick(PRAISE, key, 'p') + '” — ' + pick(CRITICS, key, 'c')
+  };
+}
+
+// ---------- draw ----------
+function draw() {
+  sync();
+  el('steps').innerHTML = STEPS.map(function (st) {
+    var cls = st[0] === BOOK.step ? 'on' : BOOK.visited[st[0]] ? 'done' : '';
+    return '<button type="button" class="tab ' + cls + '" data-step="' + st[0] + '" aria-selected="' + (st[0] === BOOK.step) + '">' + st[1] + '</button>';
+  }).join('');
+  el('panel').innerHTML = PANELS[BOOK.step]() + navRow();
+  el('comic').innerHTML = yourComic();
+  el('printed').hidden = !BOOK.printed;
+  if (BOOK.printed) drawPrinted();
+  store();
+}
+function navRow() {
+  var i = STEPS.map(function (s) { return s[0]; }).indexOf(BOOK.step);
+  var s = '<div class="nav">';
+  if (i > 0) s += '<button type="button" class="btn quiet" data-act="back">◂ Back</button>';
+  if (i < STEPS.length - 1) s += '<button type="button" class="btn go" data-act="next">Next: ' + STEPS[i + 1][1] + ' ▸</button>';
+  return s + '</div>';
+}
+function drawPrinted() {
+  var p = printedLines();
+  el('printed-body').innerHTML = '<div class="printed-cover">' + coverSVG(Object.assign({}, BOOK.hero, {name: heroName()})) + '</div><div class="printed-words">' +
+    h('h2', 'gold', esc(p.headline)) + h('p', 'dim', esc(p.when)) + h('p', '', p.synopsis) + h('p', 'num', esc(p.numbers)) + h('p', 'critic', esc(p.critic)) +
+    '<div class="acts"><button type="button" class="btn go" data-act="download">Save the cover</button><button type="button" class="btn info" data-act="again">Make another comic</button></div>' +
+    '<div class="cta">' + (STEAM_URL ? '<a class="btn go shimmer" href="' + esc(STEAM_URL) + '" target="_blank" rel="noopener">Run a whole studio: wishlist ' + esc(GAME_NAME) + ' on Steam</a>' : '<div class="soon">Run a whole studio for a hundred years in <b>' + esc(GAME_NAME) + '</b>, coming to Steam.</div>') + '</div></div>';
+}
+
+// ---------- act ----------
+function setField(group, v) {
+  var parts = group.split(':');
+  if (parts[0] === 'spine') { BOOK.spine[+parts[1]][parts[2]] = v; return; }
+  if (parts.length === 3) { var c = parts[0] === 'hero' ? BOOK.hero : BOOK.villain; slot(c, parts[1]).held[parts[2]] = v; return; }
+  if (group === 'threat') BOOK.threat = v; else if (group === 'stake') BOOK.stake = v; else if (group === 'genre') BOOK.genre = v; else if (group === 'year') BOOK.year = v;
+}
+function go(step) { BOOK.step = step; BOOK.visited[step] = true; draw(); el('panel').focus({preventScroll: true}); window.scrollTo({top: 0, behavior: 'smooth'}); }
+function rollCharacter(c) { var s = slot(c, 'figure'); s.roll++; s.held = {}; var hs = slot(c, 'hero'); hs.roll++; hs.held = {}; }
+function act(a) {
+  var order = STEPS.map(function (s) { return s[0]; }), i = order.indexOf(BOOK.step);
+  if (a === 'next') return go(order[i + 1]);
+  if (a === 'back') return go(order[i - 1]);
+  if (a === 'roll-name-hero') { BOOK.hero.name = ''; BOOK.heroRoll++; }
+  if (a === 'roll-name-villain') { BOOK.villain.name = ''; BOOK.villainRoll++; }
+  if (a === 'roll-studio') { BOOK.studio = ''; BOOK.studioRoll++; }
+  if (a === 'roll-hero') rollCharacter(BOOK.hero);
+  if (a === 'roll-villain') rollCharacter(BOOK.villain);
+  if (a === 'roll-mark') { var m = slot(BOOK.hero, 'mark'); m.roll++; m.held = {}; }
+  if (a === 'greenlight') { STEPS.forEach(function (s) { BOOK.visited[s[0]] = true; }); BOOK.printed = true; draw(); el('printed').focus(); return; }
+  if (a === 'close-printed') { BOOK.printed = false; }
+  if (a === 'again') { BOOK = fresh(); STATE.st = {}; }
+  if (a === 'download') return downloadCover();
+  draw();
+}
+function downloadCover() {
+  var svg = el('printed-body').querySelector('svg');
+  if (!svg) return;
+  var src = new XMLSerializer().serializeToString(svg);
+  if (src.indexOf('xmlns=') < 0) src = src.replace('<svg', '<svg xmlns="http://www.w3.org/2000/svg"');
+  var img = new Image();
+  img.onload = function () {
+    var cv = document.createElement('canvas'); cv.width = 800; cv.height = 1200;
+    var cx = cv.getContext('2d'); cx.drawImage(img, 0, 0, 800, 1200);
+    cv.toBlob(function (b) {
+      var a = document.createElement('a'); a.href = URL.createObjectURL(b);
+      a.download = title().replace(/[^A-Za-z0-9]+/g, '-').replace(/^-|-$/g, '').toLowerCase() + '-1.png';
+      document.body.appendChild(a); a.click(); a.remove();
+    }, 'image/png');
+  };
+  img.src = 'data:image/svg+xml;charset=utf-8,' + encodeURIComponent(src);
+}
+
+// ---------- wire once (the root is drawn on load; events are delegated) ----------
+function boot() {
+  load();
+  document.addEventListener('click', function (e) {
+    var t = e.target.closest('button,[data-act]');
+    if (!t) return;
+    if (t.dataset.step) return go(t.dataset.step);
+    if (t.dataset.g) { setField(t.dataset.g, t.dataset.v); return draw(); }
+    if (t.dataset.act) act(t.dataset.act);
+  });
+  document.addEventListener('input', function (e) {
+    var id = e.target.id, v = e.target.value.trim();
+    if (id === 'name-hero') BOOK.hero.name = v; else if (id === 'name-villain') BOOK.villain.name = v; else if (id === 'studio') BOOK.studio = v; else if (id === 'title') BOOK.title = v; else return;
+    sync(); el('comic').innerHTML = yourComic(); store();
+    var fig = el('panel').querySelector('.figure-frame'); if (fig && (id === 'name-hero' || id === 'name-villain')) fig.innerHTML = figureSVG(Object.assign({}, id === 'name-hero' ? BOOK.hero : BOOK.villain, {name: v || '?'}));
+    if (id === 'studio') { var mk = el('panel').querySelector('.mark svg'); if (mk) mk.outerHTML = markSVG(BOOK.hero, 88); }
+  });
+  document.addEventListener('keydown', function (e) { if (e.key === 'Escape' && BOOK.printed) act('close-printed'); });
+  // A link can open a step: #conflict, #spine, #cover, #run, or #printed for the finished #1.
+  var want = (location.hash || '').slice(1);
+  if (want === 'printed') { STEPS.forEach(function (s) { BOOK.visited[s[0]] = true; }); BOOK.step = 'run'; BOOK.printed = true; }
+  else if (PANELS[want]) { BOOK.step = want; BOOK.visited[want] = true; }
+  draw();
+}
+if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', boot); else boot();
+
+})();
+</script>
+</body>
+</html>
