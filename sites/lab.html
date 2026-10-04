@@ -714,23 +714,16 @@ const EYE_GEO = [
   {cx:362/900, cy:505/801, r:19/900},   // left eye
   {cx:487/900, cy:481/801, r:19/900}    // right eye
 ];
+// 👀 His words, 3 Oct 2026: "on lab, the eyes are very creepy, please fixz somehow".
+// The cup's face stays exactly as drawn — no painted-over pupils swivelling in white
+// discs. The whole cup LEANS toward what it is watching instead. The `rotate` and
+// `translate` properties compose with the wobble animation's `transform`, so the two
+// never fight. EYE_GEO is kept for the record of where the drawn eyes sit.
 const eyeSets = [];
+const LEAN_OK = !matchMedia('(prefers-reduced-motion: reduce)').matches;
 function makeEyes(wrap){
-  const inner = wrap.querySelector('.cupinner') || wrap;
-  const eyes = EYE_GEO.map(g => {
-    const e = document.createElement('div');
-    e.className = 'eye';
-    e.style.left = (g.cx*100)+'%';
-    e.style.top  = (g.cy*100)+'%';
-    e.style.width = (g.r*2*100)+'%';
-    e.style.transform = 'translate(-50%,-50%)';
-    const p = document.createElement('div');
-    p.className = 'pupil';
-    e.appendChild(p);
-    inner.appendChild(e);
-    return {el:e, pupil:p, g};
-  });
-  const set = {wrap, eyes, target:null, until:0};
+  wrap.style.transition = 'rotate .35s cubic-bezier(.3,1.4,.5,1), translate .35s cubic-bezier(.3,1.4,.5,1)';
+  const set = {wrap, eyes:[], target:null, until:0};
   eyeSets.push(set);
   return set;
 }
@@ -744,16 +737,16 @@ function updateEyes(now){
       const r = set.target.getBoundingClientRect();
       tx = r.left + r.width/2; ty = r.top + r.height/2;
     }
-    for (const eye of set.eyes){
-      const r = eye.el.getBoundingClientRect();
-      if (!r.width) continue;
-      const ex = r.left + r.width/2, ey = r.top + r.height/2;
-      let dx = tx-ex, dy = ty-ey;
-      const d = Math.hypot(dx,dy) || 1;
-      const travel = r.width*0.22;
-      const k = Math.min(1, d/220) * travel / d;
-      eye.pupil.style.transform = `translate(${(dx*k).toFixed(1)}px, ${(dy*k).toFixed(1)}px)`;
-    }
+    if (!LEAN_OK) continue;
+    const r = set.wrap.getBoundingClientRect();
+    if (!r.width) continue;
+    const cx = r.left + r.width/2, cy = r.top + r.height/2;
+    // Up to 7 degrees of lean and a small shuffle toward the target, easing off
+    // as it gets far away so the cup never looks yanked.
+    const nx = clamp((tx-cx) / (r.width*1.6), -1, 1);
+    const ny = clamp((ty-cy) / (r.height*1.6), -1, 1);
+    set.wrap.style.rotate = (nx*7).toFixed(2)+'deg';
+    set.wrap.style.translate = `${(nx*r.width*0.03).toFixed(1)}px ${(ny*r.height*0.02).toFixed(1)}px`;
   }
 }
 
