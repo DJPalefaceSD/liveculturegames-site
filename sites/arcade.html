@@ -1,0 +1,1643 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Live Culture Games</title>
+<meta name="description" content="Live Culture Games is a small game studio in Escondido, California. Something is fermenting.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Atkinson+Hyperlegible:ital,wght@0,400;0,700;1,400&family=Press+Start+2P&display=swap" rel="stylesheet">
+<style>
+  :root{
+    color-scheme: dark;
+    --ink:#000;
+    --ink2:#111111;
+    --night:#07070F;
+    --night2:#0E0E1C;
+    --panel:#15152B;
+    --panel2:#1D1D38;
+    --pink:#FF1493;
+    --pink-dim:#B20D66;
+    --blue:#63AED8;
+    --blue-dim:#2E6E95;
+    --cup:#EEF2F8;
+    --lid:#8A8A8A;
+    --text:#EEF2F8;
+    --pixel:'Press Start 2P', monospace;
+    --body:'Atkinson Hyperlegible', 'Segoe UI', system-ui, sans-serif;
+    --gutter:16px;
+    --radius:18px;
+  }
+  *{box-sizing:border-box}
+  html{scroll-behavior:smooth}
+  body{
+    margin:0;
+    background:var(--night);
+    color:var(--text);
+    font-family:var(--body);
+    font-size:20px;
+    line-height:1.5;
+    overflow-x:hidden;
+    -webkit-font-smoothing:antialiased;
+  }
+  img{max-width:100%;height:auto;display:block}
+  a{color:var(--blue)}
+  a:focus-visible,button:focus-visible,canvas:focus-visible,summary:focus-visible{
+    outline:4px solid var(--blue);outline-offset:4px
+  }
+  .sr-only{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap}
+
+  /* ---------- type ---------- */
+  h1,h2,h3{margin:0;line-height:1.25}
+  .px{font-family:var(--pixel);letter-spacing:.02em;text-transform:uppercase}
+  h1{font-size:clamp(26px,4.2vw,44px);color:var(--text)}
+  h2{font-family:var(--pixel);font-size:clamp(20px,2.6vw,28px);color:var(--pink);text-transform:uppercase;line-height:1.5}
+  h3{font-size:clamp(22px,2.4vw,26px);color:var(--blue)}
+  p{margin:0}
+  .lead{font-size:clamp(20px,2.3vw,24px)}
+  .glow-pink{text-shadow:0 0 12px rgba(255,20,147,.55)}
+  .glow-blue{text-shadow:0 0 12px rgba(99,174,216,.55)}
+
+  /* ---------- page frame ---------- */
+  .wrap{width:100%;max-width:1120px;margin:0 auto;padding:0 var(--gutter)}
+  main{display:grid;gap:40px;padding:24px 0 48px}
+
+  /* ---------- top bar ---------- */
+  .top{
+    position:sticky;top:0;z-index:50;
+    background:rgba(7,7,15,.92);
+    backdrop-filter:blur(6px);
+    border-bottom:4px solid var(--ink);
+    box-shadow:0 2px 0 var(--pink);
+  }
+  .top .wrap{display:flex;align-items:center;gap:14px;min-height:72px;padding-top:8px;padding-bottom:8px;flex-wrap:wrap}
+  .brand{display:flex;align-items:center;gap:12px;text-decoration:none;color:var(--text);margin-right:auto}
+  .brand img{width:56px;height:auto}
+  .brand .px{font-size:14px;line-height:1.6;color:var(--text)}
+  .brand .px b{display:block;color:var(--pink);font-weight:400}
+  @media (max-width:640px){
+    .top .wrap{flex-wrap:nowrap;min-height:60px;gap:10px}
+    .brand img{width:42px}
+    .brand .px{font-size:13px;line-height:1.4}
+    .top .benchlink{display:none}
+    .top .toggle{padding:8px 12px;font-size:13px}
+  }
+
+  /* ---------- controls ---------- */
+  .btn{
+    font-family:var(--pixel);font-size:14px;line-height:1.4;text-transform:uppercase;
+    color:var(--ink);background:var(--pink);
+    border:4px solid var(--ink);border-radius:12px;
+    padding:12px 18px;min-height:2.8rem;
+    cursor:pointer;
+    box-shadow:0 5px 0 var(--ink),0 0 18px rgba(255,20,147,.45);
+    transform:translateY(0);
+    transition:transform .08s ease,box-shadow .08s ease,background .15s;
+    display:inline-flex;align-items:center;justify-content:center;gap:10px;
+    text-decoration:none;
+    user-select:none;-webkit-user-select:none;touch-action:manipulation;
+  }
+  .btn:hover{background:#ff3da5}
+  .btn:active,.btn.is-down{transform:translateY(4px);box-shadow:0 1px 0 var(--ink),0 0 18px rgba(255,20,147,.45)}
+  .btn.blue{background:var(--blue);box-shadow:0 5px 0 var(--ink),0 0 18px rgba(99,174,216,.45)}
+  .btn.blue:hover{background:#86c3e5}
+  .btn.blue:active,.btn.blue.is-down{box-shadow:0 1px 0 var(--ink),0 0 18px rgba(99,174,216,.45)}
+  .btn.white{background:var(--cup)}
+  .btn.white:hover{background:#fff}
+  .btn[disabled]{opacity:.55;cursor:default;transform:none}
+  .btn.big{font-size:clamp(14px,1.8vw,18px);padding:16px 24px;min-height:3.4rem}
+  .btn .ico{width:22px;height:22px;flex:none}
+
+  .toggle{background:var(--panel2);color:var(--text);box-shadow:0 5px 0 var(--ink)}
+  .toggle:hover{background:#27274a}
+  .toggle[aria-pressed="true"]{background:var(--blue);color:var(--ink)}
+  .toggle[aria-pressed="true"]:hover{background:#86c3e5}
+
+  /* ---------- cabinet ---------- */
+  .cab{
+    background:var(--panel);
+    border:4px solid var(--ink);
+    border-radius:var(--radius);
+    box-shadow:0 0 0 2px var(--pink-dim),0 18px 40px rgba(0,0,0,.6);
+    overflow:hidden;
+  }
+  .cab.blue-cab{box-shadow:0 0 0 2px var(--blue-dim),0 18px 40px rgba(0,0,0,.6)}
+  .marquee{
+    display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap;
+    background:linear-gradient(180deg,#ff5db4 0%,var(--pink) 55%,#d4107a 100%);
+    color:var(--ink);
+    border-bottom:4px solid var(--ink);
+    padding:14px 18px;
+  }
+  .blue-cab .marquee{background:linear-gradient(180deg,#9ad0ec 0%,var(--blue) 55%,#4a95bf 100%)}
+  .marquee h2{color:var(--ink);text-shadow:none;font-size:clamp(16px,2.2vw,24px)}
+  .marquee .tag{font-family:var(--pixel);font-size:14px;background:var(--ink);color:var(--cup);padding:8px 10px;border-radius:8px;line-height:1.4}
+  .deck{padding:20px 18px 22px;display:grid;gap:16px}
+  .row{display:flex;gap:12px;flex-wrap:wrap;align-items:center}
+  .chip{
+    display:inline-flex;align-items:center;gap:8px;
+    background:var(--night2);border:3px solid var(--ink);border-radius:10px;
+    padding:8px 12px;min-height:2.6rem;font-weight:700;font-size:18px;
+    box-shadow:inset 0 0 0 2px var(--blue-dim);
+  }
+  .chip .k{color:var(--blue);font-family:var(--pixel);font-size:14px;letter-spacing:.04em}
+  .chip .v{color:var(--text);font-variant-numeric:tabular-nums;min-width:2ch;text-align:right}
+  .chip.pinkchip{box-shadow:inset 0 0 0 2px var(--pink-dim)}
+  .chip.pinkchip .k{color:var(--pink)}
+
+  /* ---------- screen (CRT) ---------- */
+  .screen{
+    position:relative;
+    background:#05050C;
+    border:6px solid var(--ink);
+    border-radius:16px;
+    box-shadow:inset 0 0 50px rgba(99,174,216,.22),0 0 26px rgba(255,20,147,.3);
+    overflow:hidden;
+    margin:16px 18px 0;
+  }
+  .screen::after{ /* scanlines: only ever over screens, never over body text */
+    content:"";position:absolute;inset:0;pointer-events:none;z-index:5;
+    background:repeating-linear-gradient(180deg,rgba(0,0,0,0) 0 3px,rgba(0,0,0,.28) 3px 4px);
+    mix-blend-mode:multiply;
+  }
+  .screen::before{ /* corner vignette glow */
+    content:"";position:absolute;inset:0;pointer-events:none;z-index:4;
+    background:radial-gradient(ellipse at center,rgba(0,0,0,0) 55%,rgba(0,0,0,.55) 100%);
+  }
+
+  /* ---------- hero ---------- */
+  .hero .screen{
+    height:clamp(300px,46vw,480px);
+    perspective:700px;
+    cursor:pointer;
+    touch-action:manipulation;
+  }
+  .sky{position:absolute;inset:0;background:linear-gradient(180deg,#0A0A1E 0%,#1A0A33 55%,#3a0a3a 100%)}
+  .sun{
+    position:absolute;left:50%;top:18%;width:38%;max-width:260px;aspect-ratio:1;
+    transform:translateX(-50%);border-radius:50%;
+    background:linear-gradient(180deg,var(--pink) 0%,#ff5db4 45%,var(--blue) 100%);
+    box-shadow:0 0 50px rgba(255,20,147,.55);
+    -webkit-mask:repeating-linear-gradient(180deg,#000 0 10%,transparent 10% 14%);
+            mask:repeating-linear-gradient(180deg,#000 0 10%,transparent 10% 14%);
+    opacity:.9;
+  }
+  .horizon{position:absolute;left:0;right:0;top:50%;height:3px;background:var(--blue);box-shadow:0 0 18px var(--blue),0 0 40px var(--pink)}
+  .floor{
+    position:absolute;left:-50%;right:-50%;top:50%;height:100%;
+    transform-origin:50% 0;
+    transform:rotateX(62deg);
+    overflow:hidden;
+  }
+  .grid{
+    position:absolute;left:0;right:0;top:-120px;height:calc(100% + 240px);
+    background-image:
+      linear-gradient(90deg,rgba(255,20,147,.75) 0 2px,transparent 2px),
+      linear-gradient(180deg,rgba(99,174,216,.85) 0 2px,transparent 2px);
+    background-size:60px 60px,60px 60px;
+    animation:gridscroll 1.2s linear infinite;
+    will-change:transform;
+  }
+  @keyframes gridscroll{from{transform:translateY(0)}to{transform:translateY(60px)}}
+  .cupwrap{
+    position:absolute;left:50%;bottom:4%;width:clamp(150px,30vw,300px);
+    transform:translate(-50%,0);
+    z-index:3;
+    --tx:0;--ty:0;
+  }
+  .cupmove{
+    transform:translate(calc(var(--tx) * 14px),calc(var(--ty) * 8px)) rotate(calc(var(--tx) * 7deg));
+    transition:transform .12s ease-out;
+    will-change:transform;
+  }
+  .cupimg{width:100%;animation:bounce 1.1s cubic-bezier(.4,0,.6,1) infinite;transform-origin:50% 100%;filter:drop-shadow(0 0 14px rgba(255,20,147,.5));will-change:transform}
+  @keyframes bounce{
+    0%,100%{transform:translateY(0) scale(1,1)}
+    12%{transform:translateY(0) scale(1.06,.92)}
+    45%{transform:translateY(-14%) scale(.96,1.05)}
+    60%{transform:translateY(-14%) scale(1,1)}
+    92%{transform:translateY(0) scale(1.04,.95)}
+  }
+  .cupwrap.happy .cupimg{animation:happy .7s ease-out 1}
+  @keyframes happy{
+    0%{transform:translateY(0) scale(1.1,.85)}
+    35%{transform:translateY(-28%) scale(.92,1.1) rotate(-8deg)}
+    65%{transform:translateY(-22%) scale(1,1) rotate(8deg)}
+    100%{transform:translateY(0) scale(1,1)}
+  }
+  .cupwrap.wobble .cupimg{animation:wobble .5s ease-out 1}
+  @keyframes wobble{
+    0%{transform:rotate(0) scale(1.05,.95)}25%{transform:rotate(-6deg)}50%{transform:rotate(5deg)}75%{transform:rotate(-3deg)}100%{transform:rotate(0)}
+  }
+  .cupwrap:hover .cupimg{animation-duration:.7s}
+  .shadow{
+    position:absolute;left:50%;bottom:2%;width:clamp(120px,24vw,240px);height:22px;
+    transform:translateX(-50%);border-radius:50%;
+    background:radial-gradient(ellipse,rgba(0,0,0,.7) 0%,rgba(0,0,0,0) 70%);z-index:2;
+  }
+  .puddle{
+    position:absolute;left:50%;bottom:3%;width:clamp(120px,24vw,240px);height:26px;z-index:2;
+    transform:translateX(-50%) scaleX(var(--pool,0));
+    transition:transform .4s cubic-bezier(.2,1.4,.4,1);
+    will-change:transform;
+  }
+  .fx{position:absolute;inset:0;z-index:6;pointer-events:none;overflow:hidden}
+  .flydrop{
+    position:absolute;width:34px;height:34px;left:0;top:0;
+    --dx:0px;--dy:0px;
+    animation:fly .9s cubic-bezier(.2,.7,.4,1) forwards;
+    will-change:transform,opacity;
+  }
+  @keyframes fly{
+    0%{transform:translate(0,0) scale(.5) rotate(0);opacity:1}
+    60%{opacity:1}
+    100%{transform:translate(var(--dx),var(--dy)) scale(1.1) rotate(var(--rot,0deg));opacity:0}
+  }
+  .attract{
+    position:absolute;left:0;right:0;bottom:0;z-index:7;pointer-events:none;
+    display:flex;justify-content:center;padding:10px;
+  }
+  .attract span{
+    font-family:var(--pixel);font-size:clamp(13px,1.6vw,16px);
+    color:var(--ink);background:var(--cup);border:3px solid var(--ink);border-radius:8px;
+    padding:8px 12px;
+    animation:pulse 1.4s ease-in-out infinite;
+  }
+  @keyframes pulse{0%,100%{opacity:1}50%{opacity:.55}}
+  .hero .deck{grid-template-columns:1.4fr 1fr;align-items:center;gap:24px}
+  .hero .copy{display:grid;gap:14px}
+  .hero .copy .lead{color:var(--cup)}
+  .hero .actions{display:grid;gap:12px}
+  @media (max-width:760px){.hero .deck{grid-template-columns:1fr}}
+
+  /* ---------- game ---------- */
+  .gamebox{position:relative;margin:16px 18px 0}
+  .gamebox .screen{margin:0}
+  #catch{
+    display:block;width:100%;aspect-ratio:4/3;max-height:560px;
+    background:#05050C;cursor:none;touch-action:none;
+  }
+  @media (max-width:640px){#catch{aspect-ratio:1/1.1;cursor:default}}
+  .overlay{
+    position:absolute;inset:0;z-index:8;display:flex;align-items:center;justify-content:center;padding:16px;
+  }
+  .overlay[hidden]{display:none}
+  .plate{
+    background:var(--night2);border:4px solid var(--ink);border-radius:14px;
+    box-shadow:0 0 0 3px var(--pink),0 0 30px rgba(255,20,147,.4);
+    padding:20px 22px;display:grid;gap:14px;max-width:420px;width:100%;text-align:center;
+  }
+  .plate.blueplate{box-shadow:0 0 0 3px var(--blue),0 0 30px rgba(99,174,216,.4)}
+  .plate .px{font-size:clamp(16px,2.4vw,22px);color:var(--pink);line-height:1.5}
+  .blueplate .px{color:var(--blue)}
+  .plate .num{font-family:var(--pixel);font-size:clamp(22px,4vw,36px);color:var(--cup)}
+  .lives{display:inline-flex;gap:4px}
+  .lives svg{width:24px;height:24px}
+  .lives svg.lost{opacity:.22}
+
+  /* ---------- gacha ---------- */
+  .gacha .deck{grid-template-columns:minmax(260px,1fr) 1.3fr;align-items:start;gap:24px}
+  @media (max-width:760px){.gacha .deck{grid-template-columns:1fr}}
+  .machine{display:grid;justify-items:center;gap:0;padding-top:8px}
+  .machine svg{width:min(100%,300px);height:auto;overflow:visible}
+  .caps{animation:bob 2.2s ease-in-out infinite;transform-origin:center;transform-box:fill-box}
+  .caps:nth-child(2){animation-delay:-.6s}
+  .caps:nth-child(3){animation-delay:-1.2s}
+  .caps:nth-child(4){animation-delay:-1.7s}
+  @keyframes bob{0%,100%{transform:translateY(0)}50%{transform:translateY(-6px)}}
+  .machine.turning .caps{animation:jiggle .5s ease-in-out 2}
+  @keyframes jiggle{0%,100%{transform:translate(0,0)}25%{transform:translate(-5px,-8px) rotate(-12deg)}75%{transform:translate(5px,-4px) rotate(10deg)}}
+  .knob{transform-origin:center;transform-box:fill-box;transition:transform .6s cubic-bezier(.3,1.3,.5,1)}
+  .machine.turning .knob{transform:rotate(180deg)}
+  .outcap{opacity:0;transform-origin:center;transform-box:fill-box}
+  .machine.dispense .outcap{animation:dropout .75s cubic-bezier(.3,0,.5,1.4) forwards}
+  @keyframes dropout{0%{opacity:0;transform:translateY(-70px)}20%{opacity:1}100%{opacity:1;transform:translateY(0)}}
+
+  .cardzone{display:grid;gap:16px;justify-items:center}
+  .holo{
+    position:relative;width:min(100%,260px);aspect-ratio:7/10;
+    background:linear-gradient(160deg,#1c1c3b,#0d0d1f);
+    border:4px solid var(--ink);border-radius:16px;
+    box-shadow:0 0 0 3px var(--pink),0 12px 30px rgba(0,0,0,.6);
+    display:grid;grid-template-rows:auto 1fr auto;gap:8px;padding:14px;
+    transform:perspective(700px) rotateX(var(--rx,0deg)) rotateY(var(--ry,0deg));
+    transition:transform .12s ease-out;
+    overflow:hidden;
+    will-change:transform;
+    --sheen:0deg;
+  }
+  .holo.enter{animation:cardin .6s cubic-bezier(.2,1.2,.4,1) 1}
+  @keyframes cardin{0%{transform:perspective(700px) rotateY(90deg) scale(.7);opacity:0}100%{transform:perspective(700px) rotateY(0) scale(1);opacity:1}}
+  .holo::after{
+    content:"";position:absolute;left:-60%;top:-60%;width:220%;height:220%;pointer-events:none;
+    background:conic-gradient(from 0deg,transparent 0 18%,rgba(255,20,147,.5) 26%,rgba(99,174,216,.5) 36%,rgba(255,255,255,.55) 44%,transparent 52% 100%);
+    mix-blend-mode:screen;opacity:.75;
+    transform:rotate(var(--sheen));
+    animation:sheen 7s linear infinite;
+    will-change:transform;
+  }
+  @keyframes sheen{from{transform:rotate(0deg)}to{transform:rotate(360deg)}}
+  .holo .head{display:flex;justify-content:space-between;align-items:center;font-family:var(--pixel);font-size:13px;color:var(--blue)}
+  .holo .art{display:grid;place-items:center;background:rgba(0,0,0,.35);border:3px solid var(--ink);border-radius:12px;padding:10px}
+  .holo .art svg{width:80%;max-width:170px;height:auto}
+  .holo .name{font-family:var(--pixel);font-size:14px;color:var(--cup);text-align:center;line-height:1.5}
+  .holo .name small{display:block;font-family:var(--body);font-size:18px;font-weight:700;color:var(--pink);text-transform:none;letter-spacing:0}
+  .holo.empty{box-shadow:0 0 0 3px var(--blue-dim),0 12px 30px rgba(0,0,0,.6)}
+  .holo.empty::after{display:none}
+  .holo.empty .art{font-family:var(--pixel);font-size:40px;color:var(--blue)}
+  .holo .badge{position:absolute;right:10px;top:38px;background:var(--pink);color:var(--ink);font-family:var(--pixel);font-size:13px;padding:6px 8px;border:3px solid var(--ink);border-radius:8px;transform:rotate(8deg);display:none}
+  .holo.shiny .badge{display:block}
+
+  details{background:var(--night2);border:3px solid var(--ink);border-radius:12px;box-shadow:inset 0 0 0 2px var(--blue-dim)}
+  summary{
+    cursor:pointer;list-style:none;padding:12px 16px;min-height:2.8rem;
+    font-weight:700;font-size:20px;color:var(--cup);display:flex;align-items:center;gap:10px;
+  }
+  summary::-webkit-details-marker{display:none}
+  summary::before{content:"▶";color:var(--blue);font-size:14px;transition:transform .15s}
+  details[open] summary::before{transform:rotate(90deg)}
+  .album{display:grid;grid-template-columns:repeat(auto-fill,minmax(84px,1fr));gap:10px;padding:0 14px 14px}
+  .slot{
+    aspect-ratio:1;display:grid;place-items:center;
+    background:var(--panel);border:3px solid var(--ink);border-radius:10px;
+    font-family:var(--pixel);font-size:22px;color:var(--blue-dim);
+  }
+  .slot.got{box-shadow:0 0 0 2px var(--pink);background:#1c1c3b}
+  .slot svg{width:70%;height:auto}
+
+  /* ---------- tease ---------- */
+  .tease .screen{height:clamp(260px,40vw,420px);background:#000}
+  #static{position:absolute;inset:0;width:100%;height:100%;image-rendering:pixelated;opacity:var(--st,1)}
+  .ghost{
+    position:absolute;inset:0;display:grid;place-items:center;z-index:2;pointer-events:none;
+    font-family:var(--pixel);font-size:clamp(28px,7vw,72px);color:var(--pink);text-align:center;line-height:1.3;
+    opacity:var(--gh,0);filter:blur(calc((1 - var(--gh,0)) * 8px));
+    text-shadow:0 0 24px rgba(255,20,147,.8);
+  }
+  .tease .overlay{z-index:9;transition:opacity .4s}
+  .tease .overlay[hidden]{display:none}
+  .signal{display:grid;gap:8px}
+  .bar{height:26px;background:var(--night2);border:3px solid var(--ink);border-radius:8px;overflow:hidden;box-shadow:inset 0 0 0 2px var(--blue-dim)}
+  .bar i{display:block;height:100%;width:100%;background:linear-gradient(90deg,var(--blue),var(--pink));transform:scaleX(var(--sig,0));transform-origin:left;transition:transform .08s linear}
+  .signal .label{display:flex;justify-content:space-between;font-weight:700;font-size:18px}
+  .signal .label .px{font-size:13px;color:var(--blue)}
+  .tease .deck{grid-template-columns:1fr auto;align-items:center}
+  @media (max-width:640px){.tease .deck{grid-template-columns:1fr}}
+
+  /* ---------- bench + footer ---------- */
+  .bench .deck{grid-template-columns:auto 1fr auto;align-items:center}
+  @media (max-width:760px){.bench .deck{grid-template-columns:1fr}}
+  .bench .benchico{width:84px;height:84px}
+  footer{border-top:4px solid var(--ink);box-shadow:0 -2px 0 var(--pink);background:var(--night2);padding:28px 0 150px}
+  footer .wrap{display:grid;gap:12px}
+  footer .row{gap:18px}
+  footer a{font-weight:700}
+  footer img{width:60px}
+
+  /* ---------- the cup talks: speech bubbles ---------- */
+  .say{display:grid;grid-template-columns:auto 1fr;gap:14px;align-items:end}
+  .say img{width:clamp(72px,10vw,110px);height:auto;transform-origin:50% 100%;will-change:transform}
+  .bubble{
+    position:relative;background:var(--cup);color:var(--ink);
+    border:4px solid var(--ink);border-radius:16px;padding:14px 18px;
+    font-size:clamp(19px,2vw,22px);font-weight:700;line-height:1.4;
+    box-shadow:0 0 0 3px var(--pink),0 6px 0 var(--ink);
+  }
+  .bubble::before{
+    content:"";position:absolute;left:-18px;bottom:18px;width:0;height:0;
+    border:12px solid transparent;border-right-color:var(--ink);border-left:0;
+  }
+  .bubble::after{
+    content:"";position:absolute;left:-10px;bottom:21px;width:0;height:0;
+    border:9px solid transparent;border-right-color:var(--cup);border-left:0;
+  }
+  .mood-happy img{animation:happy .7s ease-out 1}
+  .mood-wobble img{animation:wobble .5s ease-out 1}
+  .mood-proud img{animation:proud .8s ease-out 1}
+  .mood-shy img{animation:shy .8s ease-in-out 1}
+  .mood-think img{animation:think 1.2s ease-in-out 1}
+  @keyframes proud{0%{transform:scale(1)}40%{transform:scale(1.14,1.1) translateY(-6%)}100%{transform:scale(1)}}
+  @keyframes shy{0%{transform:scale(1)}50%{transform:scale(.94,.9) rotate(4deg) translateY(4%)}100%{transform:scale(1)}}
+  @keyframes think{0%{transform:rotate(0)}30%{transform:rotate(-7deg) translateY(-3%)}70%{transform:rotate(-7deg) translateY(-3%)}100%{transform:rotate(0)}}
+
+  /* the guide dock: the cup follows the visitor down the page */
+  .guide{
+    position:fixed;left:var(--gutter);right:var(--gutter);bottom:12px;z-index:60;
+    display:grid;grid-template-columns:auto 1fr auto;gap:10px;align-items:end;
+    max-width:560px;
+    transform:translateY(0);transition:transform .3s ease,opacity .3s;
+  }
+  .guide[hidden]{display:none}
+  body.playing .guide{transform:translateY(140%);opacity:0;pointer-events:none}
+  .guide img{width:64px;height:auto;filter:drop-shadow(0 0 10px rgba(255,20,147,.6))}
+  .guide .bubble{font-size:18px;padding:10px 14px;min-height:2.8rem;display:flex;align-items:center}
+  .guide .bubble::before{bottom:12px}.guide .bubble::after{bottom:15px}
+  .guide .hide{
+    background:var(--night2);color:var(--cup);border:3px solid var(--ink);border-radius:10px;
+    font-family:var(--pixel);font-size:13px;padding:10px;min-height:2.6rem;min-width:2.6rem;cursor:pointer;
+    box-shadow:0 4px 0 var(--ink);
+  }
+  @media (max-width:640px){.guide{bottom:8px;max-width:none}.guide img{width:52px}.guide .bubble{font-size:18px}}
+
+  /* ---------- teach: stage select ---------- */
+  .stages{display:flex;gap:8px;flex-wrap:wrap}
+  .stagebtn{
+    font-family:var(--pixel);font-size:13px;line-height:1.4;color:var(--cup);
+    background:var(--night2);border:3px solid var(--ink);border-radius:10px;
+    padding:10px 12px;min-height:2.8rem;cursor:pointer;box-shadow:0 4px 0 var(--ink);
+    display:inline-flex;align-items:center;gap:8px;
+  }
+  .stagebtn .n{background:var(--blue);color:var(--ink);border-radius:6px;padding:4px 6px}
+  .stagebtn[aria-selected="true"]{background:var(--pink);color:var(--ink)}
+  .stagebtn[aria-selected="true"] .n{background:var(--ink);color:var(--cup)}
+  .stagebtn.done .n{background:var(--cup)}
+  .stage{display:grid;gap:18px}
+  .stage[hidden]{display:none}
+  .stage h3{color:var(--blue)}
+  .toy{
+    background:var(--night2);border:4px solid var(--ink);border-radius:14px;padding:16px;
+    box-shadow:inset 0 0 0 2px var(--blue-dim);display:grid;gap:14px;
+  }
+  .quote{
+    font-size:clamp(22px,2.6vw,28px);font-weight:700;color:var(--cup);line-height:1.35;
+    border-left:8px solid var(--pink);padding:6px 0 6px 18px;
+  }
+  .quote small{display:block;font-size:18px;color:var(--blue);font-weight:700;margin-top:6px}
+  .nav{display:flex;justify-content:space-between;gap:12px;flex-wrap:wrap}
+
+  /* stage 1: co-op controls */
+  .coop{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+  @media (max-width:640px){.coop{grid-template-columns:1fr}}
+  .pad{border:3px solid var(--ink);border-radius:12px;padding:12px;display:grid;gap:10px;background:var(--panel)}
+  .pad h4{margin:0;font-family:var(--pixel);font-size:13px;line-height:1.5}
+  .pad.p1 h4{color:var(--pink)}.pad.p2 h4{color:var(--blue)}
+  .pad .keys{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+  .key{
+    font-family:var(--body);font-weight:700;font-size:18px;color:var(--cup);
+    background:var(--night2);border:3px solid var(--ink);border-radius:10px;min-height:2.8rem;
+    cursor:pointer;box-shadow:0 4px 0 var(--ink);padding:8px;
+  }
+  .key:active,.key.lit{transform:translateY(3px);box-shadow:0 1px 0 var(--ink)}
+  .p1 .key.lit{background:var(--pink);color:var(--ink)}
+  .p2 .key.lit{background:var(--blue);color:var(--ink)}
+
+  /* stage 2: wall to page */
+  .dial{display:grid;gap:8px}
+  .dial label{font-weight:700;display:flex;justify-content:space-between}
+  input[type=range]{width:100%;height:44px;accent-color:var(--pink);cursor:pointer}
+  .sample{
+    border:3px solid var(--ink);border-radius:12px;padding:14px;background:var(--panel);
+    transition:font-size .2s;min-height:140px;
+  }
+  .sample.wall p{font-size:var(--fs,18px);line-height:1.25;color:var(--cup)}
+  .sample.page{display:grid;gap:10px}
+  .sample.page .rowline{
+    display:flex;align-items:center;gap:12px;font-size:clamp(20px,2.2vw,24px);font-weight:700;color:var(--cup);
+    background:var(--night2);border:3px solid var(--ink);border-radius:10px;padding:10px 14px;
+  }
+  .sample.page .rowline b{font-family:var(--pixel);font-size:13px;color:var(--blue);font-weight:400}
+
+  /* stage 3: one at a time */
+  .queue{display:grid;grid-template-columns:repeat(5,1fr);gap:8px}
+  @media (max-width:640px){.queue{grid-template-columns:repeat(3,1fr)}}
+  .qcard{
+    aspect-ratio:3/4;border:3px solid var(--ink);border-radius:10px;background:var(--panel);
+    display:grid;place-items:center;font-family:var(--pixel);font-size:clamp(13px,1.4vw,14px);color:var(--blue-dim);
+    transform:scale(.9);transition:transform .25s,background .25s,color .25s;
+    text-align:center;padding:4px;line-height:1.4;
+  }
+  .qcard.now{background:var(--pink);color:var(--ink);transform:scale(1.06);box-shadow:0 0 18px rgba(255,20,147,.6)}
+  .qcard.done{background:var(--night2);color:var(--blue)}
+
+  /* stage 4: memory vs source */
+  .readouts{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+  @media (max-width:640px){.readouts{grid-template-columns:1fr}}
+  .readout{border:3px solid var(--ink);border-radius:12px;padding:12px;background:var(--panel);display:grid;gap:6px}
+  .readout .k{font-family:var(--pixel);font-size:13px;line-height:1.5}
+  .readout.mem .k{color:var(--pink)}.readout.src .k{color:var(--blue)}
+  .readout .big{font-family:var(--pixel);font-size:clamp(26px,4vw,40px);color:var(--cup)}
+  .readout .note{font-size:18px;color:var(--cup)}
+  .readout.wins{box-shadow:0 0 0 3px var(--blue),0 0 20px rgba(99,174,216,.5)}
+
+  /* stage 5: the wall */
+  .gate{display:grid;grid-template-columns:1fr auto 1fr;gap:12px;align-items:center}
+  @media (max-width:640px){.gate{grid-template-columns:1fr}}
+  .buildcard{
+    border:3px solid var(--ink);border-radius:12px;background:var(--panel);padding:12px;display:grid;gap:8px;
+    font-weight:700;transition:transform .35s cubic-bezier(.3,1.2,.4,1),opacity .35s;will-change:transform;
+  }
+  .buildcard .k{font-family:var(--pixel);font-size:13px;color:var(--blue);line-height:1.5}
+  .buildcard.testing{box-shadow:0 0 0 3px var(--pink)}
+  .buildcard.shipped{transform:translateX(30px);opacity:0}
+  .buildcard.back{transform:translateX(-30px);opacity:0}
+  .shelf{border:3px dashed var(--blue-dim);border-radius:12px;padding:12px;display:grid;gap:6px;min-height:100px}
+  .shelf .k{font-family:var(--pixel);font-size:13px;color:var(--blue);line-height:1.5}
+  .shelf .count{font-family:var(--pixel);font-size:28px;color:var(--cup)}
+  .wallmark{font-family:var(--pixel);font-size:13px;color:var(--pink);text-align:center;line-height:1.6}
+
+  /* ---------- reduced motion ---------- */
+  @media (prefers-reduced-motion: reduce){
+    html{scroll-behavior:auto}
+    .grid,.cupimg,.attract span,.caps,.holo::after,.sun{animation:none !important}
+    .cupmove,.holo,.puddle{transition:none}
+    .flydrop{animation-duration:.4s}
+    .holo.enter{animation:none}
+    .machine.turning .caps{animation:none}
+    .knob{transition:transform .2s}
+    .mood-happy img,.mood-wobble img,.mood-proud img,.mood-shy img,.mood-think img{animation:none}
+    .guide,.qcard,.buildcard,.sample{transition:none}
+  }
+</style>
+</head>
+<body>
+
+<svg width="0" height="0" style="position:absolute" aria-hidden="true">
+  <defs>
+    <!-- One droplet, in the logo's language: thick black line, flat pink, white gloss streak -->
+    <symbol id="drop" viewBox="0 0 40 48">
+      <path d="M20 3 C 26 14, 36 21, 36 31 A 16 16 0 0 1 4 31 C 4 21, 14 14, 20 3 Z" fill="#FF1493" stroke="#000" stroke-width="4" stroke-linejoin="round"/>
+      <path d="M11 29 C 11 23, 14 19, 18 16" fill="none" stroke="#fff" stroke-width="3.5" stroke-linecap="round"/>
+    </symbol>
+    <symbol id="coin" viewBox="0 0 40 40">
+      <circle cx="20" cy="20" r="16" fill="#63AED8" stroke="#000" stroke-width="4"/>
+      <circle cx="20" cy="20" r="8" fill="none" stroke="#000" stroke-width="3"/>
+      <path d="M10 13 C 12 9, 15 7, 18 6" fill="none" stroke="#fff" stroke-width="3" stroke-linecap="round"/>
+    </symbol>
+    <symbol id="puddleshape" viewBox="0 0 240 26">
+      <path d="M12 16 C 30 2, 70 2, 90 12 C 110 20, 150 2, 190 8 C 215 11, 232 10, 230 17 C 228 24, 200 24, 160 23 C 120 22, 60 25, 30 22 C 12 20, 2 22, 12 16 Z" fill="#FF1493" stroke="#000" stroke-width="3" stroke-linejoin="round"/>
+      <path d="M40 14 C 55 10, 70 10, 80 13" fill="none" stroke="#fff" stroke-width="3" stroke-linecap="round"/>
+    </symbol>
+    <!-- Sticker set: six droplets of the cup -->
+    <symbol id="st1" viewBox="0 0 120 120">
+      <use href="#drop" x="30" y="24" width="60" height="72"/>
+    </symbol>
+    <symbol id="st2" viewBox="0 0 120 120">
+      <use href="#drop" x="14" y="30" width="48" height="58"/>
+      <use href="#drop" x="60" y="18" width="48" height="58"/>
+    </symbol>
+    <symbol id="st3" viewBox="0 0 120 120">
+      <path d="M22 70 C 10 50, 30 36, 44 44 C 48 26, 72 24, 78 42 C 96 36, 112 54, 98 70 C 110 84, 92 100, 76 92 C 64 106, 40 104, 36 88 C 18 92, 10 82, 22 70 Z" fill="#FF1493" stroke="#000" stroke-width="5" stroke-linejoin="round"/>
+      <path d="M38 62 C 42 50, 52 44, 62 44" fill="none" stroke="#fff" stroke-width="5" stroke-linecap="round"/>
+      <circle cx="104" cy="34" r="6" fill="#FF1493" stroke="#000" stroke-width="4"/>
+      <circle cx="14" cy="94" r="5" fill="#FF1493" stroke="#000" stroke-width="4"/>
+    </symbol>
+    <symbol id="st4" viewBox="0 0 120 120">
+      <path d="M26 96 C 20 66, 40 40, 70 30 C 92 22, 104 36, 96 52 C 90 64, 72 62, 70 52 C 68 44, 78 40, 84 44" fill="none" stroke="#000" stroke-width="22" stroke-linecap="round" stroke-linejoin="round"/>
+      <path d="M26 96 C 20 66, 40 40, 70 30 C 92 22, 104 36, 96 52 C 90 64, 72 62, 70 52 C 68 44, 78 40, 84 44" fill="none" stroke="#8A8A8A" stroke-width="13" stroke-linecap="round" stroke-linejoin="round"/>
+      <path d="M36 74 C 38 60, 48 48, 60 42" fill="none" stroke="#fff" stroke-width="4" stroke-linecap="round"/>
+    </symbol>
+    <symbol id="st5" viewBox="0 0 120 120">
+      <path d="M70 60 L 104 22" stroke="#000" stroke-width="18" stroke-linecap="round"/>
+      <path d="M70 60 L 104 22" stroke="#8A8A8A" stroke-width="9" stroke-linecap="round"/>
+      <ellipse cx="48" cy="76" rx="36" ry="24" transform="rotate(-25 48 76)" fill="#EEF2F8" stroke="#000" stroke-width="5"/>
+      <path d="M26 86 C 20 70, 34 58, 50 62 C 66 54, 80 66, 72 80 C 60 92, 36 96, 26 86 Z" fill="#FF1493" stroke="#000" stroke-width="4" stroke-linejoin="round"/>
+      <path d="M36 76 C 40 68, 48 64, 56 64" fill="none" stroke="#fff" stroke-width="4" stroke-linecap="round"/>
+    </symbol>
+    <symbol id="st6" viewBox="0 0 120 120">
+      <path d="M30 42 L 38 100 C 38 106, 44 108, 60 108 C 76 108, 82 106, 82 100 L 90 42 Z" fill="#EEF2F8" stroke="#000" stroke-width="5" stroke-linejoin="round"/>
+      <ellipse cx="60" cy="40" rx="34" ry="12" fill="#8A8A8A" stroke="#000" stroke-width="5"/>
+      <path d="M34 36 C 44 30, 70 30, 84 36" fill="none" stroke="#fff" stroke-width="4" stroke-linecap="round"/>
+      <path d="M44 62 L 46 94" fill="none" stroke="#fff" stroke-width="5" stroke-linecap="round"/>
+      <path d="M92 32 C 100 22, 110 20, 112 28" fill="none" stroke="#000" stroke-width="9" stroke-linecap="round"/>
+      <path d="M92 32 C 100 22, 110 20, 112 28" fill="none" stroke="#8A8A8A" stroke-width="4" stroke-linecap="round"/>
+    </symbol>
+  </defs>
+</svg>
+
+<header class="top">
+  <div class="wrap">
+    <a class="brand" href="#top" aria-label="Live Culture Games, home">
+      <img src="cup-360.png" alt="" width="56" height="50">
+      <span class="px">Live Culture<b>Games</b></span>
+    </a>
+    <button class="btn toggle" id="soundBtn" type="button" aria-pressed="false">
+      <svg class="ico" viewBox="0 0 24 24" aria-hidden="true"><path d="M4 9v6h4l5 4V5L8 9H4z" fill="currentColor"/><path id="soundWave" d="M16 8.5a5 5 0 0 1 0 7M18.5 6a9 9 0 0 1 0 12" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" opacity="0"/><path id="soundX" d="M17 9.5l5 5M22 9.5l-5 5" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"/></svg>
+      <span id="soundLabel">Sound: Off</span>
+    </button>
+    <a class="btn blue benchlink" href="/figure-bench/">Figure Bench</a>
+  </div>
+</header>
+
+<main class="wrap" id="top">
+
+  <!-- ================= HERO: the attract screen ================= -->
+  <section class="cab hero" id="heroCab" data-guide aria-labelledby="heroTitle">
+    <div class="marquee">
+      <h2 id="heroTitle">Live Culture Games</h2>
+      <span class="tag">Escondido, CA</span>
+    </div>
+
+    <div class="screen" id="heroScreen" aria-label="The cup, bouncing on the attract screen. Click or tap to spill." role="img">
+      <div class="sky"></div>
+      <div class="sun"></div>
+      <div class="horizon"></div>
+      <div class="floor"><div class="grid"></div></div>
+      <div class="shadow"></div>
+      <svg class="puddle" id="puddle" viewBox="0 0 240 26" aria-hidden="true"><use href="#puddleshape"/></svg>
+      <div class="cupwrap" id="cupwrap">
+        <div class="cupmove" id="cupmove">
+          <img class="cupimg" id="cupimg" src="cup-900.png" alt="" width="900" height="801" draggable="false">
+        </div>
+      </div>
+      <div class="fx" id="heroFx"></div>
+      <div class="attract"><span id="attractText">Insert coin</span></div>
+    </div>
+
+    <div class="deck">
+      <div class="copy">
+        <h1>A small game studio in Escondido, California.</h1>
+        <p class="lead">We grow games the slow way: live cultures, fresh ideas, a lot of stirring.</p>
+        <div class="say" id="heroSay">
+          <img src="cup-360.png" alt="" width="110" height="98">
+          <p class="bubble" id="heroBubble">Hi. I'm the cup. Click me and I spill. It's fine, I'm mostly yogurt.</p>
+        </div>
+      </div>
+      <div class="actions">
+        <button class="btn big" id="coinBtn" type="button">
+          <svg class="ico" aria-hidden="true"><use href="#coin"/></svg>
+          Insert coin
+        </button>
+        <a class="btn blue big" href="#catchCab">Play Catch the Culture</a>
+        <div class="row">
+          <span class="chip"><span class="k">Credits</span> <span class="v" id="credits">0</span></span>
+          <span class="chip pinkchip"><span class="k">Drops spilled</span> <span class="v" id="drops">0</span></span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ================= THE CUP TEACHES: how we make games with Claude ================= -->
+  <section class="cab" id="teachCab" data-guide aria-labelledby="teachTitle">
+    <div class="marquee">
+      <h2 id="teachTitle">How we make games</h2>
+      <span class="tag">2 Players</span>
+    </div>
+    <div class="deck">
+      <div class="stages" role="tablist" aria-label="Stages" id="stages">
+        <button class="stagebtn" role="tab" aria-selected="true" aria-controls="stage1" id="tab1" type="button"><span class="n">1</span>Two players</button>
+        <button class="stagebtn" role="tab" aria-selected="false" aria-controls="stage2" id="tab2" type="button"><span class="n">2</span>The limits</button>
+        <button class="stagebtn" role="tab" aria-selected="false" aria-controls="stage3" id="tab3" type="button"><span class="n">3</span>One at a time</button>
+        <button class="stagebtn" role="tab" aria-selected="false" aria-controls="stage4" id="tab4" type="button"><span class="n">4</span>The source</button>
+        <button class="stagebtn" role="tab" aria-selected="false" aria-controls="stage5" id="tab5" type="button"><span class="n">5</span>The wall</button>
+      </div>
+
+      <!-- stage 1 -->
+      <div class="stage" id="stage1" role="tabpanel" aria-labelledby="tab1">
+        <div class="say" data-say>
+          <img src="cup-360.png" alt="" width="110" height="98">
+          <p class="bubble" data-bubble>Two players, one game. The founder is Player 1. Claude is Player 2. Press a button on either pad.</p>
+        </div>
+        <p class="quote">"AI codes the game and assists me as a disabled person."<small>The founder's own public line.</small></p>
+        <div class="toy">
+          <div class="coop" id="coop">
+            <div class="pad p1">
+              <h4>Player 1: the founder</h4>
+              <div class="keys">
+                <button class="key" type="button" data-line="Ideas. Every game here starts as one of the founder's.">Ideas</button>
+                <button class="key" type="button" data-line="Taste. If it doesn't feel right, it isn't right.">Taste</button>
+                <button class="key" type="button" data-line="Design. The what and the why are Player 1's.">Design</button>
+                <button class="key" type="button" data-line="Final say. Nothing ships without it.">Final say</button>
+              </div>
+            </div>
+            <div class="pad p2">
+              <h4>Player 2: Claude, by Anthropic</h4>
+              <div class="keys">
+                <button class="key" type="button" data-line="Code. The founder does not write code. Claude writes all of it.">Code</button>
+                <button class="key" type="button" data-line="Checking. Claude runs the tests and reads the output.">Checking</button>
+                <button class="key" type="button" data-line="Remembering. Claude keeps the notes so the founder doesn't have to.">Remembering</button>
+                <button class="key" type="button" data-line="Keeping track. Every ticket, every owed test, written down.">Keeping track</button>
+              </div>
+            </div>
+          </div>
+          <p>The human brings the ideas, the taste, the design and the final say. Claude brings the hands.</p>
+        </div>
+      </div>
+
+      <!-- stage 2 -->
+      <div class="stage" id="stage2" role="tabpanel" aria-labelledby="tab2" hidden>
+        <div class="say" data-say>
+          <img src="cup-360.png" alt="" width="110" height="98">
+          <p class="bubble" data-bubble>The limits are real. The founder is disabled and lives with ADHD, autism and vision problems. Slide the dial and watch what we do about one of them.</p>
+        </div>
+        <div class="toy">
+          <div class="dial">
+            <label for="wallDial"><span>Wall of text</span><span>Readable page</span></label>
+            <input type="range" id="wallDial" min="0" max="100" value="0" aria-label="From a wall of text to a readable page">
+          </div>
+          <div class="sample wall" id="sample" style="--fs:18px">
+            <p id="wallText">A page of paragraphs costs the reader the buffer they were thinking with. So every page here is built the other way round: big type, one idea per block, short rows you can count, and the paragraph lives behind the row that names it. The eyes get a rest, the attention gets one thing, and nothing important hides in the middle of a sentence.</p>
+          </div>
+          <p id="dialLine">Big readable pages instead of walls of text. Same words, different shape.</p>
+        </div>
+      </div>
+
+      <!-- stage 3 -->
+      <div class="stage" id="stage3" role="tabpanel" aria-labelledby="tab3" hidden>
+        <div class="say" data-say>
+          <img src="cup-360.png" alt="" width="110" height="98">
+          <p class="bubble" data-bubble>One thing at a time. I hold the queue. You hold one card. Press Next.</p>
+        </div>
+        <div class="toy">
+          <div class="queue" id="queue">
+            <div class="qcard now">Idea</div>
+            <div class="qcard">Build</div>
+            <div class="qcard">Check</div>
+            <div class="qcard">Play</div>
+            <div class="qcard">Ship</div>
+          </div>
+          <div class="row">
+            <button class="btn blue" id="queueNext" type="button">Next</button>
+            <span class="chip"><span class="k">Doing</span> <span class="v" id="queueNow">Idea</span></span>
+            <span class="chip pinkchip"><span class="k">Held by Claude</span> <span class="v" id="queueHeld">4</span></span>
+          </div>
+          <p>Claude remembers the rest, so the founder doesn't have to hold it all.</p>
+        </div>
+      </div>
+
+      <!-- stage 4 -->
+      <div class="stage" id="stage4" role="tabpanel" aria-labelledby="tab4" hidden>
+        <div class="say" data-say>
+          <img src="cup-360.png" alt="" width="110" height="98">
+          <p class="bubble" data-bubble>The source is the truth, not anyone's memory. Not mine either. Try it: memory wrote down your spills when you got here.</p>
+        </div>
+        <div class="toy">
+          <div class="readouts">
+            <div class="readout mem">
+              <span class="k">What memory says</span>
+              <span class="big" id="memVal">0</span>
+              <span class="note">drops spilled, written down when this stage opened</span>
+            </div>
+            <div class="readout src" id="srcBox">
+              <span class="k">What the source says</span>
+              <span class="big" id="srcVal">?</span>
+              <span class="note">drops spilled, counted right now</span>
+            </div>
+          </div>
+          <div class="row">
+            <button class="btn blue" id="checkSrc" type="button">Check the source</button>
+            <a class="btn white" href="#top">Go spill some more</a>
+          </div>
+          <p id="srcLine">Memory is a note. The source is the real files. When they differ, the source wins.</p>
+        </div>
+      </div>
+
+      <!-- stage 5 -->
+      <div class="stage" id="stage5" role="tabpanel" aria-labelledby="tab5" hidden>
+        <div class="say" data-say>
+          <img src="cup-360.png" alt="" width="110" height="98">
+          <p class="bubble" data-bubble>This is the wall. Claude builds it, the founder plays it. Only a human saying "it works" gets a build through.</p>
+        </div>
+        <div class="toy">
+          <div class="gate">
+            <div class="buildcard" id="buildcard">
+              <span class="k">Build <span id="buildNo">1</span></span>
+              <span id="buildState">Built by Claude. Not played yet.</span>
+              <div class="row">
+                <button class="btn" id="playBuild" type="button">Play it</button>
+                <button class="btn blue" id="shipBuild" type="button" disabled>It works</button>
+                <button class="btn white" id="backBuild" type="button" disabled>Not yet</button>
+              </div>
+            </div>
+            <div class="wallmark">THE<br>WALL<br>&#9654;</div>
+            <div class="shelf">
+              <span class="k">Shipped</span>
+              <span class="count" id="shipped">0</span>
+              <span class="k">Sent back</span>
+              <span class="count" id="sentBack">0</span>
+            </div>
+          </div>
+          <p>The human plays every build and decides if it works before it ships.</p>
+        </div>
+      </div>
+
+      <div class="nav">
+        <button class="btn white" id="stagePrev" type="button" disabled>Back</button>
+        <button class="btn" id="stageNext" type="button">Next stage</button>
+      </div>
+    </div>
+  </section>
+
+  <!-- ================= TOY 1: Catch the Culture ================= -->
+  <section class="cab blue-cab" id="catchCab" data-guide aria-labelledby="catchTitle">
+    <div class="marquee">
+      <h2 id="catchTitle">Catch the Culture</h2>
+      <span class="tag">1 Player</span>
+    </div>
+
+    <div class="gamebox">
+      <div class="screen">
+        <canvas id="catch" tabindex="0" aria-label="Catch the Culture. Move the spoon to catch the falling yogurt. Use the mouse, your finger, or the arrow keys."></canvas>
+        <div class="overlay" id="catchOverlay">
+          <div class="plate blueplate">
+            <p class="px" id="ovTitle">Catch the culture</p>
+            <p id="ovBody">Move the spoon under the falling yogurt. Pink drops are 10. Blue ones are live cultures, worth 30. Miss a pink drop and you lose a life.</p>
+            <p class="num" id="ovScore" hidden>0</p>
+            <button class="btn big" id="startBtn" type="button">Start</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="deck">
+      <div class="row">
+        <span class="chip"><span class="k">Score</span> <span class="v" id="score">0</span></span>
+        <span class="chip pinkchip"><span class="k">Combo</span> <span class="v" id="combo">0</span></span>
+        <span class="chip"><span class="k">Best</span> <span class="v" id="best">0</span></span>
+        <span class="chip pinkchip"><span class="k">Lives</span> <span class="lives" id="lives" aria-label="lives"></span></span>
+      </div>
+      <p>Catch five in a row and the combo multiplies. Mouse, finger or arrow keys all move the spoon. Your best score stays on this device.</p>
+      <div class="row">
+        <button class="btn white" id="pauseBtn" type="button" disabled>Pause</button>
+      </div>
+      <p class="sr-only" id="gameLive" aria-live="polite"></p>
+    </div>
+  </section>
+
+  <!-- ================= TOY 2 lives in the hero. TOY 3: Capsules ================= -->
+  <section class="cab gacha" id="gachaCab" data-guide aria-labelledby="gachaTitle">
+    <div class="marquee">
+      <h2 id="gachaTitle">Culture Capsules</h2>
+      <span class="tag">Holo stickers</span>
+    </div>
+
+    <div class="deck">
+      <div class="machine" id="machine">
+        <svg viewBox="0 0 300 400" aria-label="A capsule machine. Turn the knob to get a sticker." role="img">
+          <!-- globe -->
+          <circle cx="150" cy="130" r="112" fill="#0E0E1C" stroke="#000" stroke-width="8"/>
+          <circle cx="150" cy="130" r="112" fill="url(#glass)"/>
+          <g>
+            <g class="caps"><circle cx="110" cy="160" r="26" fill="#FF1493" stroke="#000" stroke-width="5"/><path d="M84 160 A 26 26 0 0 0 136 160 Z" fill="#EEF2F8" stroke="#000" stroke-width="5"/></g>
+            <g class="caps"><circle cx="165" cy="175" r="26" fill="#63AED8" stroke="#000" stroke-width="5"/><path d="M139 175 A 26 26 0 0 0 191 175 Z" fill="#EEF2F8" stroke="#000" stroke-width="5"/></g>
+            <g class="caps"><circle cx="140" cy="110" r="26" fill="#FF1493" stroke="#000" stroke-width="5"/><path d="M114 110 A 26 26 0 0 0 166 110 Z" fill="#EEF2F8" stroke="#000" stroke-width="5"/></g>
+            <g class="caps"><circle cx="200" cy="120" r="26" fill="#63AED8" stroke="#000" stroke-width="5"/><path d="M174 120 A 26 26 0 0 0 226 120 Z" fill="#EEF2F8" stroke="#000" stroke-width="5"/></g>
+          </g>
+          <path d="M70 70 C 85 45, 115 32, 145 34" fill="none" stroke="#fff" stroke-width="7" stroke-linecap="round" opacity=".85"/>
+          <!-- body -->
+          <rect x="60" y="236" width="180" height="150" rx="16" fill="#FF1493" stroke="#000" stroke-width="8"/>
+          <rect x="60" y="236" width="180" height="40" rx="12" fill="#B20D66" stroke="#000" stroke-width="8"/>
+          <text x="150" y="265" text-anchor="middle" font-family="'Press Start 2P', monospace" font-size="13" fill="#EEF2F8">CULTURE</text>
+          <!-- knob -->
+          <g class="knob" id="knob">
+            <circle cx="150" cy="318" r="30" fill="#EEF2F8" stroke="#000" stroke-width="7"/>
+            <rect x="140" y="292" width="20" height="52" rx="6" fill="#8A8A8A" stroke="#000" stroke-width="5"/>
+          </g>
+          <!-- chute -->
+          <rect x="188" y="340" width="40" height="38" rx="8" fill="#000"/>
+          <g class="outcap" id="outcap"><circle cx="208" cy="372" r="18" fill="#FF1493" stroke="#000" stroke-width="5"/><path d="M190 372 A 18 18 0 0 0 226 372 Z" fill="#EEF2F8" stroke="#000" stroke-width="5"/></g>
+          <defs>
+            <radialGradient id="glass" cx="40%" cy="30%" r="80%">
+              <stop offset="0" stop-color="#63AED8" stop-opacity=".22"/>
+              <stop offset="1" stop-color="#000" stop-opacity=".25"/>
+            </radialGradient>
+          </defs>
+        </svg>
+        <button class="btn big" id="turnBtn" type="button">Turn the knob</button>
+      </div>
+
+      <div class="cardzone">
+        <div class="holo empty" id="card">
+          <div class="head"><span id="cardNo">?? / ??</span><span>Holo</span></div>
+          <div class="art" id="cardArt">?</div>
+          <div class="name" id="cardName">Turn the knob<small>A sticker is inside.</small></div>
+          <span class="badge">Shiny</span>
+        </div>
+        <details id="album" open>
+          <summary id="albumSum">Collected: counting</summary>
+          <div class="album" id="albumGrid"></div>
+        </details>
+      </div>
+    </div>
+  </section>
+
+  <!-- ================= THE TEASE: Player 2 ================= -->
+  <section class="cab tease" id="player2" data-guide aria-labelledby="teaseTitle">
+    <div class="marquee">
+      <h2 id="teaseTitle">Coming soon: Player 2</h2>
+      <span class="tag">No signal</span>
+    </div>
+
+    <div class="screen">
+      <canvas id="static" width="160" height="110" aria-hidden="true"></canvas>
+      <div class="ghost" id="ghost" aria-hidden="true">100<br>YEARS</div>
+      <div class="overlay" id="teaseOverlay" hidden>
+        <div class="plate">
+          <p class="px">Signal lost</p>
+          <p class="lead">Our first culture is still growing: 100 years of popular culture.</p>
+          <p>It is fermenting. Hold the button again any time.</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="deck">
+      <div class="signal">
+        <div class="label"><span class="px">Signal</span><span id="sigPct">0%</span></div>
+        <div class="bar" id="sigBar" role="progressbar" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0" aria-label="Signal strength"><i></i></div>
+        <p>Hold the button to tune the second cabinet in.</p>
+      </div>
+      <button class="btn big" id="tuneBtn" type="button">Hold to tune</button>
+    </div>
+  </section>
+
+  <!-- ================= Figure Bench ================= -->
+  <section class="cab blue-cab bench" id="benchCab" data-guide aria-labelledby="benchTitle">
+    <div class="marquee">
+      <h2 id="benchTitle">Playable now</h2>
+      <span class="tag">Free</span>
+    </div>
+    <div class="deck">
+      <svg class="benchico" aria-hidden="true"><use href="#st5"/></svg>
+      <div>
+        <h3>The Figure Bench</h3>
+        <p>Build a hero on the Figure Bench. It is open, it is ours, and it works on a phone.</p>
+      </div>
+      <a class="btn blue big" href="/figure-bench/">Build a hero</a>
+    </div>
+  </section>
+
+</main>
+
+<div class="guide" id="guide" aria-live="polite">
+  <img src="cup-360.png" alt="" width="64" height="57" id="guideCup">
+  <p class="bubble" id="guideBubble">Hi. I'm the cup. Scroll, I'll come with you.</p>
+  <button class="hide" id="guideHide" type="button" aria-label="Hide the cup's guide">Hide</button>
+</div>
+
+<footer>
+  <div class="wrap">
+    <div class="row">
+      <img src="cup-360.png" alt="" width="60" height="53">
+      <p class="px" style="font-size:14px;color:var(--pink)">Live Culture Games</p>
+    </div>
+    <div class="row">
+      <a href="mailto:ryan@liveculturegames.com">ryan@liveculturegames.com</a>
+      <span>Escondido, California</span>
+      <a href="/figure-bench/">Figure Bench</a>
+    </div>
+    <p>&copy; 2026 Live Culture Games.</p>
+  </div>
+</footer>
+
+<script>
+(function(){
+  'use strict';
+  const $ = (s, el) => (el || document).querySelector(s);
+  const RM = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+  // ---------- storage (always guarded) ----------
+  const store = {
+    get(k, d){ try { const v = localStorage.getItem(k); return v === null ? d : JSON.parse(v); } catch(e){ return d; } },
+    set(k, v){ try { localStorage.setItem(k, JSON.stringify(v)); } catch(e){ /* private window, blocked storage: the toy still works */ } }
+  };
+
+  // ---------- sound (WebAudio, off by default) ----------
+  const Sound = {
+    ctx: null, on: false,
+    ensure(){
+      if (!this.ctx) { try { this.ctx = new (window.AudioContext || window.webkitAudioContext)(); } catch(e){ this.ctx = null; } }
+      if (this.ctx && this.ctx.state === 'suspended') { this.ctx.resume(); }
+      return this.ctx;
+    },
+    tone(f, t0, dur, type, vol){
+      const c = this.ctx; if (!c) return;
+      const o = c.createOscillator(), g = c.createGain();
+      o.type = type || 'square'; o.frequency.setValueAtTime(f, t0);
+      g.gain.setValueAtTime(0.0001, t0);
+      g.gain.linearRampToValueAtTime(vol || 0.07, t0 + 0.01);
+      g.gain.exponentialRampToValueAtTime(0.0001, t0 + dur);
+      o.connect(g); g.connect(c.destination);
+      o.start(t0); o.stop(t0 + dur + 0.03);
+    },
+    play(fn){ if (!this.on || !this.ensure()) return; fn(this.ctx.currentTime); },
+    coin(){ this.play(t => { this.tone(987.77, t, 0.09, 'square', 0.06); this.tone(1318.51, t + 0.09, 0.42, 'square', 0.06); }); },
+    blip(){ this.play(t => { this.tone(660, t, 0.07, 'square', 0.05); this.tone(990, t + 0.06, 0.09, 'square', 0.05); }); },
+    culture(){ this.play(t => { [523, 659, 784, 1047].forEach((f, i) => this.tone(f, t + i * 0.06, 0.12, 'triangle', 0.07)); }); },
+    miss(){ this.play(t => { this.tone(180, t, 0.18, 'sawtooth', 0.05); }); },
+    pop(){ this.play(t => { this.tone(300, t, 0.05, 'sine', 0.08); this.tone(900, t + 0.04, 0.12, 'sine', 0.06); }); },
+    over(){ this.play(t => { [440, 370, 311, 220].forEach((f, i) => this.tone(f, t + i * 0.14, 0.16, 'square', 0.05)); }); },
+    tune(p){ this.play(t => { this.tone(200 + p * 900, t, 0.05, 'sine', 0.03); }); }
+  };
+  const soundBtn = $('#soundBtn');
+  soundBtn.addEventListener('click', () => {
+    Sound.on = !Sound.on;
+    soundBtn.setAttribute('aria-pressed', String(Sound.on));
+    $('#soundLabel').textContent = Sound.on ? 'Sound: On' : 'Sound: Off';
+    $('#soundWave').style.opacity = Sound.on ? '1' : '0';
+    $('#soundX').style.opacity = Sound.on ? '0' : '1';
+    if (Sound.on) { Sound.ensure(); Sound.blip(); }
+  });
+
+  // ---------- hero: the cup reacts ----------
+  const heroScreen = $('#heroScreen'), cupwrap = $('#cupwrap'), cupmove = $('#cupmove'), heroFx = $('#heroFx'), puddle = $('#puddle');
+  let dropsSpilled = 0, credits = 0, spillSeq = 0;
+  const dropsEl = $('#drops'), creditsEl = $('#credits');
+
+  heroScreen.addEventListener('pointermove', e => {
+    if (RM) return;
+    const r = heroScreen.getBoundingClientRect();
+    const tx = ((e.clientX - r.left) / r.width - 0.5) * 2;
+    const ty = ((e.clientY - r.top) / r.height - 0.5) * 2;
+    cupmove.style.setProperty('--tx', tx.toFixed(3));
+    cupmove.style.setProperty('--ty', ty.toFixed(3));
+  });
+  heroScreen.addEventListener('pointerleave', () => { cupmove.style.setProperty('--tx', 0); cupmove.style.setProperty('--ty', 0); });
+
+  function restartAnim(el, cls){ el.classList.remove(cls); void el.offsetWidth; el.classList.add(cls); }
+
+  function spill(n, big){
+    const r = heroScreen.getBoundingClientRect(), c = cupwrap.getBoundingClientRect();
+    const ox = c.left - r.left + c.width / 2, oy = c.top - r.top + c.height * 0.55;
+    spillSeq++;
+    for (let i = 0; i < n; i++){
+      // evenly spread angles, offset each spill so the fan never lands twice in the same place
+      const a = (-Math.PI * 0.95) + (Math.PI * 0.9) * (i / Math.max(1, n - 1)) + (spillSeq % 5) * 0.11;
+      const dist = (big ? 150 : 110) + ((i * 37 + spillSeq * 13) % 60);
+      const d = document.createElement('div');
+      d.className = 'flydrop';
+      d.style.left = (ox - 17) + 'px'; d.style.top = (oy - 17) + 'px';
+      d.style.setProperty('--dx', (Math.cos(a) * dist).toFixed(0) + 'px');
+      d.style.setProperty('--dy', (Math.sin(a) * dist * 0.6 + 70).toFixed(0) + 'px');
+      d.style.setProperty('--rot', ((i % 2 ? -1 : 1) * (40 + i * 15)) + 'deg');
+      d.innerHTML = '<svg viewBox="0 0 40 48" width="34" height="34"><use href="#drop"/></svg>';
+      d.addEventListener('animationend', () => d.remove());
+      heroFx.appendChild(d);
+    }
+    dropsSpilled += n;
+    dropsEl.textContent = dropsSpilled;
+    puddle.style.setProperty('--pool', Math.min(1, dropsSpilled / 60).toFixed(2));
+  }
+
+  heroScreen.addEventListener('pointerdown', e => {
+    if (e.button !== undefined && e.button !== 0) return;
+    restartAnim(cupwrap, 'wobble');
+    spill(6, false);
+    Sound.blip();
+  });
+
+  $('#coinBtn').addEventListener('click', () => {
+    credits++;
+    creditsEl.textContent = credits;
+    restartAnim(cupwrap, 'happy');
+    cupwrap.classList.remove('wobble');
+    spill(10, true);
+    Sound.coin();
+    const t = $('#attractText');
+    t.textContent = 'Credit ' + credits + ' - press start';
+    clearTimeout(t._tm);
+    t._tm = setTimeout(() => { t.textContent = 'Insert coin'; }, 2600);
+  });
+
+  // ---------- toy 1: Catch the Culture ----------
+  const canvas = $('#catch'), ctx = canvas.getContext('2d');
+  const scoreEl = $('#score'), comboEl = $('#combo'), bestEl = $('#best'), livesEl = $('#lives');
+  const overlay = $('#catchOverlay'), ovTitle = $('#ovTitle'), ovBody = $('#ovBody'), ovScore = $('#ovScore'), startBtn = $('#startBtn'), pauseBtn = $('#pauseBtn'), gameLive = $('#gameLive');
+  const PHI = 0.6180339887;
+  const G = {
+    W: 0, H: 0, dpr: 1, running: false, paused: false, visible: true,
+    score: 0, combo: 0, lives: 3, best: store.get('lcg-catch-best', 0),
+    spoonX: 0, targetX: 0, drops: [], parts: [], floats: [],
+    t: 0, spawnAt: 0, n: 0, last: 0, raf: 0, keys: {left:false, right:false}, splashAt: 0
+  };
+  bestEl.textContent = G.best;
+
+  function drawLives(){
+    livesEl.innerHTML = '';
+    for (let i = 0; i < 3; i++){
+      const s = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
+      s.setAttribute('viewBox', '0 0 40 48');
+      if (i >= G.lives) s.classList.add('lost');
+      const u = document.createElementNS('http://www.w3.org/2000/svg', 'use');
+      u.setAttribute('href', '#drop'); s.appendChild(u); livesEl.appendChild(s);
+    }
+  }
+  drawLives();
+
+  function resize(){
+    const r = canvas.getBoundingClientRect();
+    if (!r.width) return;
+    G.dpr = Math.min(2, window.devicePixelRatio || 1);
+    G.W = r.width; G.H = r.height;
+    canvas.width = Math.round(r.width * G.dpr); canvas.height = Math.round(r.height * G.dpr);
+    ctx.setTransform(G.dpr, 0, 0, G.dpr, 0, 0);
+    if (!G.spoonX) { G.spoonX = G.targetX = G.W / 2; }
+    if (!G.running) drawFrame();
+  }
+  if ('ResizeObserver' in window) new ResizeObserver(resize).observe(canvas); else window.addEventListener('resize', resize);
+  resize();
+
+  function hud(){ scoreEl.textContent = G.score; comboEl.textContent = G.combo; bestEl.textContent = G.best; }
+  function mult(){ return Math.min(5, 1 + Math.floor(G.combo / 5)); }
+
+  function startGame(){
+    G.score = 0; G.combo = 0; G.lives = 3; G.drops = []; G.parts = []; G.floats = [];
+    G.t = 0; G.spawnAt = 0.4; G.n = 0; G.running = true; G.paused = false; G.last = 0;
+    drawLives(); hud();
+    overlay.hidden = true; pauseBtn.disabled = false; pauseBtn.textContent = 'Pause';
+    canvas.focus({ preventScroll: true });
+    gameLive.textContent = 'Game started.';
+    document.body.classList.add('playing');
+    loop();
+  }
+  function endGame(){
+    G.running = false; cancelAnimationFrame(G.raf);
+    const isBest = G.score > G.best;
+    if (isBest) { G.best = G.score; store.set('lcg-catch-best', G.best); }
+    hud();
+    ovTitle.textContent = isBest ? 'New best!' : 'Game over';
+    ovBody.textContent = isBest ? 'That is the top score on this device.' : 'Best on this device: ' + G.best + '.';
+    ovScore.hidden = false; ovScore.textContent = G.score;
+    startBtn.textContent = 'Play again';
+    overlay.hidden = false; pauseBtn.disabled = true;
+    gameLive.textContent = 'Game over. Score ' + G.score + '.';
+    document.body.classList.remove('playing');
+    guideSay(isBest ? 'New best: ' + G.score + '. I saw the whole thing.' : G.score + ' points. The spoon was close. Again?', isBest ? 'proud' : 'shy');
+    Sound.over();
+    drawFrame();
+  }
+  function togglePause(force){
+    if (!G.running) return;
+    G.paused = force === undefined ? !G.paused : force;
+    pauseBtn.textContent = G.paused ? 'Resume' : 'Pause';
+    document.body.classList.toggle('playing', !G.paused);
+    if (!G.paused) { G.last = 0; loop(); }
+  }
+  startBtn.addEventListener('click', startGame);
+  pauseBtn.addEventListener('click', () => togglePause());
+  document.addEventListener('visibilitychange', () => { if (document.hidden && G.running && !G.paused) togglePause(true); });
+  if ('IntersectionObserver' in window){
+    new IntersectionObserver(es => { es.forEach(en => { G.visible = en.isIntersecting; if (!G.visible && G.running && !G.paused) togglePause(true); }); }, { threshold: 0.1 }).observe(canvas);
+  }
+
+  // input: pointer, touch, keys
+  function pointerX(e){ const r = canvas.getBoundingClientRect(); return (e.clientX - r.left); }
+  canvas.addEventListener('pointermove', e => { G.targetX = pointerX(e); });
+  canvas.addEventListener('pointerdown', e => { G.targetX = pointerX(e); canvas.setPointerCapture && canvas.setPointerCapture(e.pointerId); if (G.running && G.paused) togglePause(false); });
+  canvas.addEventListener('keydown', e => {
+    if (e.key === 'ArrowLeft') { G.keys.left = true; e.preventDefault(); }
+    else if (e.key === 'ArrowRight') { G.keys.right = true; e.preventDefault(); }
+    else if (e.key === ' ' || e.key === 'Enter') { if (!G.running) startGame(); else togglePause(); e.preventDefault(); }
+    else if (e.key === 'p' || e.key === 'P') { togglePause(); }
+  });
+  canvas.addEventListener('keyup', e => { if (e.key === 'ArrowLeft') G.keys.left = false; if (e.key === 'ArrowRight') G.keys.right = false; });
+
+  function spawn(){
+    G.n++;
+    const margin = 40;
+    const x = margin + ((G.n * PHI) % 1) * (G.W - margin * 2);
+    const blue = G.n % 5 === 0;
+    const speed = Math.min(360, 130 + G.score * 0.35);
+    G.drops.push({ x, y: -30, vy: speed * (blue ? 0.85 : 1), r: blue ? 15 : 17, blue, ph: G.n * 1.7 });
+  }
+
+  function drawDrop(x, y, r, blue, wob){
+    ctx.save(); ctx.translate(x, y); ctx.rotate(wob);
+    ctx.beginPath();
+    ctx.moveTo(0, -r * 1.55);
+    ctx.bezierCurveTo(r * 0.55, -r * 0.55, r, -r * 0.1, r, r * 0.25);
+    ctx.arc(0, r * 0.25, r, 0, Math.PI, false);
+    ctx.bezierCurveTo(-r, -r * 0.1, -r * 0.55, -r * 0.55, 0, -r * 1.55);
+    ctx.closePath();
+    ctx.fillStyle = blue ? '#63AED8' : '#FF1493'; ctx.fill();
+    ctx.lineWidth = 4; ctx.lineJoin = 'round'; ctx.strokeStyle = '#000'; ctx.stroke();
+    ctx.beginPath(); ctx.moveTo(-r * 0.5, r * 0.3); ctx.quadraticCurveTo(-r * 0.5, -r * 0.3, -r * 0.1, -r * 0.6);
+    ctx.lineWidth = 3; ctx.lineCap = 'round'; ctx.strokeStyle = '#fff'; ctx.stroke();
+    ctx.restore();
+  }
+  function drawSpoon(x, y){
+    ctx.save(); ctx.translate(x, y);
+    // handle
+    ctx.lineCap = 'round';
+    ctx.beginPath(); ctx.moveTo(28, 4); ctx.lineTo(74, -52);
+    ctx.lineWidth = 20; ctx.strokeStyle = '#000'; ctx.stroke();
+    ctx.lineWidth = 11; ctx.strokeStyle = '#8A8A8A'; ctx.stroke();
+    ctx.beginPath(); ctx.moveTo(44, -16); ctx.lineTo(62, -38); ctx.lineWidth = 3; ctx.strokeStyle = '#fff'; ctx.stroke();
+    // bowl
+    ctx.beginPath(); ctx.ellipse(0, 0, 50, 24, 0, 0, Math.PI * 2);
+    ctx.fillStyle = '#EEF2F8'; ctx.fill(); ctx.lineWidth = 5; ctx.strokeStyle = '#000'; ctx.stroke();
+    ctx.beginPath(); ctx.ellipse(0, 3, 38, 14, 0, 0, Math.PI * 2); ctx.fillStyle = '#C9D3E2'; ctx.fill();
+    ctx.beginPath(); ctx.moveTo(-36, -8); ctx.quadraticCurveTo(-22, -20, -6, -20); ctx.lineWidth = 4; ctx.strokeStyle = '#fff'; ctx.stroke();
+    ctx.restore();
+  }
+  function drawBackground(){
+    ctx.fillStyle = '#05050C'; ctx.fillRect(0, 0, G.W, G.H);
+    ctx.strokeStyle = 'rgba(99,174,216,.14)'; ctx.lineWidth = 1;
+    for (let x = 0; x < G.W; x += 40){ ctx.beginPath(); ctx.moveTo(x, 0); ctx.lineTo(x, G.H); ctx.stroke(); }
+    for (let y = 0; y < G.H; y += 40){ ctx.beginPath(); ctx.moveTo(0, y); ctx.lineTo(G.W, y); ctx.stroke(); }
+    ctx.strokeStyle = 'rgba(255,20,147,.5)'; ctx.lineWidth = 3;
+    ctx.beginPath(); ctx.moveTo(0, G.H - 30); ctx.lineTo(G.W, G.H - 30); ctx.stroke();
+  }
+  function drawFrame(){
+    drawBackground();
+    const sy = G.H - 70;
+    G.drops.forEach(d => drawDrop(d.x, d.y, d.r, d.blue, Math.sin(G.t * 4 + d.ph) * 0.15));
+    drawSpoon(G.spoonX, sy);
+    G.parts.forEach(p => { ctx.globalAlpha = Math.max(0, p.life); ctx.fillStyle = p.c; ctx.beginPath(); ctx.arc(p.x, p.y, p.r, 0, Math.PI * 2); ctx.fill(); ctx.strokeStyle = '#000'; ctx.lineWidth = 2; ctx.stroke(); });
+    ctx.globalAlpha = 1;
+    G.floats.forEach(f => {
+      ctx.globalAlpha = Math.max(0, f.life);
+      ctx.font = '700 22px "Press Start 2P", monospace'; ctx.textAlign = 'center';
+      ctx.lineWidth = 6; ctx.strokeStyle = '#000'; ctx.strokeText(f.txt, f.x, f.y);
+      ctx.fillStyle = f.c; ctx.fillText(f.txt, f.x, f.y);
+    });
+    ctx.globalAlpha = 1;
+    if (G.combo >= 5){
+      ctx.font = '16px "Press Start 2P", monospace'; ctx.textAlign = 'center';
+      const s = 'COMBO x' + mult();
+      ctx.lineWidth = 6; ctx.strokeStyle = '#000'; ctx.strokeText(s, G.W / 2, 34);
+      ctx.fillStyle = '#FF1493'; ctx.fillText(s, G.W / 2, 34);
+    }
+  }
+  function burst(x, y, c, n){
+    for (let i = 0; i < n; i++){
+      const a = -Math.PI * (0.15 + 0.7 * i / (n - 1));
+      G.parts.push({ x, y, vx: Math.cos(a) * (90 + (i % 3) * 40), vy: Math.sin(a) * (120 + (i % 2) * 60), r: 4 + (i % 3), life: 1, c });
+    }
+  }
+  function step(dt){
+    G.t += dt;
+    // spoon: pointer target or keys
+    const kv = 520 * dt;
+    if (G.keys.left) G.targetX -= kv;
+    if (G.keys.right) G.targetX += kv;
+    G.targetX = Math.max(50, Math.min(G.W - 50, G.targetX));
+    G.spoonX += (G.targetX - G.spoonX) * Math.min(1, dt * 18);
+    // spawn
+    G.spawnAt -= dt;
+    if (G.spawnAt <= 0){ spawn(); G.spawnAt = Math.max(0.42, 0.95 - G.score * 0.0012); }
+    const sy = G.H - 70;
+    for (let i = G.drops.length - 1; i >= 0; i--){
+      const d = G.drops[i]; d.y += d.vy * dt;
+      const dx = d.x - G.spoonX, dy = d.y - sy;
+      if (dy > -14 && dy < 16 && Math.abs(dx) < 52){
+        G.drops.splice(i, 1);
+        G.combo++;
+        const pts = (d.blue ? 30 : 10) * mult();
+        G.score += pts;
+        G.floats.push({ x: d.x, y: sy - 36, txt: '+' + pts, life: 1, c: d.blue ? '#63AED8' : '#FF1493' });
+        burst(d.x, sy - 10, d.blue ? '#63AED8' : '#FF1493', 7);
+        if (d.blue) Sound.culture(); else Sound.blip();
+        hud();
+      } else if (d.y > G.H + 20){
+        G.drops.splice(i, 1);
+        if (!d.blue){
+          G.combo = 0; G.lives--; drawLives(); hud(); Sound.miss();
+          G.floats.push({ x: d.x, y: G.H - 40, txt: 'MISS', life: 1, c: '#EEF2F8' });
+          if (G.lives <= 0){ endGame(); return; }
+        } else { G.combo = 0; hud(); }
+      }
+    }
+    G.parts.forEach(p => { p.vy += 520 * dt; p.x += p.vx * dt; p.y += p.vy * dt; p.life -= dt * 1.8; });
+    G.parts = G.parts.filter(p => p.life > 0);
+    G.floats.forEach(f => { f.y -= 50 * dt; f.life -= dt * 1.1; });
+    G.floats = G.floats.filter(f => f.life > 0);
+  }
+  function loop(ts){
+    if (!G.running || G.paused) return;
+    if (ts === undefined) { G.raf = requestAnimationFrame(loop); return; }
+    if (!G.last) G.last = ts;
+    const dt = Math.min(0.05, (ts - G.last) / 1000); G.last = ts;
+    step(dt);
+    if (!G.running) return;
+    drawFrame();
+    G.raf = requestAnimationFrame(loop);
+  }
+
+  // ---------- toy 3: Culture Capsules (gacha) ----------
+  const STICKERS = [
+    { id: 'st1', name: 'Drip', line: 'The first drop. Every culture starts with one.' },
+    { id: 'st2', name: 'Twin Drop', line: 'Two drops, one spoon.' },
+    { id: 'st3', name: 'Splat', line: 'The puddle with ambitions.' },
+    { id: 'st4', name: 'Lid Curl', line: 'Peeled. No going back.' },
+    { id: 'st5', name: 'Spoonful', line: 'The right amount of culture.' },
+    { id: 'st6', name: 'Sealed Cup', line: 'Still fermenting. Do not peel.' }
+  ];
+  const machine = $('#machine'), turnBtn = $('#turnBtn'), card = $('#card'), cardNo = $('#cardNo'), cardArt = $('#cardArt'), cardName = $('#cardName');
+  const albumSum = $('#albumSum'), albumGrid = $('#albumGrid'), album = $('#album');
+  let got = store.get('lcg-stickers', []);
+  if (!Array.isArray(got)) got = [];
+  let turns = store.get('lcg-turns', 0); if (typeof turns !== 'number') turns = 0;
+  let busy = false;
+
+  function renderAlbum(){
+    const count = STICKERS.filter(s => got.indexOf(s.id) >= 0).length;
+    albumSum.textContent = 'Collected: ' + count + ' of ' + STICKERS.length;
+    album.open = count < STICKERS.length;
+    albumGrid.innerHTML = '';
+    STICKERS.forEach((s, i) => {
+      const slot = document.createElement('div');
+      const has = got.indexOf(s.id) >= 0;
+      slot.className = 'slot' + (has ? ' got' : '');
+      slot.setAttribute('title', has ? s.name : 'Not yet');
+      slot.innerHTML = has ? '<svg viewBox="0 0 120 120" aria-label="' + s.name + '"><use href="#' + s.id + '"/></svg>' : '<span aria-label="Sticker ' + (i + 1) + ' not collected">?</span>';
+      albumGrid.appendChild(slot);
+    });
+  }
+  renderAlbum();
+
+  function showCard(s, idx, shiny){
+    card.classList.remove('empty', 'enter', 'shiny');
+    void card.offsetWidth;
+    card.classList.add('enter'); if (shiny) card.classList.add('shiny');
+    cardNo.textContent = String(idx + 1).padStart(2, '0') + ' / ' + String(STICKERS.length).padStart(2, '0');
+    cardArt.innerHTML = '<svg viewBox="0 0 120 120" role="img" aria-label="' + s.name + '"><use href="#' + s.id + '"/></svg>';
+    cardName.innerHTML = '';
+    cardName.appendChild(document.createTextNode(s.name));
+    const small = document.createElement('small'); small.textContent = s.line; cardName.appendChild(small);
+  }
+
+  turnBtn.addEventListener('click', () => {
+    if (busy) return; busy = true; turnBtn.disabled = true;
+    // no dice: the knob walks every sticker before any repeat (5 is coprime with 6)
+    const idx = (turns * 5) % STICKERS.length;
+    const shiny = turns >= STICKERS.length;
+    turns++; store.set('lcg-turns', turns);
+    machine.classList.remove('dispense');
+    machine.classList.add('turning');
+    Sound.blip();
+    const t1 = RM ? 250 : 650, t2 = RM ? 250 : 800;
+    setTimeout(() => {
+      machine.classList.add('dispense');
+      setTimeout(() => {
+        Sound.pop();
+        const s = STICKERS[idx];
+        if (got.indexOf(s.id) < 0) { got.push(s.id); store.set('lcg-stickers', got); }
+        showCard(s, idx, shiny);
+        renderAlbum();
+        guideSay(got.length >= STICKERS.length ? 'All six. Now they come out shiny.' : s.name + '. ' + s.line, 'happy');
+        machine.classList.remove('turning');
+        busy = false; turnBtn.disabled = false;
+        turnBtn.textContent = got.length >= STICKERS.length ? 'Turn again (shiny)' : 'Turn the knob';
+      }, t2);
+    }, t1);
+  });
+  // holo tilt follows the pointer
+  card.addEventListener('pointermove', e => {
+    if (RM || card.classList.contains('empty')) return;
+    const r = card.getBoundingClientRect();
+    const px = (e.clientX - r.left) / r.width - 0.5, py = (e.clientY - r.top) / r.height - 0.5;
+    card.style.setProperty('--ry', (px * 22).toFixed(1) + 'deg');
+    card.style.setProperty('--rx', (-py * 22).toFixed(1) + 'deg');
+  });
+  card.addEventListener('pointerleave', () => { card.style.setProperty('--ry', '0deg'); card.style.setProperty('--rx', '0deg'); });
+
+  // ---------- the tease: Player 2 ----------
+  const st = $('#static'), sctx = st.getContext('2d'), teaseScreen = st.parentElement;
+  const tuneBtn = $('#tuneBtn'), sigBar = $('#sigBar'), sigPct = $('#sigPct'), teaseOverlay = $('#teaseOverlay'), ghost = $('#ghost');
+  const SW = st.width, SH = st.height;
+  const img = sctx.createImageData(SW, SH);
+  let seed = 0x9E3779B9;
+  function rnd(){ seed ^= seed << 13; seed ^= seed >>> 17; seed ^= seed << 5; return (seed >>> 0) / 4294967296; }
+  let holding = false, sig = 0, locked = false, lastT = 0, tVisible = true, staticTimer = 0, lastStatic = 0, toneAt = 0;
+  function drawStatic(){
+    const d = img.data; const tint = sig;
+    for (let i = 0; i < d.length; i += 4){
+      const v = rnd();
+      const g = v * 255 * (0.55 + 0.45 * (1 - tint));
+      d[i] = g + (v > 0.97 ? 120 * tint : 0); d[i + 1] = g * (1 - 0.5 * tint); d[i + 2] = g + (v > 0.94 ? 80 : 0); d[i + 3] = 255;
+    }
+    sctx.putImageData(img, 0, 0);
+    // rolling bar
+    sctx.fillStyle = 'rgba(0,0,0,.35)'; sctx.fillRect(0, (performance.now() / 12) % SH, SW, 10);
+  }
+  function setSig(v){
+    sig = Math.max(0, Math.min(1, v));
+    sigBar.style.setProperty('--sig', sig.toFixed(3));
+    sigBar.setAttribute('aria-valuenow', Math.round(sig * 100));
+    sigPct.textContent = Math.round(sig * 100) + '%';
+    teaseScreen.style.setProperty('--st', (1 - sig * 0.78).toFixed(3));
+    ghost.style.setProperty('--gh', Math.max(0, (sig - 0.3) / 0.7).toFixed(3));
+  }
+  function teaseLoop(ts){
+    if (!lastT) lastT = ts;
+    const dt = Math.min(0.05, (ts - lastT) / 1000); lastT = ts;
+    if (tVisible){
+      const period = RM ? 400 : 40;
+      if (ts - lastStatic > period) { drawStatic(); lastStatic = ts; }
+      if (holding && !locked){
+        setSig(sig + dt / 2.6);
+        if (ts - toneAt > 120) { Sound.tune(sig); toneAt = ts; }
+        if (sig >= 0.92){
+          locked = true; holding = false;
+          tuneBtn.classList.remove('is-down');
+          teaseOverlay.hidden = false;
+          tuneBtn.textContent = 'Hold to tune again';
+          guideSay('So close. It is still fermenting. I told you.', 'shy');
+          Sound.over();
+        }
+      } else if (!holding && !locked && sig > 0){
+        setSig(sig - dt / 1.6);
+      }
+    }
+    requestAnimationFrame(teaseLoop);
+  }
+  if ('IntersectionObserver' in window){
+    new IntersectionObserver(es => { es.forEach(en => { tVisible = en.isIntersecting; }); }, { threshold: 0.05 }).observe(st);
+  }
+  requestAnimationFrame(teaseLoop);
+  setSig(0);
+  function holdStart(e){ if (e && e.preventDefault) e.preventDefault(); if (locked) { locked = false; teaseOverlay.hidden = true; setSig(0); } holding = true; tuneBtn.classList.add('is-down'); Sound.ensure && Sound.on && Sound.ensure(); }
+  function holdEnd(){ holding = false; tuneBtn.classList.remove('is-down'); }
+  tuneBtn.addEventListener('pointerdown', holdStart);
+  tuneBtn.addEventListener('pointerup', holdEnd);
+  tuneBtn.addEventListener('pointercancel', holdEnd);
+  tuneBtn.addEventListener('pointerleave', holdEnd);
+  tuneBtn.addEventListener('keydown', e => { if ((e.key === ' ' || e.key === 'Enter') && !e.repeat) { holdStart(e); } });
+  tuneBtn.addEventListener('keyup', e => { if (e.key === ' ' || e.key === 'Enter') holdEnd(); });
+  tuneBtn.addEventListener('click', e => e.preventDefault());
+  window.addEventListener('blur', holdEnd);
+
+  // ---------- the cup is the guide ----------
+  const guide = $('#guide'), guideBubble = $('#guideBubble'), heroBubble = $('#heroBubble'), heroSay = $('#heroSay');
+  const MOODS = ['mood-happy', 'mood-wobble', 'mood-proud', 'mood-shy', 'mood-think'];
+  function mood(el, m){
+    if (!el) return;
+    MOODS.forEach(c => el.classList.remove(c));
+    if (m) { void el.offsetWidth; el.classList.add('mood-' + m); }
+  }
+  const SECTION_LINES = {
+    heroCab:  'Hi. I\'m the cup. Click me and I spill. It\'s fine, I\'m mostly yogurt.',
+    teachCab: 'This part is how we make games. Press a stage and I\'ll explain.',
+    catchCab: 'Spoon goes under the drop. Five in a row and the combo kicks in.',
+    gachaCab: 'Turn the knob. Every sticker comes out before any repeats. No dice here.',
+    player2:  'Player 2 isn\'t ready. Hold the button and see how close you get.',
+    benchCab: 'The Figure Bench is open right now. Go build a hero.'
+  };
+  let currentSection = 'heroCab', sayTimer = 0;
+  function guideSay(line, m, hold){
+    guideBubble.textContent = line;
+    mood(guide, m || 'happy');
+    clearTimeout(sayTimer);
+    if (hold !== false) sayTimer = setTimeout(() => { guideBubble.textContent = SECTION_LINES[currentSection] || SECTION_LINES.heroCab; }, 4200);
+  }
+  if ('IntersectionObserver' in window){
+    const io = new IntersectionObserver(es => {
+      es.forEach(en => {
+        if (en.isIntersecting && en.target.id !== currentSection){
+          currentSection = en.target.id;
+          clearTimeout(sayTimer);
+          guideBubble.textContent = SECTION_LINES[currentSection];
+          mood(guide, 'wobble');
+        }
+      });
+    }, { rootMargin: '-40% 0px -45% 0px', threshold: 0 });
+    document.querySelectorAll('[data-guide]').forEach(s => io.observe(s));
+  }
+  $('#guideHide').addEventListener('click', () => { guide.hidden = true; });
+
+  // the hero cup talks too
+  function heroTalk(line, m){
+    heroBubble.textContent = line; mood(heroSay, m);
+  }
+  let spillTalk = 0;
+  heroScreen.addEventListener('pointerdown', () => {
+    const lines = ['Whoops. Worth it.', 'That one\'s on you.', 'More yogurt where that came from.', 'Careful, the puddle is growing.'];
+    heroTalk(lines[spillTalk++ % lines.length], 'wobble');
+  });
+  $('#coinBtn').addEventListener('click', () => {
+    heroTalk(credits === 1 ? 'A credit! Press start. Or just keep feeding me coins, also fine.' : 'Credit ' + credits + '. You are very generous.', 'happy');
+    guideSay('Ooh, a coin. Watch me.', 'happy');
+  });
+
+  // ---------- teach: stage select ----------
+  const tabs = Array.prototype.slice.call(document.querySelectorAll('#stages .stagebtn'));
+  const panels = tabs.map(t => document.getElementById(t.getAttribute('aria-controls')));
+  const prevBtn = $('#stagePrev'), nextBtn = $('#stageNext');
+  let stage = 0;
+  function showStage(i, speak){
+    stage = Math.max(0, Math.min(tabs.length - 1, i));
+    tabs.forEach((t, k) => { t.setAttribute('aria-selected', String(k === stage)); if (k < stage) t.classList.add('done'); });
+    panels.forEach((p, k) => { p.hidden = k !== stage; });
+    prevBtn.disabled = stage === 0;
+    nextBtn.textContent = stage === tabs.length - 1 ? 'Back to stage 1' : 'Next stage';
+    const say = panels[stage].querySelector('[data-say]');
+    mood(say, ['proud', 'shy', 'think', 'think', 'proud'][stage]);
+    if (stage === 3) memSnapshot();
+    if (speak) guideSay('Stage ' + (stage + 1) + ' of ' + tabs.length + '. ' + ['Two players.', 'The limits are real.', 'One thing at a time.', 'The source is the truth.', 'The wall.'][stage], 'think');
+  }
+  tabs.forEach((t, k) => t.addEventListener('click', () => showStage(k, true)));
+  prevBtn.addEventListener('click', () => showStage(stage - 1, true));
+  nextBtn.addEventListener('click', () => showStage(stage === tabs.length - 1 ? 0 : stage + 1, true));
+  $('#stages').addEventListener('keydown', e => {
+    if (e.key === 'ArrowRight') { showStage(stage + 1, true); tabs[stage].focus(); }
+    if (e.key === 'ArrowLeft') { showStage(stage - 1, true); tabs[stage].focus(); }
+  });
+
+  // stage 1: co-op pads
+  const coop = $('#coop'), coopBubble = $('#stage1 [data-bubble]'), coopSay = $('#stage1 [data-say]');
+  const keys = Array.prototype.slice.call(coop.querySelectorAll('.key'));
+  keys.forEach(k => k.addEventListener('click', () => {
+    k.classList.add('lit');
+    const lit = keys.filter(x => x.classList.contains('lit')).length;
+    coopBubble.textContent = lit === keys.length ? 'That\'s the whole team. Two players, one game, nobody playing alone.' : k.getAttribute('data-line');
+    mood(coopSay, k.closest('.p1') ? 'proud' : 'think');
+    Sound.blip();
+  }));
+
+  // stage 2: the dial from wall to page
+  const dial = $('#wallDial'), sample = $('#sample'), dialLine = $('#dialLine'), dialSay = $('#stage2 [data-say]'), dialBubble = $('#stage2 [data-bubble]');
+  const PAGE_ROWS = [['Big type', 'Body text never under 18px.'], ['One idea', 'One block, one thing.'], ['Short rows', 'Rows you can count.'], ['Prose behind', 'The paragraph waits behind the row that names it.']];
+  const wallHTML = sample.innerHTML;
+  let dialMode = 'wall';
+  function renderDial(){
+    const v = Number(dial.value);
+    if (v < 50){
+      if (dialMode !== 'wall') { sample.className = 'sample wall'; sample.innerHTML = wallHTML; dialMode = 'wall'; }
+      sample.style.setProperty('--fs', (18 + v * 0.08).toFixed(1) + 'px');
+      dialLine.textContent = v === 0 ? 'A wall of text. Readable, but it costs the reader the buffer they were thinking with.' : 'Bigger helps. The shape is still a wall.';
+    } else {
+      if (dialMode !== 'page'){
+        dialMode = 'page'; sample.className = 'sample page';
+        sample.innerHTML = PAGE_ROWS.map(r => '<div class="rowline"><b>' + r[0] + '</b><span>' + r[1] + '</span></div>').join('');
+      }
+      dialLine.textContent = v === 100 ? 'Same words, new shape. This is how every page here is built.' : 'Now it is rows. Keep going.';
+      if (v === 100) { dialBubble.textContent = 'There. Four rows I can count. That is the whole trick, and it works for everyone.'; mood(dialSay, 'proud'); }
+    }
+  }
+  dial.addEventListener('input', renderDial);
+
+  // stage 3: one thing at a time
+  const qcards = Array.prototype.slice.call(document.querySelectorAll('#queue .qcard'));
+  const queueNow = $('#queueNow'), queueHeld = $('#queueHeld'), qSay = $('#stage3 [data-say]'), qBubble = $('#stage3 [data-bubble]');
+  let qi = 0;
+  function renderQueue(){
+    qcards.forEach((c, k) => { c.classList.toggle('now', k === qi); c.classList.toggle('done', k < qi); });
+    queueNow.textContent = qcards[qi].textContent;
+    queueHeld.textContent = qcards.length - 1 - qi;
+  }
+  $('#queueNext').addEventListener('click', () => {
+    qi = (qi + 1) % qcards.length;
+    renderQueue();
+    const held = qcards.length - 1 - qi;
+    qBubble.textContent = qi === 0 ? 'And round again. A new idea, one card at a time.' : held === 0 ? 'Last card. Nothing else to hold. Nice.' : 'You have ' + qcards[qi].textContent + '. I\'m holding the other ' + held + '.';
+    mood(qSay, qi === qcards.length - 1 ? 'proud' : 'think');
+    Sound.blip();
+  });
+
+  // stage 4: memory vs source (uses the page's own live counter)
+  const memVal = $('#memVal'), srcVal = $('#srcVal'), srcBox = $('#srcBox'), srcLine = $('#srcLine'), srcSay = $('#stage4 [data-say]'), srcBubble = $('#stage4 [data-bubble]');
+  let memSnap = null;
+  function memSnapshot(){ if (memSnap === null) { memSnap = dropsSpilled; memVal.textContent = memSnap; } }
+  $('#checkSrc').addEventListener('click', () => {
+    memSnapshot();
+    srcVal.textContent = dropsSpilled;
+    srcBox.classList.remove('wins'); void srcBox.offsetWidth; srcBox.classList.add('wins');
+    if (dropsSpilled === memSnap){
+      srcLine.textContent = 'They agree, for now. Go spill a few more up top, then check again.';
+      srcBubble.textContent = 'Same number. Memory got lucky. Spill some more and come back.';
+      mood(srcSay, 'shy');
+    } else {
+      srcLine.textContent = 'Memory said ' + memSnap + '. The source says ' + dropsSpilled + '. The source wins.';
+      srcBubble.textContent = 'See? Memory said ' + memSnap + '. The real count is ' + dropsSpilled + '. We always go and look.';
+      mood(srcSay, 'proud');
+    }
+    Sound.culture();
+  });
+
+  // stage 5: the wall
+  const buildcard = $('#buildcard'), buildNo = $('#buildNo'), buildState = $('#buildState');
+  const playBuild = $('#playBuild'), shipBuild = $('#shipBuild'), backBuild = $('#backBuild');
+  const shippedEl = $('#shipped'), sentBackEl = $('#sentBack'), wSay = $('#stage5 [data-say]'), wBubble = $('#stage5 [data-bubble]');
+  let buildN = 1, shipped = 0, sentBack = 0, wallBusy = false;
+  function newBuild(){
+    buildN++; buildNo.textContent = buildN;
+    buildState.textContent = 'Built by Claude. Not played yet.';
+    buildcard.className = 'buildcard';
+    playBuild.disabled = false; shipBuild.disabled = true; backBuild.disabled = true; wallBusy = false;
+  }
+  playBuild.addEventListener('click', () => {
+    if (wallBusy) return; wallBusy = true;
+    buildcard.classList.add('testing');
+    buildState.textContent = 'Playing it...';
+    playBuild.disabled = true;
+    mood(wSay, 'happy'); Sound.blip();
+    setTimeout(() => {
+      buildState.textContent = 'Played. Does it work? Only the founder decides.';
+      shipBuild.disabled = false; backBuild.disabled = false; wallBusy = false;
+      wBubble.textContent = 'Played it. Now the only question that matters: does it work? That answer is Player 1\'s.';
+      mood(wSay, 'think');
+    }, RM ? 300 : 1100);
+  });
+  shipBuild.addEventListener('click', () => {
+    if (wallBusy) return; wallBusy = true;
+    shipped++; shippedEl.textContent = shipped;
+    buildcard.classList.add('shipped'); shipBuild.disabled = true; backBuild.disabled = true;
+    wBubble.textContent = 'Build ' + buildN + ' is through the wall. A human said it works, so it ships.';
+    mood(wSay, 'proud'); Sound.culture();
+    setTimeout(newBuild, RM ? 200 : 500);
+  });
+  backBuild.addEventListener('click', () => {
+    if (wallBusy) return; wallBusy = true;
+    sentBack++; sentBackEl.textContent = sentBack;
+    buildcard.classList.add('back'); shipBuild.disabled = true; backBuild.disabled = true;
+    wBubble.textContent = 'Build ' + buildN + ' goes back to Claude. No shame in it. A fix costs an afternoon; a bad ship costs a player.';
+    mood(wSay, 'shy'); Sound.miss();
+    setTimeout(newBuild, RM ? 200 : 500);
+  });
+
+  renderQueue();
+  showStage(0, false);
+})();
+</script>
+</body>
+</html>

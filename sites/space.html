@@ -1,0 +1,1261 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Live Culture Games</title>
+<meta name="description" content="Live Culture Games — a small game studio in Escondido, California. Mission Control.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;700&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
+<style>
+:root{
+  color-scheme: dark;
+  --ink:#000;
+  --space:#070A14;
+  --panel:#0E1426;
+  --panel-2:#141C33;
+  --line:#2A365C;
+  --text:#F3F6FF;
+  --text-soft:#BFD0E6;
+  --pink:#FF1493;
+  --pink-deep:#B80D68;
+  --blue:#63AED8;
+  --cup:#EEF2F8;
+  --lid:#8A8A8A;
+  --red:#D40A2A;
+  --green:#7CF2A5;
+  --sans:"Space Grotesk",system-ui,sans-serif;
+  --mono:"Space Mono",ui-monospace,Consolas,monospace;
+  --gutter:16px;
+  --radius:14px;
+}
+*{box-sizing:border-box}
+[hidden]{display:none !important}
+html{scroll-behavior:smooth}
+body{
+  margin:0;background:var(--space);color:var(--text);
+  font-family:var(--sans);font-size:19px;line-height:1.5;
+  overflow-x:hidden;
+}
+img{max-width:100%;display:block}
+button,input{font:inherit}
+a{color:var(--blue)}
+a:focus-visible,button:focus-visible,input:focus-visible,[tabindex]:focus-visible{outline:4px solid var(--blue);outline-offset:3px}
+.sr{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0)}
+
+/* HUD grid under everything (static, calm) */
+body::before{
+  content:"";position:fixed;inset:0;z-index:0;pointer-events:none;
+  background:
+    linear-gradient(transparent 0 calc(100% - 1px), rgba(99,174,216,.08) 0) 0 0/100% 48px,
+    linear-gradient(90deg,transparent 0 calc(100% - 1px), rgba(99,174,216,.08) 0) 0 0/48px 100%;
+}
+.wrap{position:relative;z-index:1;max-width:1180px;margin:0 auto;padding:0 var(--gutter)}
+
+/* ---------- HUD top bar ---------- */
+.hud{
+  display:flex;align-items:center;gap:14px;flex-wrap:wrap;
+  padding:14px 0;border-bottom:2px solid var(--line);
+}
+.hud .brand{display:flex;align-items:center;gap:12px;text-decoration:none;color:var(--text)}
+.hud .brand img{width:58px;height:auto;filter:drop-shadow(0 0 10px rgba(255,20,147,.55))}
+.hud .brand b{font-size:1.15rem;letter-spacing:.06em;text-transform:uppercase}
+.hud .brand small{display:block;font-family:var(--mono);font-size:.85rem;color:var(--blue);letter-spacing:.12em}
+.tele{
+  margin-left:auto;display:flex;gap:10px;flex-wrap:wrap;
+  font-family:var(--mono);font-size:1rem;
+}
+.chip{
+  background:var(--panel-2);border:2px solid var(--line);border-radius:10px;
+  padding:6px 12px;color:var(--text);white-space:nowrap;min-height:2.6rem;display:inline-flex;align-items:center;gap:8px
+}
+.chip .k{color:var(--blue);letter-spacing:.1em}
+.chip .v{color:var(--text);font-weight:700}
+.dot{width:12px;height:12px;border-radius:50%;background:var(--green);box-shadow:0 0 10px var(--green)}
+.dot.pink{background:var(--pink);box-shadow:0 0 10px var(--pink)}
+
+/* ---------- HERO ---------- */
+.hero{
+  display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1.25fr);gap:20px;
+  align-items:stretch;padding:24px 0 10px;
+}
+.hero-panel{
+  background:var(--panel);border:2px solid var(--line);border-radius:var(--radius);
+  padding:26px;display:flex;flex-direction:column;gap:18px;justify-content:center;
+  box-shadow:inset 0 0 0 1px rgba(99,174,216,.15);
+}
+.kicker{font-family:var(--mono);color:var(--blue);letter-spacing:.18em;font-size:1rem;margin:0}
+h1{
+  font-size:clamp(2.6rem,6vw,4.4rem);line-height:.98;margin:0;color:var(--pink);
+  letter-spacing:-.01em;text-transform:uppercase;
+  text-shadow:0 0 18px rgba(255,20,147,.35);
+}
+.lead{font-size:1.35rem;margin:0;color:var(--text)}
+.lead-2{font-size:1.15rem;margin:0;color:var(--text-soft)}
+.btn{
+  appearance:none;border:0;cursor:pointer;border-radius:12px;
+  min-height:3rem;padding:10px 18px;font-weight:700;font-size:1.05rem;
+  display:inline-flex;align-items:center;justify-content:center;gap:8px;
+  color:var(--ink);background:var(--blue);
+  transition:transform .12s ease, filter .12s ease;
+  touch-action:manipulation;user-select:none;
+}
+.btn:hover{filter:brightness(1.08)}
+.btn:active{transform:translateY(2px) scale(.98)}
+.btn.pink{background:var(--pink);color:var(--ink)}
+.btn.ghost{background:var(--panel-2);color:var(--text);border:2px solid var(--line)}
+.btn.red{background:var(--red);color:#fff}
+.btn-row{display:flex;flex-wrap:wrap;gap:10px}
+
+.scene-wrap{
+  position:relative;border:2px solid var(--line);border-radius:var(--radius);overflow:hidden;
+  background:radial-gradient(ellipse at 55% 45%, #121A36 0%, var(--space) 60%);
+  min-height:clamp(360px,62vh,640px);
+  touch-action:none;cursor:grab;
+}
+.scene-wrap.dragging{cursor:grabbing}
+.scene-wrap canvas{position:absolute;inset:0;width:100%;height:100%;display:block}
+.corner{position:absolute;width:26px;height:26px;border:3px solid var(--blue);pointer-events:none;opacity:.9}
+.corner.tl{top:10px;left:10px;border-right:0;border-bottom:0}
+.corner.tr{top:10px;right:10px;border-left:0;border-bottom:0}
+.corner.bl{bottom:10px;left:10px;border-right:0;border-top:0}
+.corner.br{bottom:10px;right:10px;border-left:0;border-top:0}
+.scene-label{
+  position:absolute;left:12px;right:12px;bottom:12px;z-index:3;pointer-events:none;
+  display:flex;gap:8px;flex-wrap:wrap;justify-content:center;
+}
+.scene-label .chip{font-size:.95rem;pointer-events:auto;background:rgba(14,20,38,.96)}
+.scene-top{position:absolute;left:12px;top:12px;z-index:3;display:flex;gap:8px;flex-wrap:wrap;pointer-events:none}
+.scene-top .chip{font-size:.95rem;background:rgba(14,20,38,.96);pointer-events:auto}
+
+/* The cup — a DOM mascot that follows the 3D orbit */
+.cup{
+  position:absolute;left:0;top:0;width:150px;z-index:2;
+  transform:translate(-9999px,-9999px);
+  will-change:transform,opacity;transition:opacity .18s ease;
+  cursor:pointer;touch-action:none;
+}
+.cup .cup-inner{position:relative;width:100%;aspect-ratio:900/801;transform-origin:50% 70%;will-change:transform}
+.cup img{position:absolute;inset:0;width:100%;height:100%;filter:drop-shadow(0 0 14px rgba(255,20,147,.55));pointer-events:none;user-select:none;-webkit-user-drag:none}
+.cup .lid{
+  clip-path:polygon(46% 0,100% 0,100% 19%,92% 24%,68% 31%,60% 30%,50% 26%,45% 18%);
+  transform-origin:62% 31%;transition:transform .5s cubic-bezier(.3,1.6,.5,1);
+}
+.cup .base{clip-path:polygon(0 0,46% 0,45% 18%,50% 26%,60% 30%,68% 31%,92% 24%,100% 19%,100% 100%,0 100%)}
+.cup.peeled .lid{transform:rotate(-28deg) translate(6%,-10%) scale(1.06)}
+.cup.wobble .cup-inner{animation:wobble .8s ease}
+.cup.dance .cup-inner{animation:dance 1.6s ease-in-out}
+.cup.boost{filter:drop-shadow(0 0 30px rgba(255,20,147,.9))}
+@keyframes wobble{
+  0%{transform:rotate(0)}20%{transform:rotate(-9deg) scale(1.04)}45%{transform:rotate(7deg)}
+  70%{transform:rotate(-4deg)}100%{transform:rotate(0)}
+}
+@keyframes dance{
+  0%{transform:rotate(0) translateY(0)}12%{transform:rotate(-14deg) translateY(-10%)}
+  25%{transform:rotate(0) translateY(0)}37%{transform:rotate(14deg) translateY(-10%)}
+  50%{transform:rotate(0) translateY(0)}62%{transform:rotate(-14deg) translateY(-12%)}
+  75%{transform:rotate(0) translateY(0)}87%{transform:rotate(14deg) translateY(-12%)}100%{transform:rotate(0)}
+}
+.cup.bounce .cup-inner{animation:bounce .9s cubic-bezier(.3,1.5,.5,1)}
+.cup.squash .cup-inner{animation:squash .7s ease}
+@keyframes bounce{0%{transform:translateY(0)}30%{transform:translateY(-22%) scaleY(1.08)}60%{transform:translateY(0) scaleY(.92) scaleX(1.06)}80%{transform:translateY(-6%)}100%{transform:translateY(0)}}
+@keyframes squash{0%{transform:scale(1,1)}35%{transform:scale(1.18,.78)}70%{transform:scale(.94,1.1)}100%{transform:scale(1,1)}}
+
+/* ---------- COMMS: the cup talks ---------- */
+.comms{
+  grid-column:1 / -1;display:grid;grid-template-columns:auto minmax(0,1fr);gap:14px;align-items:center;
+  background:var(--panel);border:2px solid var(--pink);border-radius:var(--radius);padding:14px 16px;
+  box-shadow:0 0 22px rgba(255,20,147,.18);
+}
+.comms .avatar{width:84px;height:auto;filter:drop-shadow(0 0 10px rgba(255,20,147,.5))}
+.comms .avatar.talk{animation:talk .5s ease}
+@keyframes talk{0%{transform:rotate(0)}30%{transform:rotate(-8deg) scale(1.08)}70%{transform:rotate(6deg)}100%{transform:rotate(0)}}
+.bubble{
+  position:relative;background:var(--cup);color:var(--ink);border-radius:16px;padding:12px 16px;
+  font-size:1.2rem;font-weight:500;line-height:1.4;border:3px solid var(--ink);
+}
+.bubble::before{
+  content:"";position:absolute;left:-16px;top:26px;border:8px solid transparent;border-right:10px solid var(--ink);
+}
+.bubble.pop{animation:pop .35s cubic-bezier(.3,1.6,.5,1)}
+@keyframes pop{0%{transform:scale(.92)}100%{transform:scale(1)}}
+.bubble .who{font-family:var(--mono);font-size:.85rem;letter-spacing:.14em;color:var(--pink-deep);display:block;margin-bottom:2px}
+.comms .btn-row{grid-column:1 / -1}
+
+/* ---------- BRIEFING: the cup teaches ---------- */
+.brief{padding:26px 0 10px}
+.steps{display:grid;grid-template-columns:minmax(0,1fr);gap:14px}
+.step{
+  background:var(--panel);border:2px solid var(--line);border-radius:var(--radius);padding:22px;
+  box-shadow:inset 0 0 0 1px rgba(99,174,216,.15);
+}
+.step[hidden]{display:none}
+.step .n{font-family:var(--mono);color:var(--blue);letter-spacing:.14em;font-size:1rem;margin:0 0 8px}
+.step h3{font-size:clamp(1.5rem,3.4vw,2rem);color:var(--text);margin:0 0 10px}
+.step .say{
+  background:var(--cup);color:var(--ink);border:3px solid var(--ink);border-radius:16px;padding:12px 16px;
+  font-size:1.2rem;line-height:1.45;margin:0 0 14px;position:relative;
+}
+.step .say.quote{border-color:var(--pink);font-weight:700;font-size:1.3rem}
+.rows{list-style:none;margin:0 0 14px;padding:0;display:grid;gap:8px}
+.rows li{
+  display:grid;grid-template-columns:auto minmax(0,1fr);gap:12px;align-items:center;
+  background:var(--panel-2);border:2px solid var(--line);border-radius:12px;padding:10px 14px;font-size:1.1rem;min-height:3rem;
+}
+.rows li b{font-family:var(--mono);color:var(--pink);font-size:1rem;letter-spacing:.1em}
+.rows li.human{border-color:var(--pink)}
+.rows li.claude{border-color:var(--blue)}
+.dots{display:flex;gap:8px;align-items:center;flex-wrap:wrap;margin:0 0 14px}
+.dots button{
+  width:2.6rem;height:2.6rem;border-radius:50%;border:2px solid var(--line);background:var(--panel-2);color:var(--text);
+  font-family:var(--mono);font-weight:700;cursor:pointer;
+}
+.dots button[aria-current="step"]{background:var(--pink);color:var(--ink);border-color:var(--pink)}
+.dots button.done{border-color:var(--blue)}
+.stepnav{display:flex;gap:10px;flex-wrap:wrap}
+
+/* the seating toy */
+.seats{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin:0 0 14px}
+.seat{
+  background:#04060E;border:3px dashed var(--line);border-radius:12px;padding:12px;min-height:150px;
+}
+.seat.human{border-color:var(--pink)}
+.seat.claude{border-color:var(--blue)}
+.seat.want{border-style:solid;box-shadow:0 0 0 4px rgba(99,174,216,.35)}
+.seat h4{margin:0 0 8px;font-family:var(--mono);letter-spacing:.14em;font-size:1rem;color:var(--text)}
+.seat.human h4{color:var(--pink)}
+.seat.claude h4{color:var(--blue)}
+.seat .in{display:flex;flex-wrap:wrap;gap:8px}
+.jobs{display:flex;flex-wrap:wrap;gap:8px;margin:0 0 12px;min-height:3rem}
+.job{
+  appearance:none;border:2px solid var(--line);background:var(--panel-2);color:var(--text);border-radius:999px;
+  min-height:2.8rem;padding:6px 16px;font-weight:700;font-size:1.05rem;cursor:pointer;transition:transform .12s ease;
+}
+.job.pick{background:var(--text);color:var(--ink);border-color:var(--text);transform:scale(1.06)}
+.job.seated{cursor:default;background:var(--panel);border-color:currentColor}
+.seat.human .job.seated{color:var(--pink)}
+.seat.claude .job.seated{color:var(--blue)}
+.job.no{animation:shake .4s ease}
+@keyframes shake{0%,100%{transform:translateX(0)}25%{transform:translateX(-8px)}75%{transform:translateX(8px)}}
+.seat-row{display:flex;gap:10px;flex-wrap:wrap;align-items:center}
+.seat-row .btn.human{background:var(--pink);color:var(--ink)}
+.seat-row .btn.claude{background:var(--blue);color:var(--ink)}
+
+.flame{
+  position:absolute;left:50%;top:100%;width:34%;height:60%;transform:translateX(-50%);
+  background:linear-gradient(var(--pink),transparent);border-radius:0 0 50% 50%;opacity:0;
+  pointer-events:none;filter:blur(2px);
+}
+.cup.boost .flame{opacity:1;animation:flame .18s infinite alternate}
+@keyframes flame{from{transform:translateX(-50%) scaleY(1)}to{transform:translateX(-50%) scaleY(1.35)}}
+
+/* DOM droplets (spill) */
+.drop{
+  position:absolute;left:0;top:0;width:22px;height:22px;border-radius:50% 50% 50% 50%/60% 60% 40% 40%;
+  background:var(--pink);border:3px solid var(--ink);z-index:4;pointer-events:none;will-change:transform,opacity;
+}
+.drop::after{content:"";position:absolute;left:3px;top:3px;width:6px;height:4px;border-radius:50%;background:#fff}
+
+/* ---------- Mission deck ---------- */
+.deck{padding:26px 0 10px}
+h2{font-size:clamp(1.9rem,4vw,2.6rem);margin:0 0 6px;color:var(--pink);text-transform:uppercase;letter-spacing:.02em}
+h3{font-size:1.5rem;margin:0 0 8px;color:var(--blue)}
+.sub{margin:0 0 16px;color:var(--text-soft);font-size:1.1rem}
+.tabs{display:flex;flex-wrap:wrap;gap:10px;margin-bottom:14px}
+.tab{
+  appearance:none;border:2px solid var(--line);background:var(--panel-2);color:var(--text);
+  border-radius:12px;min-height:3rem;padding:8px 18px;font-weight:700;font-size:1.05rem;cursor:pointer;
+  font-family:var(--mono);letter-spacing:.06em;
+}
+.tab[aria-selected="true"]{background:var(--pink);color:var(--ink);border-color:var(--pink)}
+.panel{
+  background:var(--panel);border:2px solid var(--line);border-radius:var(--radius);padding:22px;
+  box-shadow:inset 0 0 0 1px rgba(99,174,216,.15);
+}
+.panel[hidden]{display:none}
+
+/* Terminal */
+.term{
+  background:#04060E;border:2px solid var(--line);border-radius:12px;padding:16px;
+  font-family:var(--mono);font-size:1.05rem;line-height:1.5;color:var(--text);
+  min-height:260px;max-height:380px;overflow:auto;white-space:pre-wrap;overflow-wrap:anywhere;
+  background-image:repeating-linear-gradient(transparent 0 3px, rgba(99,174,216,.05) 3px 4px);
+}
+.term .ln{margin:0}
+.term .p{color:var(--pink);font-weight:700}
+.term .ok{color:var(--green)}
+.term .b{color:var(--blue)}
+.term .warn{color:#FFC65C}
+.term a{color:var(--blue);font-weight:700}
+.term .lnk{
+  display:inline-flex;align-items:center;min-height:2.6rem;padding:4px 14px;margin:6px 0;border-radius:10px;
+  background:var(--blue);color:var(--ink);text-decoration:none;font-weight:700;
+}
+.term-form{display:flex;gap:10px;margin-top:12px;flex-wrap:wrap}
+.term-form label{flex:1 1 100%;font-family:var(--mono);color:var(--blue);letter-spacing:.12em;font-size:1rem}
+.term-form input{
+  flex:1 1 220px;min-height:3.4rem;border-radius:12px;border:3px solid var(--blue);background:#04060E;color:var(--text);
+  padding:8px 14px;font-family:var(--mono);font-size:1.25rem;caret-color:var(--pink);
+}
+.term-form input::placeholder{color:#8AA6C4}
+.cmds{display:flex;flex-wrap:wrap;gap:8px;margin-top:12px}
+.cmds .btn{font-family:var(--mono);font-size:1rem;background:var(--panel-2);color:var(--text);border:2px solid var(--line)}
+.cursor{display:inline-block;width:.6em;height:1.1em;background:var(--pink);vertical-align:-2px;animation:blink 1s steps(2) infinite}
+@keyframes blink{to{opacity:0}}
+
+/* Launch */
+.launch{display:grid;grid-template-columns:auto minmax(0,1fr);gap:24px;align-items:center}
+.bigred{
+  width:190px;height:190px;border-radius:50%;border:0;cursor:pointer;
+  background:radial-gradient(circle at 40% 35%, #FF4D6B, var(--red) 55%, #8E0618);
+  color:#fff;font-weight:700;font-size:1.5rem;letter-spacing:.08em;font-family:var(--mono);
+  box-shadow:0 10px 0 #5C0410, 0 0 0 10px #1B2444, 0 0 0 13px var(--line), 0 0 40px rgba(212,10,42,.45);
+  transition:transform .08s ease, box-shadow .08s ease;
+}
+.bigred:active,.bigred.armed{transform:translateY(8px);box-shadow:0 2px 0 #5C0410, 0 0 0 10px #1B2444, 0 0 0 13px var(--line), 0 0 60px rgba(212,10,42,.8)}
+.count{
+  font-family:var(--mono);font-size:clamp(3.4rem,10vw,6rem);line-height:1;color:var(--text);
+  background:#04060E;border:2px solid var(--line);border-radius:12px;padding:14px 20px;text-align:center;
+  font-variant-numeric:tabular-nums;
+}
+.count.go{color:var(--pink);text-shadow:0 0 20px rgba(255,20,147,.6)}
+.status{font-family:var(--mono);color:var(--blue);letter-spacing:.1em;margin:10px 0 0;font-size:1.05rem;min-height:1.6em}
+
+/* Mission 001 */
+.mission{position:relative;display:grid;grid-template-columns:minmax(0,1fr) auto;gap:20px;align-items:start}
+.stamp{
+  display:inline-block;font-family:var(--mono);font-weight:700;letter-spacing:.2em;font-size:1.5rem;
+  color:var(--pink);border:5px solid var(--pink);border-radius:8px;padding:6px 14px;transform:rotate(-8deg);
+  text-transform:uppercase;box-shadow:0 0 18px rgba(255,20,147,.35);background:rgba(14,20,38,.95);
+  margin:4px 8px 8px 0;
+}
+.readout{
+  list-style:none;margin:0;padding:0;font-family:var(--mono);font-size:1.05rem;
+  background:#04060E;border:2px solid var(--line);border-radius:12px;overflow:hidden;
+}
+.readout li{display:grid;grid-template-columns:minmax(120px,38%) minmax(0,1fr);gap:10px;padding:10px 14px;border-bottom:1px solid var(--line)}
+.readout li:last-child{border-bottom:0}
+.readout .k{color:var(--blue);letter-spacing:.1em}
+.readout .v{color:var(--text);font-weight:700;overflow-wrap:anywhere}
+.redact{background:var(--text);color:var(--text);border-radius:3px;padding:0 4px;letter-spacing:.05em}
+.redact.hot{background:var(--pink);color:var(--ink)}
+.jar{
+  width:200px;margin:0 auto;background:var(--panel-2);border:2px solid var(--line);border-radius:12px;padding:14px;text-align:center;
+}
+.jar .cupimg{width:150px;margin:0 auto;position:relative;aspect-ratio:900/801}
+.jar .cupimg img{position:absolute;inset:0;width:100%;height:100%}
+.jar .cupimg .lid{clip-path:polygon(46% 0,100% 0,100% 19%,92% 24%,68% 31%,60% 30%,50% 26%,45% 18%);transform-origin:62% 31%;transition:transform .5s cubic-bezier(.3,1.6,.5,1)}
+.jar .cupimg .base{clip-path:polygon(0 0,46% 0,45% 18%,50% 26%,60% 30%,68% 31%,92% 24%,100% 19%,100% 100%,0 100%)}
+.jar.open .cupimg .lid{transform:rotate(-30deg) translate(6%,-12%) scale(1.06)}
+.jar .jl{font-family:var(--mono);font-size:1rem;color:var(--blue);letter-spacing:.12em;margin:6px 0 10px}
+.slider-row{margin-top:16px}
+.slider-row label{display:block;font-family:var(--mono);color:var(--blue);letter-spacing:.12em;font-size:1rem;margin-bottom:8px}
+input[type=range]{
+  width:100%;height:2.8rem;appearance:none;background:transparent;cursor:pointer;margin:0;
+}
+input[type=range]::-webkit-slider-runnable-track{height:16px;border-radius:8px;background:var(--panel-2);border:2px solid var(--line)}
+input[type=range]::-webkit-slider-thumb{appearance:none;width:40px;height:40px;border-radius:50%;background:var(--pink);border:4px solid var(--ink);margin-top:-14px;box-shadow:0 0 14px rgba(255,20,147,.6)}
+input[type=range]::-moz-range-track{height:16px;border-radius:8px;background:var(--panel-2);border:2px solid var(--line)}
+input[type=range]::-moz-range-thumb{width:40px;height:40px;border-radius:50%;background:var(--pink);border:4px solid var(--ink)}
+.verdict{
+  margin:14px 0 0;font-size:1.4rem;font-weight:700;color:var(--text);
+  background:var(--panel-2);border-left:8px solid var(--pink);border-radius:10px;padding:12px 16px;min-height:3.4rem;
+}
+.verdict .mono{font-family:var(--mono);color:var(--blue);display:block;font-size:1rem;letter-spacing:.12em;font-weight:400;margin-bottom:4px}
+.gauge{height:18px;border-radius:9px;background:var(--panel-2);border:2px solid var(--line);overflow:hidden;margin-top:8px}
+.gauge i{display:block;height:100%;width:0;background:linear-gradient(90deg,var(--blue),var(--pink));transition:width .2s linear}
+
+/* Contact */
+.contact .email{font-family:var(--mono);font-size:clamp(1.2rem,4.2vw,1.8rem);color:var(--text);overflow-wrap:anywhere;margin:0 0 14px}
+.contact .email a{color:var(--text);text-decoration:underline;text-decoration-color:var(--pink);text-underline-offset:6px;text-decoration-thickness:4px}
+
+/* Footer */
+footer{margin-top:30px;padding:24px 0 40px;border-top:2px solid var(--line)}
+footer .fgrid{display:flex;flex-wrap:wrap;gap:12px 24px;align-items:center;font-size:1.05rem}
+footer a{color:var(--blue);font-weight:700}
+footer .mono{font-family:var(--mono)}
+
+/* ---------- Responsive ---------- */
+@media (max-width:860px){
+  .hero{grid-template-columns:1fr}
+  .seats{grid-template-columns:1fr}
+  .comms .avatar{width:64px}
+  .launch{grid-template-columns:1fr;justify-items:center}
+  .mission{grid-template-columns:1fr}
+  .jar{width:100%;max-width:260px}
+  .tele{margin-left:0}
+}
+@media (max-width:480px){
+  .hero-panel{padding:18px}
+  .panel{padding:16px}
+  .cup{width:110px}
+  .bigred{width:160px;height:160px}
+}
+
+/* ---------- Reduced motion ---------- */
+@media (prefers-reduced-motion: reduce){
+  html{scroll-behavior:auto}
+  .cursor{animation:none}
+  .cup.wobble .cup-inner,.cup.dance .cup-inner,.cup.bounce .cup-inner,.cup.squash .cup-inner{animation:none}
+  .comms .avatar.talk,.bubble.pop,.job.no{animation:none}
+  .cup.boost .flame{animation:none}
+  .btn,.cup,.cup .lid,.jar .cupimg .lid,.gauge i{transition:none}
+}
+</style>
+</head>
+<body>
+
+<header class="wrap">
+  <div class="hud">
+    <a class="brand" href="#top" aria-label="Live Culture Games, Mission Control">
+      <img src="cup-360.png" alt="" width="58" height="52">
+      <span><b>Live Culture Games</b><small>MISSION CONTROL · ESCONDIDO, CA</small></span>
+    </a>
+    <div class="tele" aria-label="Telemetry">
+      <span class="chip"><span class="dot" aria-hidden="true"></span><span class="k">SYS</span><span class="v" id="sysMode">BOOT</span></span>
+      <span class="chip"><span class="k">MET</span><span class="v" id="met">00:00:00</span></span>
+      <span class="chip"><span class="dot pink" aria-hidden="true"></span><span class="k">PAYLOAD</span><span class="v">FERMENTING</span></span>
+    </div>
+  </div>
+</header>
+
+<main class="wrap" id="top">
+
+  <!-- ===== HERO ===== -->
+  <section class="hero" aria-label="Orbit">
+    <div class="hero-panel">
+      <p class="kicker">// MISSION CONTROL</p>
+      <h1>Live Culture Games</h1>
+      <p class="lead">A small game studio in Escondido, California.</p>
+      <p class="lead-2">High tech. Very cute. Something is fermenting.</p>
+      <div class="btn-row">
+        <button class="btn pink" id="btnMoon" type="button">Launch a moon</button>
+        <button class="btn" id="btnSpill" type="button">Spill</button>
+        <button class="btn" id="btnPeel" type="button">Peel the lid</button>
+        <button class="btn ghost" id="btnReset" type="button">Reset orbit</button>
+      </div>
+      <p class="lead-2">Drag the planet to spin it. Tap the space to launch a droplet moon. Poke the cup.</p>
+    </div>
+
+    <div class="scene-wrap" id="scene" aria-label="Yogurt planet: drag to spin, tap to launch a moon">
+      <canvas id="gl"></canvas>
+      <span class="corner tl" aria-hidden="true"></span><span class="corner tr" aria-hidden="true"></span>
+      <span class="corner bl" aria-hidden="true"></span><span class="corner br" aria-hidden="true"></span>
+      <div class="scene-top">
+        <span class="chip"><span class="k">MOONS</span><span class="v" id="cMoons">0</span></span>
+        <span class="chip"><span class="k">SPLATS</span><span class="v" id="cSplats">0</span></span>
+        <span class="chip"><span class="k">LOST</span><span class="v" id="cLost">0</span></span>
+      </div>
+      <div class="cup" id="cup" role="button" tabindex="0" aria-label="The cup. Press to spill.">
+        <div class="cup-inner">
+          <img class="base" src="cup-900.png" alt="">
+          <img class="lid" src="cup-900.png" alt="">
+          <span class="flame" aria-hidden="true"></span>
+        </div>
+      </div>
+      <div class="scene-label">
+        <span class="chip" id="sceneHint"><span class="k">ORBIT</span><span class="v">DRAG TO SPIN · TAP TO LAUNCH</span></span>
+      </div>
+    </div>
+
+    <!-- COMMS: the cup is the guide -->
+    <div class="comms" id="comms" aria-label="The cup talks">
+      <img class="avatar" id="avatar" src="cup-360.png" alt="The cup" width="84" height="75">
+      <p class="bubble" id="bubble" aria-live="polite"><span class="who">THE CUP · COMMS</span><span id="bubbleText">Hi. I'm the cup. This is my planet. Drag it, tap the space, poke me. Then press TOUR and I'll walk you round.</span></p>
+      <div class="btn-row">
+        <button class="btn pink" id="tourBtn" type="button">Tour — the cup shows you round</button>
+        <button class="btn ghost" id="tourNext" type="button" hidden>Next stop</button>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== BRIEFING: the cup teaches ===== -->
+  <section class="brief" id="briefing" aria-label="Mission briefing">
+    <h2>Mission briefing</h2>
+    <p class="sub">The cup explains how this studio makes games with Claude. One step at a time. Click through.</p>
+
+    <div class="dots" id="dots" aria-label="Briefing steps"></div>
+
+    <div class="steps" id="steps">
+      <article class="step" data-mood="bounce">
+        <p class="n">STEP 1 OF 6 · WHO IS TALKING</p>
+        <h3>I'm the cup. Here is how we make games.</h3>
+        <p class="say">We're Live Culture Games, a small studio in Escondido, California. The founder has the ideas. Claude has the hands. I have the yogurt.</p>
+        <p class="say quote">The founder's own line: "AI codes the game and assists me as a disabled person."</p>
+      </article>
+
+      <article class="step" data-mood="squash" hidden>
+        <p class="n">STEP 2 OF 6 · THE LIMITS ARE REAL</p>
+        <h3>The founder is disabled.</h3>
+        <p class="say">ADHD, autism and vision problems. Walls of text are hard. Holding twenty things in your head is hard. Small grey writing is hard. That's it, that's the list. No pity needed — it's just the terrain.</p>
+      </article>
+
+      <article class="step" data-mood="peel" hidden>
+        <p class="n">STEP 3 OF 6 · WHO WRITES THE CODE</p>
+        <h3>The founder does not write code. Claude does.</h3>
+        <p class="say">Claude, by Anthropic, writes every line of the game. The founder never types code. Not one line. Peel my lid — it's true all the way down.</p>
+      </article>
+
+      <article class="step" data-mood="wobble" hidden>
+        <p class="n">STEP 4 OF 6 · WHO BRINGS WHAT</p>
+        <h3>Two seats. Nothing overlaps.</h3>
+        <ul class="rows">
+          <li class="human"><b>THE HUMAN</b><span>The ideas, the taste, the design, and the final say.</span></li>
+          <li class="claude"><b>CLAUDE</b><span>The hands: code, checking, remembering, keeping track.</span></li>
+        </ul>
+        <p class="say">The human says what and why. Claude does how. Neither one does the other one's job.</p>
+      </article>
+
+      <article class="step" data-mood="dance" hidden>
+        <p class="n">STEP 5 OF 6 · HOW WE BEAT THE LIMITS</p>
+        <h3>Five habits. Each one earns its place.</h3>
+        <ul class="rows">
+          <li><b>01</b><span>Big readable pages instead of walls of text.</span></li>
+          <li><b>02</b><span>One thing at a time.</span></li>
+          <li><b>03</b><span>Claude remembers, so the founder doesn't have to hold it all.</span></li>
+          <li><b>04</b><span>The human plays every build and decides if it works before it ships.</span></li>
+          <li><b>05</b><span>The source — the real files — is the truth. Not anyone's memory.</span></li>
+        </ul>
+        <p class="say">This page is built the same way. Big type. One panel. You're looking at the method.</p>
+      </article>
+
+      <article class="step" data-mood="bounce" hidden>
+        <p class="n">STEP 6 OF 6 · YOUR TURN</p>
+        <h3>Seat the jobs.</h3>
+        <p class="say" id="seatSay">Tap a job, then tap the seat it belongs in. I'll tell you if you got it wrong. Cheekily.</p>
+        <div class="jobs" id="jobs" aria-label="Jobs to seat"></div>
+        <div class="seat-row" id="seatRow">
+          <span class="chip"><span class="k">PICKED</span><span class="v" id="pickName">none</span></span>
+          <button class="btn human" id="seatHuman" type="button">Seat it with the human</button>
+          <button class="btn claude" id="seatClaude" type="button">Seat it with Claude</button>
+          <button class="btn ghost" id="seatReset" type="button">Reset</button>
+        </div>
+        <div class="seats">
+          <div class="seat human" id="seatH"><h4>THE HUMAN · <span id="hCount">0</span>/4</h4><div class="in"></div></div>
+          <div class="seat claude" id="seatC"><h4>CLAUDE · <span id="cCount">0</span>/4</h4><div class="in"></div></div>
+        </div>
+      </article>
+    </div>
+
+    <div class="stepnav" style="margin-top:14px">
+      <button class="btn ghost" id="stepPrev" type="button">Back</button>
+      <button class="btn pink" id="stepNext" type="button">Next step</button>
+    </div>
+  </section>
+
+  <!-- ===== MISSION DECK ===== -->
+  <section class="deck" aria-label="Mission deck">
+    <h2>Mission deck</h2>
+    <p class="sub">One station at a time. Pick one.</p>
+
+    <div class="tabs" role="tablist" aria-label="Stations">
+      <button class="tab" role="tab" id="tab-term" aria-controls="p-term" aria-selected="true" type="button">TERMINAL</button>
+      <button class="tab" role="tab" id="tab-launch" aria-controls="p-launch" aria-selected="false" type="button">LAUNCH</button>
+      <button class="tab" role="tab" id="tab-m1" aria-controls="p-m1" aria-selected="false" type="button">MISSION 001</button>
+      <button class="tab" role="tab" id="tab-contact" aria-controls="p-contact" aria-selected="false" type="button">CONTACT</button>
+    </div>
+
+    <!-- TERMINAL -->
+    <div class="panel" id="p-term" role="tabpanel" aria-labelledby="tab-term">
+      <h3>Command terminal</h3>
+      <p class="sub">Type a command, or press one of the buttons. Try <b>help</b>.</p>
+      <div class="term" id="term" aria-live="polite"></div>
+      <form class="term-form" id="termForm" autocomplete="off">
+        <label for="cmd">TYPE A COMMAND, THEN PRESS SEND</label>
+        <input id="cmd" name="cmd" type="text" placeholder="help" spellcheck="false" autocapitalize="off">
+        <button class="btn pink" type="submit">Send</button>
+      </form>
+      <div class="cmds" id="cmds" aria-label="Commands">
+        <button class="btn" type="button" data-cmd="help">help</button>
+        <button class="btn" type="button" data-cmd="about">about</button>
+        <button class="btn" type="button" data-cmd="contact">contact</button>
+        <button class="btn" type="button" data-cmd="spill">spill</button>
+        <button class="btn" type="button" data-cmd="peel">peel</button>
+        <button class="btn" type="button" data-cmd="dance">dance</button>
+        <button class="btn" type="button" data-cmd="figure-bench">figure-bench</button>
+        <button class="btn" type="button" data-cmd="launch">launch</button>
+        <button class="btn" type="button" data-cmd="clear">clear</button>
+      </div>
+    </div>
+
+    <!-- LAUNCH -->
+    <div class="panel" id="p-launch" role="tabpanel" aria-labelledby="tab-launch" hidden>
+      <h3>Launch pad</h3>
+      <p class="sub">Press the big red button. The cup boosts out of orbit and comes back for more yogurt.</p>
+      <div class="launch">
+        <button class="bigred" id="bigred" type="button" aria-describedby="launchStatus">LAUNCH</button>
+        <div>
+          <div class="count" id="count" aria-live="assertive">T-10</div>
+          <p class="status" id="launchStatus">PAD IDLE · CUP IN ORBIT</p>
+          <div class="btn-row" style="margin-top:12px">
+            <button class="btn ghost" id="abort" type="button">Abort</button>
+            <span class="chip"><span class="k">LAUNCHES</span><span class="v" id="cLaunch">0</span></span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- MISSION 001 -->
+    <div class="panel" id="p-m1" role="tabpanel" aria-labelledby="tab-m1" hidden>
+      <div class="mission">
+        <div>
+          <span class="stamp">Classified</span>
+          <h3>Mission 001 · payload telemetry</h3>
+          <ul class="readout" id="readout">
+            <li><span class="k">MISSION</span><span class="v">001</span></li>
+            <li><span class="k">PAYLOAD</span><span class="v"><span class="redact" id="r1" data-len="14">██████████████</span></span></li>
+            <li><span class="k">STATUS</span><span class="v" id="rStatus">FERMENTING</span></li>
+            <li><span class="k">INCUBATING</span><span class="v" id="rAge">00:00:00</span></li>
+            <li><span class="k">KIND</span><span class="v">A deep simulation</span></li>
+            <li><span class="k">SCOPE</span><span class="v">100 years of popular culture</span></li>
+            <li><span class="k">NAME</span><span class="v"><span class="redact" id="r2" data-len="12">████████████</span></span></li>
+          </ul>
+          <div class="slider-row">
+            <label for="declass">DECLASSIFY — DRAG ALL THE WAY RIGHT</label>
+            <input type="range" id="declass" min="0" max="100" value="0" step="1" aria-valuetext="0 percent">
+            <div class="gauge" aria-hidden="true"><i id="gaugeFill"></i></div>
+          </div>
+          <p class="verdict" id="verdict"><span class="mono">VERDICT</span>Drag the slider to see what is in the cup.</p>
+        </div>
+        <div class="jar" id="jar">
+          <div class="cupimg">
+            <img class="base" src="cup-900.png" alt="">
+            <img class="lid" src="cup-900.png" alt="">
+          </div>
+          <p class="jl">THE CULTURE</p>
+          <button class="btn pink" id="peek" type="button">Hold to peek</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- CONTACT -->
+    <div class="panel contact" id="p-contact" role="tabpanel" aria-labelledby="tab-contact" hidden>
+      <h3>Contact mission control</h3>
+      <p class="email"><a href="mailto:ryan@liveculturegames.com">ryan@liveculturegames.com</a></p>
+      <div class="btn-row">
+        <button class="btn pink" id="copyEmail" type="button">Copy the email</button>
+        <a class="btn" href="mailto:ryan@liveculturegames.com">Open your mail app</a>
+        <a class="btn ghost" href="/figure-bench/">Build a hero on the Figure Bench</a>
+      </div>
+      <p class="sub" style="margin-top:16px">Live Culture Games · Escondido, California.</p>
+    </div>
+  </section>
+</main>
+
+<footer class="wrap">
+  <div class="fgrid">
+    <span class="mono"><a href="mailto:ryan@liveculturegames.com">ryan@liveculturegames.com</a></span>
+    <span>Escondido, CA</span>
+    <span><a href="/figure-bench/">Build a hero on the Figure Bench</a></span>
+    <span>© 2026 Live Culture Games</span>
+  </div>
+</footer>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+<script>
+(function(){
+'use strict';
+var $ = function(id){ return document.getElementById(id); };
+var reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+var GOLD = 2.399963; // golden angle — a sequence, not dice
+
+/* ---------- state ---------- */
+var S = {
+  t0: performance.now(),
+  moons: [],         // {p:[x,y,z], v:[x,y,z], m:mesh}
+  splats: 0, lost: 0, launches: 0, seq: 0,
+  spin: 0, spinV: 0,
+  orbit: 0,          // cup orbit angle
+  boost: 0,          // boost blend 0..1
+  peeled: false,
+  mode: '3D'
+};
+var PLANET_R = 1.6, CUP_R = 3.6, G = 9.0, MAX_MOONS = 40;
+
+/* ---------- counters (derived) ---------- */
+function counts(){
+  $('cMoons').textContent = S.moons.length;
+  $('cSplats').textContent = S.splats;
+  $('cLost').textContent = S.lost;
+  $('cLaunch').textContent = S.launches;
+}
+
+/* ---------- clock ---------- */
+function pad(n){ return (n<10?'0':'')+n; }
+function hms(ms){ var s=Math.floor(ms/1000); return pad(Math.floor(s/3600))+':'+pad(Math.floor(s/60)%60)+':'+pad(s%60); }
+setInterval(function(){
+  var e = performance.now()-S.t0;
+  $('met').textContent = hms(e);
+  $('rAge').textContent = hms(e);
+}, 1000);
+
+/* ---------- scene setup ---------- */
+var wrap = $('scene'), canvas = $('gl'), cupEl = $('cup'), cupInner = cupEl.querySelector('.cup-inner');
+var W = 0, H = 0;
+var three = null;
+
+function tryWebGL(){
+  if (!window.THREE) return false;
+  try {
+    var r = new THREE.WebGLRenderer({canvas:canvas, antialias:true, alpha:true});
+    r.setPixelRatio(Math.min(window.devicePixelRatio||1, 2));
+    var scene = new THREE.Scene();
+    var cam = new THREE.PerspectiveCamera(42, 1, 0.1, 100);
+    cam.position.set(0, 1.9, 12.6); cam.lookAt(0,0,0);
+
+    // stars
+    var n = 1400, pos = new Float32Array(n*3);
+    for (var i=0;i<n;i++){
+      var a = i*GOLD, b = Math.acos(1 - 2*((i+0.5)/n)); // even sphere spread
+      var rr = 30 + (i%7)*2;
+      pos[i*3]   = rr*Math.sin(b)*Math.cos(a);
+      pos[i*3+1] = rr*Math.cos(b);
+      pos[i*3+2] = rr*Math.sin(b)*Math.sin(a);
+    }
+    var sg = new THREE.BufferGeometry(); sg.setAttribute('position', new THREE.BufferAttribute(pos,3));
+    var stars = new THREE.Points(sg, new THREE.PointsMaterial({color:0xEEF2F8, size:0.16, sizeAttenuation:true}));
+    scene.add(stars);
+
+    // planet: ripple shader, pink flat fill, black outline shell, white gloss
+    var hits = []; for (i=0;i<8;i++) hits.push(new THREE.Vector4(0,1,0,-99));
+    var vert = [
+      'uniform float t; uniform float amp; uniform float outline; uniform vec4 hits[8];',
+      'varying vec3 vN; varying vec3 vP;',
+      'void main(){',
+      ' vec3 n = normalize(position);',
+      ' float d = sin(n.x*6.0 + t*1.3)*sin(n.y*5.0 - t*1.1)*sin(n.z*7.0 + t*0.9);',
+      ' float disp = d*0.07*amp;',
+      ' for(int i=0;i<8;i++){ float age = t - hits[i].w; if(age>0.0 && age<3.0){',
+      '   float ang = acos(clamp(dot(n, hits[i].xyz),-1.0,1.0));',
+      '   disp += sin(ang*16.0 - age*10.0)*exp(-age*1.5)*smoothstep(1.5,0.0,ang)*0.13; } }',
+      ' vec3 p = position + n*(disp + outline*0.08);',
+      ' vN = normalize(normalMatrix*n); vP = p;',
+      ' gl_Position = projectionMatrix*modelViewMatrix*vec4(p,1.0);',
+      '}'].join('\n');
+    var frag = [
+      'uniform float outline; varying vec3 vN; varying vec3 vP;',
+      'void main(){',
+      ' if(outline>0.5){ gl_FragColor = vec4(0.0,0.0,0.0,1.0); return; }',
+      ' vec3 n = normalize(vN);',
+      ' float l = dot(n, normalize(vec3(-0.45,0.8,0.7)));',
+      ' vec3 pink = vec3(1.0,0.078,0.576); vec3 deep = vec3(0.72,0.05,0.41);',
+      ' vec3 c = mix(deep, pink, step(0.05, l));',
+      ' float g = dot(n, normalize(vec3(-0.35,0.75,0.75)));',
+      ' if(g>0.972 && (vP.y>0.0)) c = vec3(1.0);',
+      ' gl_FragColor = vec4(c,1.0);',
+      '}'].join('\n');
+    var uni = { t:{value:0}, amp:{value:reduce?0.35:1}, outline:{value:0}, hits:{value:hits} };
+    var uniO = { t:uni.t, amp:uni.amp, outline:{value:1}, hits:uni.hits };
+    var geo = new THREE.SphereGeometry(PLANET_R, 96, 64);
+    var planet = new THREE.Group();
+    planet.add(new THREE.Mesh(geo, new THREE.ShaderMaterial({uniforms:uni, vertexShader:vert, fragmentShader:frag})));
+    planet.add(new THREE.Mesh(geo, new THREE.ShaderMaterial({uniforms:uniO, vertexShader:vert, fragmentShader:frag, side:THREE.BackSide})));
+    // a couple of flat "puddle" blobs on the surface so spin is visible
+    var blobMat = new THREE.MeshBasicMaterial({color:0xB80D68});
+    var blobOut = new THREE.MeshBasicMaterial({color:0x000000, side:THREE.BackSide});
+    for (i=0;i<5;i++){
+      var a2 = i*GOLD*2.1, e = (i-2)*0.42;
+      var bl = new THREE.Group();
+      bl.position.set(Math.cos(a2)*Math.cos(e), Math.sin(e), Math.sin(a2)*Math.cos(e)).multiplyScalar(PLANET_R*0.98);
+      bl.lookAt(0,0,0);
+      var bs = 0.42 + (i%3)*0.12;
+      var b1 = new THREE.Mesh(new THREE.SphereGeometry(bs, 24, 16), blobMat); b1.scale.set(1,0.7,0.16);
+      var b2 = new THREE.Mesh(new THREE.SphereGeometry(bs, 24, 16), blobOut); b2.scale.set(1.12,0.82,0.19);
+      bl.add(b2); bl.add(b1); planet.add(bl);
+    }
+    scene.add(planet);
+
+    // moon prototypes
+    var moonGeo = new THREE.SphereGeometry(0.19, 20, 14);
+    var moonMat = new THREE.MeshBasicMaterial({color:0xFF1493});
+    var moonOut = new THREE.MeshBasicMaterial({color:0x000000, side:THREE.BackSide});
+    var hiMat = new THREE.MeshBasicMaterial({color:0xFFFFFF});
+    var hiGeo = new THREE.SphereGeometry(0.055, 10, 8);
+    function makeMoon(){
+      var g = new THREE.Group();
+      var o = new THREE.Mesh(moonGeo, moonOut); o.scale.setScalar(1.3);
+      var hi = new THREE.Mesh(hiGeo, hiMat); hi.position.set(-0.07,0.09,0.14); hi.scale.set(1.4,0.8,1);
+      g.add(o); g.add(new THREE.Mesh(moonGeo, moonMat)); g.add(hi);
+      return g;
+    }
+
+    three = { r:r, scene:scene, cam:cam, stars:stars, planet:planet, uni:uni, hits:hits, hitI:0, makeMoon:makeMoon };
+    return true;
+  } catch (err) { console.warn('WebGL unavailable, using 2D fallback', err); return false; }
+}
+
+/* ---------- 2D fallback ---------- */
+var ctx2 = null;
+function setup2D(){
+  ctx2 = canvas.getContext('2d');
+  S.mode = '2D';
+}
+
+function resize(){
+  W = wrap.clientWidth; H = wrap.clientHeight;
+  if (three){
+    three.r.setSize(W, H, false);
+    three.cam.aspect = W/H; three.cam.updateProjectionMatrix();
+  } else if (ctx2){
+    var dpr = Math.min(window.devicePixelRatio||1,2);
+    canvas.width = W*dpr; canvas.height = H*dpr; ctx2.setTransform(dpr,0,0,dpr,0,0);
+  }
+}
+
+/* ---------- physics (shared) ---------- */
+function cupPos(){
+  var a = S.orbit, r = CUP_R + S.boost*3.2, inc = 0.38;
+  return [Math.cos(a)*r, Math.sin(a)*r*Math.sin(inc) + S.boost*2.0, Math.sin(a)*r*Math.cos(inc)];
+}
+function launchMoon(fromCup){
+  if (S.moons.length >= MAX_MOONS){ var old = S.moons.shift(); if (old.m) three.scene.remove(old.m); }
+  var p = cupPos(); var k = S.seq++;
+  var r = Math.sqrt(p[0]*p[0]+p[1]*p[1]+p[2]*p[2]);
+  var vc = Math.sqrt(G/r); // circular speed at this radius
+  // tangent direction (perp to radius, in orbit plane), nudged by the golden sequence
+  var tx = -p[2], tz = p[0], tl = Math.sqrt(tx*tx+tz*tz)||1; tx/=tl; tz/=tl;
+  var ang = (k*GOLD) % (Math.PI*2);
+  var spread = fromCup ? 0.55 : 0.3;
+  var vy = Math.sin(ang)*spread, sp = vc*(0.78 + 0.34*((Math.cos(ang)+1)/2));
+  var m = { p:[p[0],p[1],p[2]], v:[tx*sp + Math.cos(ang)*0.25, vy, tz*sp + Math.sin(ang)*0.25], m:null };
+  if (three){ m.m = three.makeMoon(); m.m.position.set(p[0],p[1],p[2]); three.scene.add(m.m); }
+  S.moons.push(m); counts();
+}
+function splat(m){
+  S.splats++;
+  if (three){
+    var d = new THREE.Vector3(m.p[0],m.p[1],m.p[2]).normalize();
+    // into planet's local frame (planet spins about Y)
+    d.applyAxisAngle(new THREE.Vector3(0,1,0), -S.spin);
+    var h = three.hits[three.hitI % 8]; h.set(d.x,d.y,d.z, three.uni.t.value); three.hitI++;
+  }
+}
+function stepPhysics(dt){
+  dt = Math.min(dt, 0.033);
+  for (var i=S.moons.length-1;i>=0;i--){
+    var m = S.moons[i], p = m.p, v = m.v;
+    var r2 = p[0]*p[0]+p[1]*p[1]+p[2]*p[2], r = Math.sqrt(r2), a = -G/(r2*r);
+    v[0]+=a*p[0]*dt; v[1]+=a*p[1]*dt; v[2]+=a*p[2]*dt;
+    p[0]+=v[0]*dt; p[1]+=v[1]*dt; p[2]+=v[2]*dt;
+    if (r < PLANET_R+0.16){ splat(m); if (m.m) three.scene.remove(m.m); S.moons.splice(i,1); counts(); if (S.splats % 5 === 0) say('Splat number '+S.splats+'. The planet is mostly yogurt now.'); continue; }
+    if (r > 16){ S.lost++; if (m.m) three.scene.remove(m.m); S.moons.splice(i,1); counts(); if (S.lost % 3 === 0) say('Another one lost to deep space. Throw softer, maybe.'); continue; }
+    if (m.m) m.m.position.set(p[0],p[1],p[2]);
+  }
+}
+
+/* ---------- the DOM cup follows the orbit ---------- */
+var pointer = {x:0.5,y:0.5};
+var cupHidden = false;
+function placeCup3D(){
+  var p = cupPos();
+  var v = new THREE.Vector3(p[0],p[1],p[2]);
+  var up = v.clone().add(new THREE.Vector3(0,1,0));
+  var c = new THREE.Vector3(0,0,0);
+  var ce = c.clone().add(new THREE.Vector3(PLANET_R,0,0));
+  var pv = v.project(three.cam), pu = up.project(three.cam), pc = c.project(three.cam), pe = ce.project(three.cam);
+  var sx = (pv.x+1)/2*W, sy = (1-pv.y)/2*H;
+  var pxPerUnit = Math.abs((pu.y - pv.y)/2*H);
+  var cx = (pc.x+1)/2*W, cy = (1-pc.y)/2*H, cr = Math.abs((pe.x-pc.x)/2*W);
+  var size = pxPerUnit*1.7;
+  var behind = pv.z > pc.z && Math.hypot(sx-cx, sy-cy) < cr*0.9;
+  var lean = ((pointer.x-0.5)*14);
+  cupEl.style.width = size+'px';
+  cupEl.style.transform = 'translate('+(sx-size/2)+'px,'+(sy-size*0.45)+'px) rotate('+lean+'deg)';
+  cupEl.style.opacity = behind ? '0' : '1';
+  cupEl.style.pointerEvents = behind ? 'none' : 'auto';
+  cupHidden = behind;
+}
+function placeCup2D(){
+  var p = cupPos(), sc = Math.min(W,H)/11;
+  var sx = W/2 + p[0]*sc, sy = H/2 - p[1]*sc - p[2]*sc*0.35;
+  var size = sc*1.7*(1 - p[2]*0.03);
+  var behind = p[2] < 0 && Math.hypot(sx-W/2, sy-H/2) < PLANET_R*sc*0.9;
+  cupEl.style.width = size+'px';
+  cupEl.style.transform = 'translate('+(sx-size/2)+'px,'+(sy-size*0.45)+'px) rotate('+((pointer.x-0.5)*14)+'deg)';
+  cupEl.style.opacity = behind ? '0' : '1';
+  cupEl.style.pointerEvents = behind ? 'none' : 'auto';
+}
+
+/* ---------- render loop ---------- */
+var last = performance.now();
+function frame(now){
+  var dt = (now-last)/1000; last = now;
+  var t = (now - S.t0)/1000;
+  S.orbit += dt * (reduce ? 0.05 : 0.32) * (S.boost>0 ? 2.2 : 1);
+  S.spin += S.spinV*dt + dt*(reduce?0.02:0.12); S.spinV *= Math.pow(0.1, dt);
+  stepPhysics(dt);
+  if (three){
+    three.uni.t.value = t;
+    three.planet.rotation.y = S.spin;
+    if (!reduce) three.stars.rotation.y = t*0.01;
+    three.r.render(three.scene, three.cam);
+    placeCup3D();
+  } else if (ctx2){
+    draw2D(t); placeCup2D();
+  }
+  requestAnimationFrame(frame);
+}
+
+function draw2D(t){
+  var c = ctx2; c.clearRect(0,0,W,H);
+  c.fillStyle = '#EEF2F8';
+  for (var i=0;i<160;i++){ var a=i*GOLD, rr=(i%9+1)/10; c.globalAlpha=0.4+rr*0.6; c.fillRect(((Math.cos(a)*0.5+0.5)*W)|0, ((Math.sin(a*1.7)*0.5+0.5)*H)|0, 2, 2); }
+  c.globalAlpha = 1;
+  var sc = Math.min(W,H)/11, cx=W/2, cy=H/2, R=PLANET_R*sc;
+  // rippling planet edge
+  c.beginPath();
+  for (var k=0;k<=72;k++){ var th=k/72*Math.PI*2; var rad=R*(1+0.05*Math.sin(th*6+t*2)*(reduce?0.3:1)); var x=cx+Math.cos(th)*rad, y=cy+Math.sin(th)*rad; k?c.lineTo(x,y):c.moveTo(x,y); }
+  c.closePath(); c.fillStyle='#FF1493'; c.fill(); c.lineWidth=6; c.strokeStyle='#000'; c.stroke();
+  c.fillStyle='#fff'; c.beginPath(); c.ellipse(cx-R*0.35, cy-R*0.4, R*0.28, R*0.1, -0.5, 0, Math.PI*2); c.fill();
+  // moons (behind first)
+  var ms = S.moons.slice().sort(function(a,b){ return a.p[2]-b.p[2]; });
+  ms.forEach(function(m){
+    var x = cx + m.p[0]*sc, y = cy - m.p[1]*sc - m.p[2]*sc*0.35, r = 0.19*sc*(1-m.p[2]*0.03);
+    c.beginPath(); c.arc(x,y,r,0,Math.PI*2); c.fillStyle='#FF1493'; c.fill(); c.lineWidth=3; c.strokeStyle='#000'; c.stroke();
+  });
+}
+
+/* ---------- pointer: drag to spin, tap to launch ---------- */
+var drag = null;
+wrap.addEventListener('pointerdown', function(e){
+  if (e.target === cupEl || cupEl.contains(e.target)) return;
+  drag = {x:e.clientX, y:e.clientY, moved:0, lastX:e.clientX, t:performance.now()};
+  wrap.classList.add('dragging'); wrap.setPointerCapture(e.pointerId);
+});
+wrap.addEventListener('pointermove', function(e){
+  var r = wrap.getBoundingClientRect();
+  pointer.x = (e.clientX - r.left)/r.width; pointer.y = (e.clientY - r.top)/r.height;
+  if (!drag) return;
+  var dx = e.clientX - drag.lastX; drag.lastX = e.clientX;
+  drag.moved += Math.abs(dx) + Math.abs(e.movementY||0);
+  S.spin += dx*0.012; S.spinV = dx*0.012*40;
+});
+function endDrag(e){
+  if (!drag) return;
+  wrap.classList.remove('dragging');
+  if (drag.moved < 6) launchMoon(false);
+  drag = null;
+}
+wrap.addEventListener('pointerup', endDrag);
+wrap.addEventListener('pointercancel', endDrag);
+wrap.addEventListener('lostpointercapture', function(){ if (drag){ drag=null; wrap.classList.remove('dragging'); } });
+
+/* ---------- the cup talks (COMMS) ---------- */
+var bubble = $('bubble'), bubbleText = $('bubbleText'), avatar = $('avatar');
+var sayT = null;
+function say(txt){
+  bubbleText.textContent = txt;
+  bubble.classList.remove('pop'); avatar.classList.remove('talk'); void bubble.offsetWidth;
+  bubble.classList.add('pop'); avatar.classList.add('talk');
+}
+var MOODS = ['wobble','dance','bounce','squash'];
+function mood(name){
+  MOODS.forEach(function(m){ cupEl.classList.remove(m); });
+  if (name === 'peel'){ if (!S.peeled) peel(); return; }
+  void cupEl.offsetWidth; cupEl.classList.add(name);
+}
+
+/* ---------- the cup reacts ---------- */
+function wobble(){ cupEl.classList.remove('wobble'); void cupEl.offsetWidth; cupEl.classList.add('wobble'); }
+function spill(){
+  wobble();
+  var r = wrap.getBoundingClientRect(), cr = cupEl.getBoundingClientRect();
+  var ox = cr.left - r.left + cr.width*0.5, oy = cr.top - r.top + cr.height*0.55;
+  var n = reduce ? 4 : 10;
+  for (var i=0;i<n;i++){
+    var d = document.createElement('span'); d.className='drop';
+    var a = i*GOLD + S.seq*0.7, dist = 70 + (i%4)*30, s = 0.7 + (i%3)*0.25;
+    d.style.transform = 'translate('+ox+'px,'+oy+'px) scale('+s+')';
+    wrap.appendChild(d);
+    d.animate([
+      {transform:'translate('+ox+'px,'+oy+'px) scale('+s+')', opacity:1},
+      {transform:'translate('+(ox+Math.cos(a)*dist)+'px,'+(oy+Math.sin(a)*dist*0.6 - 40)+'px) scale('+(s*1.1)+')', opacity:1, offset:0.5},
+      {transform:'translate('+(ox+Math.cos(a)*dist*1.3)+'px,'+(oy+Math.sin(a)*dist*0.6 + 90)+'px) scale('+(s*0.6)+')', opacity:0}
+    ], {duration: reduce?500:900, easing:'cubic-bezier(.2,.7,.3,1)', fill:'forwards'}).onfinish = function(){ this.effect.target.remove(); };
+  }
+  launchMoon(true); launchMoon(true); launchMoon(true);
+  say(S.splats > 3 ? 'Yogurt everywhere again. I regret nothing.' : 'Oops. That was the good yogurt.');
+}
+function peel(){
+  S.peeled = !S.peeled;
+  cupEl.classList.toggle('peeled', S.peeled);
+  $('jar').classList.toggle('open', S.peeled);
+  wobble();
+  return S.peeled;
+}
+function dance(){ cupEl.classList.remove('dance'); void cupEl.offsetWidth; cupEl.classList.add('dance'); S.spinV += 14; }
+$('btnPeel').addEventListener('click', function(){ say(S.peeled ? 'Lid up. See? Still growing in there. Give it time.' : 'Lid back on. Cultures like the dark.'); });
+$('btnMoon').addEventListener('click', function(){ say(S.moons.length > 12 ? 'That is a LOT of moons. I love it.' : 'A new moon. Watch it fall, or watch it fly.'); });
+cupEl.addEventListener('click', spill);
+cupEl.addEventListener('keydown', function(e){ if (e.key==='Enter'||e.key===' '){ e.preventDefault(); spill(); } });
+$('btnMoon').addEventListener('click', function(){ launchMoon(true); });
+$('btnSpill').addEventListener('click', spill);
+$('btnPeel').addEventListener('click', function(){ peel(); $('btnPeel').textContent = S.peeled ? 'Close the lid' : 'Peel the lid'; });
+$('btnReset').addEventListener('click', function(){
+  S.moons.forEach(function(m){ if (m.m) three.scene.remove(m.m); });
+  S.moons = []; S.spinV = 0; S.lost = 0; S.splats = 0; counts();
+});
+
+/* ---------- terminal ---------- */
+var term = $('term'), cmdIn = $('cmd');
+function line(html, cls){
+  var p = document.createElement('p'); p.className='ln'+(cls?' '+cls:''); p.innerHTML = html;
+  term.appendChild(p); term.scrollTop = term.scrollHeight; return p;
+}
+function esc(s){ return s.replace(/[&<>"]/g, function(c){ return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]; }); }
+var CMDS = {
+  help: function(){
+    line('<span class="b">commands</span>: help · about · contact · copy · spill · peel · dance · figure-bench · launch · status · clear');
+  },
+  about: function(){
+    line('<span class="b">LIVE CULTURE GAMES</span> — a small game studio in Escondido, California.');
+    line('Live cultures. Fresh games. The first one is fermenting. Type <span class="p">peel</span> to look.');
+  },
+  contact: function(){
+    line('<span class="b">mail</span>: <a href="mailto:ryan@liveculturegames.com">ryan@liveculturegames.com</a> · type <span class="p">copy</span> to put it on your clipboard.');
+  },
+  copy: function(){
+    copyEmail(function(ok){ line(ok ? '<span class="ok">ryan@liveculturegames.com is on your clipboard.</span>' : '<span class="warn">clipboard blocked here — the address is above, select it.</span>'); });
+  },
+  spill: function(){ spill(); line('<span class="ok">SPILL</span> — yogurt everywhere. Three moons away.'); },
+  peel: function(){
+    var open = peel();
+    line(open ? '<span class="ok">PEEL</span> — the lid is up. Inside: a culture, still growing.' : '<span class="ok">PEEL</span> — lid back on. Let it ferment.');
+    if (open) line('<span class="b">Our first culture is still growing</span> — 100 years of popular culture.');
+  },
+  dance: function(){ dance(); line('<span class="ok">DANCE</span> — the cup is dancing. The planet is spinning. Nobody is working.'); },
+  'figure-bench': function(){
+    line('<span class="ok">FIGURE BENCH</span> — the one toy already on the site. Build a hero.');
+    line('<a class="lnk" href="/figure-bench/">Open the Figure Bench</a>');
+  },
+  launch: function(){ line('<span class="ok">LAUNCH</span> — handing you to the pad.'); showTab('tab-launch'); startCountdown(); },
+  status: function(){
+    line('<span class="b">MET</span> '+$('met').textContent+' · <span class="b">moons</span> '+S.moons.length+' · <span class="b">splats</span> '+S.splats+' · <span class="b">lost</span> '+S.lost+' · <span class="b">payload</span> FERMENTING · <span class="b">lid</span> '+(S.peeled?'PEELED':'SEALED'));
+  },
+  clear: function(){ term.innerHTML=''; }
+};
+function run(raw){
+  var c = raw.trim().toLowerCase();
+  if (!c) return;
+  line('<span class="p">&gt;</span> '+esc(c));
+  var fn = CMDS[c] || CMDS[c.replace(/\s+/g,'-')];
+  if (fn) fn(); else line('<span class="warn">unknown command:</span> '+esc(c)+' — try <span class="p">help</span>.');
+}
+$('termForm').addEventListener('submit', function(e){ e.preventDefault(); run(cmdIn.value); cmdIn.value=''; cmdIn.focus(); });
+$('cmds').addEventListener('click', function(e){ var b = e.target.closest('[data-cmd]'); if (b) run(b.getAttribute('data-cmd')); });
+line('<span class="b">LCG MISSION CONTROL</span> · terminal online<span class="cursor" aria-hidden="true"></span>');
+line('type <span class="p">help</span> and press Send.');
+
+function copyEmail(cb){
+  var txt = 'ryan@liveculturegames.com';
+  if (navigator.clipboard && navigator.clipboard.writeText){ navigator.clipboard.writeText(txt).then(function(){cb(true);}, function(){cb(false);}); }
+  else cb(false);
+}
+$('copyEmail').addEventListener('click', function(){
+  var b = this; copyEmail(function(ok){ b.textContent = ok ? 'Copied' : 'Select it above'; setTimeout(function(){ b.textContent='Copy the email'; }, 2000); });
+});
+
+/* ---------- tabs ---------- */
+var tabs = Array.prototype.slice.call(document.querySelectorAll('.tab'));
+var TABSAY = {
+  'tab-term': 'The terminal. Type help. Or press the buttons, I do not judge.',
+  'tab-launch': 'The launch pad. There is a big red button. You know what to do.',
+  'tab-m1': 'Mission 001. Classified. The payload is still fermenting. Try the slider anyway.',
+  'tab-contact': 'Want to talk to mission control? One address. Copy it, it is yours.'
+};
+function showTab(id, quiet){
+  tabs.forEach(function(t){
+    var on = t.id === id; t.setAttribute('aria-selected', on?'true':'false');
+    $(t.getAttribute('aria-controls')).hidden = !on;
+  });
+  if (!quiet && TABSAY[id]) say(TABSAY[id]);
+}
+tabs.forEach(function(t){ t.addEventListener('click', function(){ showTab(t.id); }); });
+document.querySelector('.tabs').addEventListener('keydown', function(e){
+  var i = tabs.indexOf(document.activeElement); if (i<0) return;
+  if (e.key==='ArrowRight'||e.key==='ArrowLeft'){ e.preventDefault(); var j=(i+(e.key==='ArrowRight'?1:-1)+tabs.length)%tabs.length; tabs[j].focus(); showTab(tabs[j].id); }
+});
+
+/* ---------- countdown ---------- */
+var cd = null, countEl = $('count'), st = $('launchStatus'), big = $('bigred');
+function startCountdown(){
+  if (cd) return;
+  var n = 10; big.classList.add('armed'); countEl.classList.remove('go');
+  countEl.textContent = 'T-'+n; st.textContent = 'COUNTDOWN RUNNING · HOLD ON TO YOUR SPOON';
+  cd = setInterval(function(){
+    n--;
+    if (n > 0){ countEl.textContent = 'T-'+n; if (n<=3) wobble(); return; }
+    clearInterval(cd); cd = null; big.classList.remove('armed');
+    countEl.textContent = 'LIFTOFF'; countEl.classList.add('go');
+    st.textContent = 'LIFTOFF · CUP LEAVING ORBIT'; say('LIFTOFF. Hold my spoon.'); liftoff();
+  }, reduce ? 600 : 1000);
+}
+function abortCountdown(){
+  if (!cd){ st.textContent = 'NOTHING TO ABORT · PAD IDLE'; return; }
+  clearInterval(cd); cd = null; big.classList.remove('armed');
+  countEl.textContent = 'T-10'; st.textContent = 'ABORTED · THE CUP IS FINE';
+}
+function liftoff(){
+  S.launches++; counts(); cupEl.classList.add('boost');
+  var t0 = performance.now(), dur = reduce ? 1500 : 3200;
+  (function tick(){
+    var k = Math.min(1,(performance.now()-t0)/dur);
+    S.boost = Math.sin(k*Math.PI); // out and back
+    if (k < 1) requestAnimationFrame(tick);
+    else { S.boost = 0; cupEl.classList.remove('boost'); spill(); st.textContent = 'BACK IN ORBIT · MORE YOGURT ABOARD'; countEl.textContent='T-10'; countEl.classList.remove('go'); }
+  })();
+}
+big.addEventListener('click', startCountdown);
+$('abort').addEventListener('click', abortCountdown);
+
+/* ---------- Mission 001 — the tease ---------- */
+var GLYPH = '▓▒░#%&@*+=~^'; // a sequence, cycled, never random
+var declass = $('declass'), gauge = $('gaugeFill'), verdict = $('verdict');
+var r1 = $('r1'), r2 = $('r2'), reds = [r1, r2];
+function bars(n){ return new Array(n+1).join('█'); }
+var denied = false;
+declass.addEventListener('input', function(){
+  var v = +declass.value; gauge.style.width = v+'%'; declass.setAttribute('aria-valuetext', v+' percent');
+  reds.forEach(function(el, idx){
+    var len = +el.getAttribute('data-len'), show = Math.floor(len * v/100);
+    var s = '';
+    for (var i=0;i<len;i++) s += i < show && v < 100 ? GLYPH[(i*3 + idx*5 + v) % GLYPH.length] : '█';
+    el.textContent = s; el.classList.toggle('hot', v>0 && v<100);
+  });
+  if (v < 100){
+    denied = false;
+    verdict.innerHTML = '<span class="mono">DECLASSIFYING · '+v+'%</span>' + (v<50 ? 'Something is in there. Keep going.' : 'Almost. Nearly readable. Keep going.');
+    $('rStatus').textContent = 'FERMENTING';
+  } else if (!denied){
+    denied = true;
+    reds.forEach(function(el){ el.textContent = bars(+el.getAttribute('data-len')); el.classList.remove('hot'); });
+    $('rStatus').textContent = 'FERMENTING · NOT READY';
+    verdict.innerHTML = '<span class="mono">DECLASSIFICATION DENIED</span>Our first culture is still growing — 100 years of popular culture.';
+    wobble(); dance(); say('Nice try. Our first culture is still growing. A hundred years of popular culture takes a while to ferment.');
+    setTimeout(function(){ declass.value = 0; gauge.style.width='0%'; }, 1400);
+  }
+});
+var peek = $('peek');
+function peekOn(e){ e.preventDefault(); $('jar').classList.add('open'); verdict.innerHTML = '<span class="mono">PEEKING</span>Still growing. Lid back on.'; }
+function peekOff(){ if (!S.peeled) $('jar').classList.remove('open'); }
+peek.addEventListener('pointerdown', peekOn); peek.addEventListener('pointerup', peekOff); peek.addEventListener('pointerleave', peekOff); peek.addEventListener('pointercancel', peekOff);
+peek.addEventListener('keydown', function(e){ if (e.key==='Enter'||e.key===' ') peekOn(e); });
+peek.addEventListener('keyup', peekOff);
+
+/* ---------- the tour: the cup walks you round ---------- */
+var TOUR = [
+  {el:'scene', say:'Stop 1. My planet. Drag it to spin. Tap the empty space and a droplet moon goes into orbit. Tap me and I spill.'},
+  {el:'briefing', say:'Stop 2. The briefing. This is where I explain how a studio with no coder ships a game. Click through the steps.'},
+  {el:'p-term', tab:'tab-term', say:'Stop 3. The terminal. Type help. Then type dance. Trust me.'},
+  {el:'p-launch', tab:'tab-launch', say:'Stop 4. The launch pad. The big red button sends me out of orbit. I always come back. More yogurt.'},
+  {el:'p-m1', tab:'tab-m1', say:'Stop 5. Mission 001. Classified. Drag the slider all the way and see how far you get.'},
+  {el:'p-contact', tab:'tab-contact', say:'Last stop. Mission control is one email away. That is the tour. Go play.'}
+];
+var tourI = -1;
+function tourStep(){
+  tourI++;
+  if (tourI >= TOUR.length){ tourI = -1; $('tourNext').hidden = true; $('tourBtn').hidden = false; say('Tour over. I am going back to orbit. Poke me any time.'); mood('bounce'); return; }
+  var s = TOUR[tourI];
+  if (s.tab) showTab(s.tab, true);
+  say(s.say); mood(tourI % 2 ? 'bounce' : 'squash');
+  var target = $(s.el); if (target) target.scrollIntoView({behavior: reduce ? 'auto' : 'smooth', block:'start'});
+  $('tourNext').textContent = tourI === TOUR.length-1 ? 'Finish the tour' : 'Next stop ('+(tourI+2)+' of '+TOUR.length+')';
+}
+$('tourBtn').addEventListener('click', function(){ $('tourBtn').hidden = true; $('tourNext').hidden = false; tourI = -1; tourStep(); $('tourNext').scrollIntoView({behavior: reduce?'auto':'smooth', block:'nearest'}); });
+$('tourNext').addEventListener('click', function(){ tourStep(); $('comms').scrollIntoView({behavior: reduce?'auto':'smooth', block:'nearest'}); });
+
+/* ---------- the briefing: steps you click through ---------- */
+var steps = Array.prototype.slice.call(document.querySelectorAll('#steps .step'));
+var dots = $('dots'), stepI = 0, seen = {};
+var STEPSAY = [
+  'Step one. That line is the founder\'s own words. Quote it exactly, I always do.',
+  'Step two. The limits are real. They shape how every page here is built, including this one.',
+  'Step three. Not one line of code from the founder. Claude writes it all. I peeled my lid to prove it.',
+  'Step four. Two seats. The human: what and why. Claude: how. I keep the yogurt.',
+  'Step five. Five habits. Big pages, one thing at a time, Claude remembers, the human plays every build, the files are the truth.',
+  'Step six. Your turn. Seat the jobs. Tap a job, then tap a seat.'
+];
+steps.forEach(function(st, i){
+  var b = document.createElement('button'); b.type='button'; b.textContent = i+1; b.setAttribute('aria-label','Step '+(i+1));
+  b.addEventListener('click', function(){ showStep(i); }); dots.appendChild(b);
+});
+function showStep(i){
+  stepI = Math.max(0, Math.min(steps.length-1, i)); seen[stepI] = true;
+  steps.forEach(function(st, k){ st.hidden = k !== stepI; });
+  Array.prototype.forEach.call(dots.children, function(b, k){
+    if (k === stepI) b.setAttribute('aria-current','step'); else b.removeAttribute('aria-current');
+    b.classList.toggle('done', !!seen[k] && k !== stepI);
+  });
+  $('stepPrev').disabled = stepI === 0;
+  $('stepNext').textContent = stepI === steps.length-1 ? 'Back to step 1' : 'Next step';
+  mood(steps[stepI].getAttribute('data-mood')); say(STEPSAY[stepI]);
+}
+$('stepPrev').addEventListener('click', function(){ showStep(stepI-1); });
+$('stepNext').addEventListener('click', function(){ showStep(stepI === steps.length-1 ? 0 : stepI+1); });
+showStep(0); bubbleText.textContent = 'Hi. I\'m the cup. This is my planet. Drag it, tap the space, poke me. Then press TOUR and I\'ll walk you round.';
+
+/* ---------- the seating toy ---------- */
+var JOBS = [
+  {n:'The ideas', s:'human'}, {n:'The code', s:'claude'}, {n:'The taste', s:'human'}, {n:'Checking', s:'claude'},
+  {n:'The design', s:'human'}, {n:'Remembering', s:'claude'}, {n:'The final say', s:'human'}, {n:'Keeping track', s:'claude'}
+];
+var jobsEl = $('jobs'), picked = null, seated = 0, wrongs = 0;
+var NO_H = ['Nope. That one is Claude\'s. The founder never types code.', 'Wrong seat. Claude does the how.', 'That is a hands job. Claude\'s.'];
+var NO_C = ['Nope. That is the human\'s. Claude does not decide what the game is.', 'Wrong seat. What and why belong to the human.', 'Claude never takes the final say. The human plays it and rules.'];
+function buildJobs(){
+  jobsEl.innerHTML=''; $('seatH').querySelector('.in').innerHTML=''; $('seatC').querySelector('.in').innerHTML='';
+  picked = null; seated = 0; wrongs = 0; $('pickName').textContent='none'; $('hCount').textContent='0'; $('cCount').textContent='0';
+  $('seatSay').textContent = 'Tap a job, then tap the seat it belongs in. I\'ll tell you if you got it wrong. Cheekily.';
+  JOBS.forEach(function(j, i){
+    var b = document.createElement('button'); b.type='button'; b.className='job'; b.textContent=j.n; b.setAttribute('data-i', i);
+    b.addEventListener('click', function(){ pick(b, j); }); jobsEl.appendChild(b);
+  });
+  $('seatH').classList.remove('want'); $('seatC').classList.remove('want');
+}
+function pick(b, j){
+  if (b.classList.contains('seated')) return;
+  Array.prototype.forEach.call(jobsEl.children, function(x){ x.classList.remove('pick'); });
+  b.classList.add('pick'); picked = {b:b, j:j}; $('pickName').textContent = j.n;
+  $('seatH').classList.add('want'); $('seatC').classList.add('want');
+}
+function seat(where){
+  if (!picked){ $('seatSay').textContent = 'Pick a job first. Tap one of the pills.'; mood('squash'); return; }
+  var ok = picked.j.s === where, b = picked.b;
+  if (!ok){
+    wrongs++; b.classList.remove('no'); void b.offsetWidth; b.classList.add('no'); mood('squash');
+    var msgs = where === 'human' ? NO_H : NO_C; var m = msgs[wrongs % msgs.length];
+    $('seatSay').textContent = m; say(m); return;
+  }
+  b.classList.remove('pick'); b.classList.add('seated'); b.setAttribute('aria-disabled','true');
+  $(where === 'human' ? 'seatH' : 'seatC').querySelector('.in').appendChild(b);
+  seated++; picked = null; $('pickName').textContent='none';
+  $('seatH').classList.remove('want'); $('seatC').classList.remove('want');
+  $('hCount').textContent = $('seatH').querySelectorAll('.job').length;
+  $('cCount').textContent = $('seatC').querySelectorAll('.job').length;
+  if (seated === JOBS.length){
+    var done = 'All eight seated' + (wrongs ? ', '+wrongs+' wrong turn'+(wrongs>1?'s':'')+' on the way' : ', no wrong turns') + '. That is the whole method: the human says what and why, Claude does how, and the founder plays every build before it ships.';
+    $('seatSay').textContent = done; say('"AI codes the game and assists me as a disabled person." The founder\'s words. Now you have seen how.'); mood('dance');
+  } else { mood('bounce'); $('seatSay').textContent = 'Yes. '+picked_name_hint(where)+' '+(JOBS.length-seated)+' to go.'; }
+}
+function picked_name_hint(where){ return where === 'human' ? 'That one is the human\'s.' : 'That one is Claude\'s.'; }
+$('seatHuman').addEventListener('click', function(){ seat('human'); });
+$('seatClaude').addEventListener('click', function(){ seat('claude'); });
+$('seatH').addEventListener('click', function(e){ if (!e.target.closest('.job')) seat('human'); });
+$('seatC').addEventListener('click', function(e){ if (!e.target.closest('.job')) seat('claude'); });
+$('seatReset').addEventListener('click', function(){ buildJobs(); mood('wobble'); say('Reset. Seat them again, faster this time.'); });
+buildJobs();
+
+/* ---------- boot ---------- */
+if (!tryWebGL()) setup2D();
+$('sysMode').textContent = three ? 'ORBIT 3D' : 'ORBIT 2D';
+resize(); window.addEventListener('resize', resize);
+counts();
+// a few moons already in orbit so the sky is not empty
+for (var i=0;i<4;i++){ S.orbit += 1.3; launchMoon(false); }
+S.orbit = 0;
+requestAnimationFrame(frame);
+})();
+</script>
+</body>
+</html>

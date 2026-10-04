@@ -1,0 +1,1286 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Live Culture Games</title>
+<meta name="description" content="Live Culture Games — a small game studio in Escondido, California. Our first culture is still growing.">
+<meta name="color-scheme" content="light">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@600;700&family=Exo+2:wght@500;700;800&family=Nunito:wght@500;700;800&display=swap" rel="stylesheet">
+<style>
+/* ---------- CULTURE LAB tokens — lab white, deep pink, culture blue ---------- */
+:root{
+  color-scheme: light;
+  --ink:#111111;
+  --paper:#F4F8FC;         /* lab white */
+  --panel:#FFFFFF;
+  --cup:#EEF2F8;           /* cup white, from the logo */
+  --lid:#8A8A8A;           /* foil lid grey, from the logo */
+  --pink:#FF1493;          /* THE brand pink — deeppink */
+  --blue:#63AED8;          /* culture blue, accent only */
+  --blue-ink:#0F5E86;      /* culture blue dark enough to read (7.1:1 on white) */
+  --glow:#63AED8;          /* derived by the dials */
+  --line:#B9D7EA;
+  --radius:22px;
+  --font-hud:"Exo 2", system-ui, sans-serif;
+  --font-body:"Nunito", system-ui, sans-serif;
+  --font-cute:"Fredoka", "Nunito", system-ui, sans-serif;
+}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+@media (prefers-reduced-motion: reduce){ html{scroll-behavior:auto} }
+body{
+  margin:0;
+  background:var(--paper);
+  background-image:
+    radial-gradient(circle at 1px 1px, rgba(99,174,216,.28) 1.4px, transparent 1.6px);
+  background-size:28px 28px;
+  color:var(--ink);
+  font-family:var(--font-body);
+  font-size:19px;
+  line-height:1.5;
+  font-weight:600;
+  overflow-x:hidden;
+  -webkit-font-smoothing:antialiased;
+}
+img{display:block;max-width:100%}
+a{color:var(--blue-ink);text-decoration-thickness:3px;text-underline-offset:4px}
+a:focus-visible,button:focus-visible,[tabindex]:focus-visible,input:focus-visible{
+  outline:4px solid var(--blue-ink);outline-offset:4px;
+}
+.wrap{width:100%;max-width:1140px;margin:0 auto;padding:0 16px}
+@media (min-width:900px){ .wrap{padding:0 32px} }
+.sr{position:absolute!important;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap}
+
+/* ---------- Type ---------- */
+h1,h2,h3{margin:0;line-height:1.05;font-family:var(--font-cute);font-weight:700;letter-spacing:-.01em}
+h1{font-size:clamp(44px,7.2vw,86px);color:var(--ink)}
+h1 .pink{color:var(--pink)}
+h2{font-size:clamp(34px,5vw,56px);color:var(--ink)}
+h2 .pink{color:var(--pink)}
+h3{font-size:clamp(24px,3vw,30px);color:var(--blue-ink);font-family:var(--font-hud);font-weight:800;text-transform:uppercase;letter-spacing:.06em}
+p{margin:0}
+.lead{font-size:clamp(20px,2.3vw,25px);line-height:1.45;font-weight:700}
+.hud{font-family:var(--font-hud);font-weight:700;text-transform:uppercase;letter-spacing:.08em;font-size:18px}
+.big{font-family:var(--font-cute);font-weight:700;font-size:40px;line-height:1}
+
+/* ---------- Chips, buttons, panels ---------- */
+.chip{
+  display:inline-flex;align-items:center;gap:10px;
+  min-height:2.6rem;padding:6px 16px;border-radius:999px;
+  background:var(--panel);border:3px solid var(--ink);
+  font-family:var(--font-hud);font-weight:800;font-size:18px;letter-spacing:.06em;text-transform:uppercase;color:var(--ink);
+}
+.chip .dot{width:14px;height:14px;border-radius:50%;background:var(--pink);box-shadow:0 0 0 3px #fff,0 0 12px var(--pink)}
+.chip.blue{background:var(--blue)}
+.btn{
+  -webkit-appearance:none;appearance:none;cursor:pointer;
+  display:inline-flex;align-items:center;justify-content:center;gap:10px;
+  min-height:3.2rem;padding:10px 22px;border-radius:999px;
+  border:4px solid var(--ink);background:var(--pink);color:var(--ink);
+  font-family:var(--font-cute);font-weight:700;font-size:21px;line-height:1;letter-spacing:.01em;
+  box-shadow:0 5px 0 var(--ink);
+  transition:transform .12s ease, box-shadow .12s ease;
+  text-decoration:none;user-select:none;touch-action:manipulation;
+}
+.btn:hover{transform:translateY(-2px);box-shadow:0 7px 0 var(--ink)}
+.btn:active{transform:translateY(3px);box-shadow:0 2px 0 var(--ink)}
+.btn.blue{background:var(--blue)}
+.btn.white{background:var(--panel)}
+.btn.lid{background:var(--lid);color:#fff;text-shadow:0 2px 0 #000}
+.btn[aria-pressed="true"]{background:var(--ink);color:#fff}
+.btn.sm{min-height:2.6rem;font-size:19px;padding:6px 16px;border-width:3px;box-shadow:0 4px 0 var(--ink)}
+.panel{
+  position:relative;background:var(--panel);border:4px solid var(--ink);border-radius:var(--radius);
+  box-shadow:0 10px 0 rgba(17,17,17,.9), 0 0 0 6px rgba(99,174,216,.18);
+  padding:24px;
+}
+@media (min-width:700px){ .panel{padding:32px} }
+/* HUD corner brackets */
+.bracket{position:relative}
+.bracket::before,.bracket::after{
+  content:"";position:absolute;width:26px;height:26px;border:5px solid var(--blue);pointer-events:none;
+}
+.bracket::before{left:-14px;top:-14px;border-right:0;border-bottom:0;border-radius:10px 0 0 0}
+.bracket::after{right:-14px;bottom:-14px;border-left:0;border-top:0;border-radius:0 0 10px 0}
+
+/* ---------- Top bar ---------- */
+.top{
+  position:sticky;top:0;z-index:50;background:rgba(255,255,255,.94);backdrop-filter:blur(8px);
+  border-bottom:4px solid var(--ink);
+}
+.top .wrap{display:flex;align-items:center;gap:16px;min-height:76px;flex-wrap:wrap;padding-top:8px;padding-bottom:8px}
+.brand{display:flex;align-items:center;gap:12px;text-decoration:none;color:var(--ink)}
+.brand img{width:54px;height:auto}
+.brand span{font-family:var(--font-cute);font-weight:700;font-size:26px;letter-spacing:.01em;line-height:1}
+.brand span b{color:var(--pink);font-weight:700}
+.top nav{display:flex;gap:8px;margin-left:auto;flex-wrap:wrap}
+.top nav a{
+  display:inline-flex;align-items:center;min-height:2.6rem;padding:4px 14px;border-radius:999px;
+  background:var(--cup);border:3px solid var(--ink);color:var(--ink);text-decoration:none;
+  font-family:var(--font-hud);font-weight:800;font-size:17px;letter-spacing:.06em;text-transform:uppercase;
+}
+.top nav a:hover{background:var(--blue)}
+.status{display:inline-flex;align-items:center;gap:10px;font-family:var(--font-hud);font-weight:800;font-size:17px;letter-spacing:.08em;text-transform:uppercase;color:var(--blue-ink)}
+.status .dot{width:14px;height:14px;border-radius:50%;background:var(--pink);box-shadow:0 0 0 3px #fff,0 0 14px var(--pink);animation:pulse 1.4s ease-in-out infinite}
+@keyframes pulse{50%{transform:scale(1.35);opacity:.7}}
+
+/* ---------- Hero / the dish ---------- */
+.hero{padding:40px 0 56px}
+.hero .grid{display:grid;gap:28px;align-items:center}
+.hero-copy{display:grid;gap:22px;order:-1;min-width:0}
+.hero .readouts{min-width:0}
+@media (min-width:960px){
+  .hero .grid{grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:20px 48px;grid-template-rows:auto auto}
+  .hero .lab{grid-column:1;grid-row:1 / span 2;align-self:center}
+  .hero-copy{order:0;grid-column:2;grid-row:1}
+  .hero .readouts{grid-column:2;grid-row:2}
+}
+.hero-copy .actions{display:flex;flex-wrap:wrap;gap:12px}
+
+.lab{position:relative;width:min(100%,560px);margin:0 auto;aspect-ratio:1/1}
+.dish{
+  position:absolute;inset:7%;border-radius:50%;
+  background:
+    radial-gradient(circle at 50% 50%, #ffffff 0%, #FBF7FA 45%, #F2F6FB 75%, #E6EEF6 100%);
+  border:7px solid var(--ink);
+  box-shadow:
+    inset 0 0 0 10px #fff, inset 0 0 0 14px rgba(99,174,216,.35),
+    0 0 0 8px var(--panel), 0 0 50px 10px color-mix(in srgb, var(--glow) 55%, transparent),
+    0 14px 0 2px rgba(17,17,17,.9);
+  overflow:hidden;touch-action:none;cursor:crosshair;
+  transition:box-shadow .5s ease;
+}
+.dish canvas{position:absolute;inset:0;width:100%;height:100%;display:block}
+.sweep{
+  position:absolute;inset:-5%;border-radius:50%;pointer-events:none;
+  background:conic-gradient(from 0deg, transparent 0deg, color-mix(in srgb, var(--glow) 45%, transparent) 40deg, transparent 70deg);
+  animation:spin 6s linear infinite;mix-blend-mode:multiply;opacity:.7;
+}
+.scanlines{position:absolute;inset:0;pointer-events:none;border-radius:50%;
+  background:repeating-linear-gradient(0deg, rgba(17,17,17,.05) 0 2px, transparent 2px 6px);mix-blend-mode:multiply}
+@keyframes spin{to{transform:rotate(360deg)}}
+.reticle{position:absolute;inset:0;pointer-events:none;overflow:visible}
+.reticle .ring1{animation:spin 24s linear infinite;transform-origin:50% 50%}
+.reticle .ring2{animation:spin 40s linear infinite reverse;transform-origin:50% 50%}
+.reticle .ring3{animation:spin 90s linear infinite;transform-origin:50% 50%}
+
+.cupwrap{
+  position:absolute;left:50%;top:50%;width:68%;aspect-ratio:900/801;
+  transform:translate(-50%,-52%);transform-origin:50% 80%;
+  cursor:pointer;-webkit-tap-highlight-color:transparent;z-index:3;
+}
+.cupwrap .cupinner{position:relative;width:100%;height:100%;transform-origin:50% 80%;animation:wobble 4.2s ease-in-out infinite}
+.cupwrap img{width:100%;height:100%;pointer-events:none;filter:drop-shadow(0 10px 0 rgba(17,17,17,.14))}
+.cupwrap.spill .cupinner{animation:squash .55s cubic-bezier(.2,1.6,.4,1) 1, wobble 4.2s ease-in-out infinite .55s}
+.cupwrap.shiver .cupinner{animation:shiver .12s linear infinite}
+.cupwrap.sweet .cupinner{animation:bounce 1.1s ease-in-out infinite}
+.cupwrap.peek{transform:translate(-50%,-52%) rotate(14deg) translateX(10%)}
+.cupwrap{transition:transform .6s cubic-bezier(.2,1.4,.4,1)}
+@keyframes wobble{0%,100%{transform:rotate(-1.6deg)}50%{transform:rotate(1.6deg) translateY(-1.5%)}}
+@keyframes squash{0%{transform:scale(1,1)}25%{transform:scale(1.14,.82)}55%{transform:scale(.92,1.12)}80%{transform:scale(1.04,.97)}100%{transform:scale(1,1)}}
+@keyframes shiver{0%{transform:translateX(-1.2%) rotate(-1deg)}50%{transform:translateX(1.2%) rotate(1deg)}100%{transform:translateX(-1.2%) rotate(-1deg)}}
+@keyframes bounce{0%,100%{transform:translateY(0) scale(1,1)}40%{transform:translateY(-5%) scale(.97,1.04)}60%{transform:translateY(0) scale(1.03,.97)}}
+
+/* eye overlay — covers the painted pupil and moves its own */
+.eye{position:absolute;aspect-ratio:1/1;border-radius:50%;background:#fff;pointer-events:none;will-change:transform}
+.eye .pupil{position:absolute;inset:7%;border-radius:50%;background:#000;will-change:transform;transition:transform .08s linear}
+.eye .pupil::after{content:"";position:absolute;left:18%;top:14%;width:34%;height:30%;border-radius:50%;background:#fff}
+
+.drops{position:absolute;inset:0;pointer-events:none;z-index:4}
+.drop{
+  position:absolute;width:22px;height:22px;left:0;top:0;
+  background:var(--pink);border:3px solid var(--ink);border-radius:50% 50% 50% 0;
+  transform:rotate(-45deg);will-change:transform,opacity;
+}
+.drop::after{content:"";position:absolute;left:22%;top:18%;width:38%;height:26%;border-radius:50%;background:#fff;transform:rotate(45deg)}
+
+.spoon{position:absolute;left:0;top:0;width:150px;pointer-events:none;z-index:5;opacity:0;transform:translate(-9999px,-9999px);will-change:transform;transition:opacity .2s}
+.spoon.on{opacity:1}
+.spoon svg{width:100%;height:auto;overflow:visible;filter:drop-shadow(0 6px 0 rgba(17,17,17,.2))}
+
+.tags{position:absolute;inset:0;pointer-events:none}
+.tags .chip{position:absolute;pointer-events:auto}
+.tags .t1{left:0;top:0}
+.tags .t2{right:0;top:0}
+.tags .t3{left:0;bottom:0}
+.tags .t4{right:0;bottom:0}
+@media (max-width:520px){ .tags .chip{font-size:15px;padding:4px 10px;min-height:2.2rem} }
+
+/* ---------- Readouts (dials) ---------- */
+.readouts{display:grid;gap:16px;margin-top:8px}
+@media (min-width:600px){ .readouts{grid-template-columns:1fr 1fr} }
+.dial{
+  background:var(--cup);border:4px solid var(--ink);border-radius:18px;padding:16px 18px;display:grid;gap:8px;
+}
+.dial .row{display:flex;align-items:baseline;justify-content:space-between;gap:10px}
+.dial .val{font-family:var(--font-cute);font-weight:700;font-size:36px;line-height:1;color:var(--pink)}
+.dial .val small{font-size:20px;color:var(--ink);font-family:var(--font-hud);font-weight:800}
+.dial .state{font-family:var(--font-hud);font-weight:800;font-size:18px;letter-spacing:.04em;color:var(--blue-ink);text-transform:uppercase;min-height:1.5em}
+input[type=range]{
+  -webkit-appearance:none;appearance:none;width:100%;height:44px;background:transparent;margin:0;cursor:pointer;touch-action:pan-y;
+}
+input[type=range]::-webkit-slider-runnable-track{height:16px;border-radius:999px;background:linear-gradient(90deg,var(--blue),#fff 50%,var(--pink));border:3px solid var(--ink)}
+input[type=range]::-moz-range-track{height:16px;border-radius:999px;background:linear-gradient(90deg,var(--blue),#fff 50%,var(--pink));border:3px solid var(--ink)}
+input[type=range]::-webkit-slider-thumb{-webkit-appearance:none;width:40px;height:40px;border-radius:50%;background:#fff;border:4px solid var(--ink);margin-top:-15px;box-shadow:0 4px 0 var(--ink), inset -8px -8px 0 var(--cup)}
+input[type=range]::-moz-range-thumb{width:32px;height:32px;border-radius:50%;background:#fff;border:4px solid var(--ink);box-shadow:0 4px 0 var(--ink)}
+.vigor{grid-column:1/-1;display:grid;gap:8px}
+.meter{height:26px;border:4px solid var(--ink);border-radius:999px;background:#fff;overflow:hidden}
+.meter i{display:block;height:100%;width:0;background:var(--pink);transform-origin:left;transition:width .4s ease}
+.counter{display:flex;gap:16px;flex-wrap:wrap}
+.counter .chip{background:var(--cup)}
+.counter .chip b{font-family:var(--font-cute);font-size:26px;color:var(--pink);font-weight:700}
+
+/* ---------- Sections ---------- */
+section{padding:44px 0}
+.sechead{display:grid;gap:10px;margin-bottom:22px}
+.sechead .hud{color:var(--blue-ink)}
+
+/* ---------- Growth grid ---------- */
+.growbox{display:grid;gap:18px}
+.gridcan{
+  width:100%;aspect-ratio:40/26;display:block;border:5px solid var(--ink);border-radius:18px;
+  background:var(--cup);touch-action:none;cursor:crosshair;
+  box-shadow:0 8px 0 var(--ink), 0 0 36px rgba(255,20,147,.25);
+}
+.toolbar{display:flex;flex-wrap:wrap;gap:12px;align-items:center}
+.toolbar .spacer{flex:1}
+.stats{display:flex;flex-wrap:wrap;gap:12px}
+
+/* ---------- Incubator ---------- */
+.incub{display:grid;gap:28px;align-items:center}
+@media (min-width:860px){ .incub{grid-template-columns:minmax(0,1.1fr) minmax(0,1fr)} }
+.chamber{
+  position:relative;background:#fff;border:5px solid var(--ink);border-radius:28px;padding:24px;
+  box-shadow:0 10px 0 var(--ink), 0 0 0 6px rgba(99,174,216,.18);
+  display:grid;grid-template-columns:1fr auto;gap:16px;align-items:center;cursor:pointer;user-select:none;
+  -webkit-tap-highlight-color:transparent;
+}
+@media (max-width:520px){ .chamber{grid-template-columns:1fr} }
+.window{
+  position:relative;width:min(100%,300px);aspect-ratio:1/1;margin:0 auto;border-radius:50%;border:6px solid var(--ink);
+  background:radial-gradient(circle at 50% 40%, #fff 0%, #EAF4FB 55%, #D7E9F5 100%);
+  box-shadow:inset 0 0 0 8px #fff, inset 0 0 0 11px rgba(99,174,216,.4), 0 0 40px rgba(99,174,216,.5);
+  overflow:hidden;
+}
+.window svg.ring{position:absolute;inset:8%;width:84%;height:84%;transform:rotate(-90deg)}
+.window .pct{position:absolute;inset:0;display:grid;place-content:center;text-align:center;gap:2px}
+.window .pct b{font-family:var(--font-cute);font-size:52px;line-height:1;color:var(--ink);font-weight:700}
+.window .pct span{font-family:var(--font-hud);font-weight:800;font-size:16px;letter-spacing:.1em;color:var(--blue-ink)}
+.foil{
+  position:absolute;left:-10%;top:-12%;width:120%;height:46%;
+  background:linear-gradient(180deg,#A5A5A5 0%,var(--lid) 55%,#6F6F6F 100%);
+  border-bottom:6px solid var(--ink);border-radius:0 0 50% 50% / 0 0 40% 40%;
+  transform-origin:0% 0%;transition:transform .5s cubic-bezier(.2,1.6,.4,1);
+}
+.foil::after{content:"";position:absolute;left:16%;top:22%;width:30%;height:12%;border-radius:50%;background:#fff;transform:rotate(-8deg);opacity:.9}
+.chamber.jiggle .foil{transform:rotate(-7deg) translateY(-6%)}
+.chamber .mini{width:150px;aspect-ratio:900/801;position:relative;transform-origin:50% 90%;transition:transform .6s cubic-bezier(.2,1.5,.4,1);justify-self:center}
+.chamber .mini img{width:100%;height:100%;filter:drop-shadow(0 6px 0 rgba(17,17,17,.14))}
+.chamber.peek .mini{transform:rotate(-18deg) translateX(-14%) translateY(-6%)}
+.chamber .hint{grid-column:1/-1;font-family:var(--font-hud);font-weight:800;text-transform:uppercase;letter-spacing:.06em;font-size:18px;color:var(--blue-ink);text-align:center}
+.log{
+  background:var(--cup);border:4px solid var(--ink);border-radius:18px;padding:18px 20px;min-height:7.5em;display:grid;gap:8px;
+}
+.log .line{font-family:var(--font-cute);font-weight:700;font-size:clamp(24px,3vw,32px);line-height:1.2;color:var(--ink)}
+.log .line .pink{color:var(--pink)}
+.log .meta{font-family:var(--font-hud);font-weight:800;font-size:17px;letter-spacing:.06em;text-transform:uppercase;color:var(--blue-ink)}
+
+/* ---------- Bench + footer ---------- */
+.bench{display:grid;gap:20px;align-items:center}
+@media (min-width:760px){ .bench{grid-template-columns:1fr auto} }
+footer{padding:40px 0 60px;border-top:4px solid var(--ink);background:#fff}
+footer .wrap{display:grid;gap:16px}
+footer .row{display:flex;flex-wrap:wrap;gap:12px 24px;align-items:center}
+footer a{font-weight:800}
+.mono{font-family:var(--font-hud);font-weight:700}
+
+/* ---------- Speech bubbles — the cup talks ---------- */
+.bubble{
+  position:relative;background:#fff;border:4px solid var(--ink);border-radius:22px;padding:14px 20px;
+  font-family:var(--font-cute);font-weight:700;font-size:clamp(21px,2.4vw,26px);line-height:1.25;color:var(--ink);
+  box-shadow:0 6px 0 var(--ink);
+}
+.bubble .pink{color:var(--pink)}
+.bubble::before,.bubble::after{content:"";position:absolute;width:0;height:0;border:14px solid transparent}
+.bubble.left::before{left:-30px;top:26px;border-right-color:var(--ink);border-left:0}
+.bubble.left::after{left:-24px;top:27px;border:13px solid transparent;border-right-color:#fff;border-left:0}
+.bubble.down::before{left:40px;bottom:-30px;border-top-color:var(--ink);border-bottom:0}
+.bubble.down::after{left:41px;bottom:-24px;border:13px solid transparent;border-top-color:#fff;border-bottom:0}
+.bubble.pop{animation:bpop .35s cubic-bezier(.2,1.6,.4,1) 1}
+@keyframes bpop{0%{transform:scale(.92)}100%{transform:scale(1)}}
+.heroSay{display:flex;align-items:center;gap:12px}
+.bubble .who{font-family:var(--font-hud);font-weight:800;font-size:17px;letter-spacing:.08em;text-transform:uppercase;color:var(--blue-ink);display:block;margin-bottom:4px}
+.hero .heroSay .bubble{flex:1}
+.hero .heroSay .bubble.left::before,.hero .heroSay .bubble.left::after{display:none}
+@media (min-width:960px){
+  .hero .heroSay .bubble.left::before,.hero .heroSay .bubble.left::after{display:block}
+}
+/* the guide dock: appears once the hero cup has scrolled away */
+.dock{
+  position:fixed;left:12px;right:12px;bottom:12px;z-index:60;display:flex;align-items:flex-end;gap:10px;
+  transform:translateY(130%);transition:transform .45s cubic-bezier(.2,1.3,.4,1);pointer-events:none;
+}
+.dock.show{transform:translateY(0);pointer-events:auto}
+.dock .dcup{width:78px;flex:0 0 auto;aspect-ratio:900/801;position:relative;transform-origin:50% 90%;animation:wobble 4.2s ease-in-out infinite;cursor:pointer;-webkit-tap-highlight-color:transparent}
+.dock .dcup img{width:100%;height:100%;filter:drop-shadow(0 5px 0 rgba(17,17,17,.2))}
+.dock .dcup.spill{animation:squash .55s cubic-bezier(.2,1.6,.4,1) 1, wobble 4.2s ease-in-out infinite .55s}
+.dock .bubble{flex:1;max-width:620px;font-size:20px;padding:10px 46px 10px 16px;box-shadow:0 5px 0 var(--ink)}
+.dock .bubble::before{left:-26px;top:auto;bottom:18px;border-right-color:var(--ink);border-left:0}
+.dock .bubble::after{left:-20px;top:auto;bottom:19px;border:13px solid transparent;border-right-color:#fff;border-left:0}
+.dock .x{
+  position:absolute;right:6px;top:6px;width:36px;height:36px;border-radius:50%;border:3px solid var(--ink);background:var(--cup);
+  font:800 20px/1 var(--font-hud);color:var(--ink);cursor:pointer;display:grid;place-content:center;
+}
+.dock.hidden{display:none}
+
+/* ---------- Lab notebook — the cup teaches ---------- */
+.lesson{display:grid;gap:22px}
+.lesson .stage{display:grid;gap:18px;align-items:start}
+@media (min-width:760px){ .lesson .stage{grid-template-columns:190px minmax(0,1fr);gap:26px} }
+@media (max-width:759px){ .lesson .bubble.left::before,.lesson .bubble.left::after{display:none} }
+.lesson .tcup{width:190px;max-width:48vw;aspect-ratio:900/801;position:relative;transform-origin:50% 90%;animation:wobble 4.2s ease-in-out infinite;margin:0 auto}
+.lesson .tcup img{width:100%;height:100%;filter:drop-shadow(0 8px 0 rgba(17,17,17,.14))}
+.lesson .tcup.spill{animation:squash .55s cubic-bezier(.2,1.6,.4,1) 1, wobble 4.2s ease-in-out infinite .55s}
+.lesson .tcup.nod{animation:bounce 1.1s ease-in-out 2}
+.lesson .steps{display:flex;gap:8px;flex-wrap:wrap;align-items:center}
+.lesson .steps button{
+  width:46px;height:46px;border-radius:50%;border:4px solid var(--ink);background:#fff;cursor:pointer;
+  font:700 20px/1 var(--font-cute);color:var(--ink);box-shadow:0 3px 0 var(--ink);
+}
+.lesson .steps button[aria-current="step"]{background:var(--pink)}
+.lesson .steps button.done{background:var(--blue)}
+.lesson .steps .lbl{font-family:var(--font-hud);font-weight:800;font-size:18px;letter-spacing:.06em;text-transform:uppercase;color:var(--blue-ink);margin-left:6px}
+.lesson .card{display:none;gap:18px}
+.lesson .card.on{display:grid}
+.lesson .card p.body{font-size:clamp(20px,2.2vw,24px);line-height:1.45;font-weight:700}
+.quote{
+  background:var(--cup);border:4px solid var(--ink);border-left:14px solid var(--pink);border-radius:18px;padding:16px 20px;
+  font-family:var(--font-cute);font-weight:700;font-size:clamp(24px,3vw,34px);line-height:1.2;
+}
+.quote small{display:block;font-family:var(--font-hud);font-weight:800;font-size:17px;letter-spacing:.08em;text-transform:uppercase;color:var(--blue-ink);margin-top:8px}
+.lesson .nav{display:flex;gap:12px;flex-wrap:wrap}
+/* sort toy */
+.sort{display:grid;gap:16px}
+.sort .tray{display:flex;flex-wrap:wrap;gap:10px;min-height:3rem;padding:12px;border:4px dashed var(--line);border-radius:18px;background:#fff}
+.job{
+  display:inline-flex;align-items:center;min-height:2.6rem;padding:6px 16px;border-radius:999px;border:3px solid var(--ink);
+  background:var(--cup);font-family:var(--font-cute);font-weight:700;font-size:20px;color:var(--ink);cursor:grab;user-select:none;touch-action:none;
+  box-shadow:0 3px 0 var(--ink);-webkit-tap-highlight-color:transparent;
+}
+.job.sel{background:var(--pink)}
+.job.ghost{position:fixed;left:0;top:0;z-index:70;pointer-events:none;opacity:.95;transform:translate(-9999px,-9999px)}
+.job.wrong{animation:shake .4s ease 1}
+@keyframes shake{0%,100%{transform:translateX(0)}25%{transform:translateX(-8px)}75%{transform:translateX(8px)}}
+.beakers{display:grid;gap:14px}
+@media (min-width:600px){ .beakers{grid-template-columns:1fr 1fr} }
+.beaker{
+  position:relative;border:5px solid var(--ink);border-radius:0 0 28px 28px;background:#fff;min-height:170px;padding:52px 14px 14px;
+  display:flex;flex-wrap:wrap;gap:8px;align-content:flex-start;transition:box-shadow .2s;
+}
+.beaker::before{content:attr(data-label);position:absolute;left:12px;top:10px;font-family:var(--font-hud);font-weight:800;font-size:18px;letter-spacing:.08em;text-transform:uppercase;color:var(--ink)}
+.beaker.human{background:linear-gradient(0deg, rgba(255,20,147,.18) 0 40%, #fff 40%)}
+.beaker.claude{background:linear-gradient(0deg, rgba(99,174,216,.28) 0 40%, #fff 40%)}
+.beaker.armed{box-shadow:0 0 0 6px var(--blue)}
+.beaker .job{cursor:default;box-shadow:none}
+.beaker.human .job{background:var(--pink)}
+.beaker.claude .job{background:var(--blue)}
+.sort .score{font-family:var(--font-hud);font-weight:800;font-size:18px;letter-spacing:.06em;text-transform:uppercase;color:var(--blue-ink)}
+/* flip cards */
+.flips{display:grid;gap:14px}
+@media (min-width:640px){ .flips{grid-template-columns:1fr 1fr} }
+.flip{
+  -webkit-appearance:none;appearance:none;border:0;background:transparent;padding:0;cursor:pointer;text-align:left;
+  perspective:900px;min-height:120px;font:inherit;color:inherit;
+}
+.flip .in{position:relative;width:100%;min-height:120px;transition:transform .55s cubic-bezier(.2,1.3,.4,1);transform-style:preserve-3d}
+.flip[aria-pressed="true"] .in{transform:rotateY(180deg)}
+.flip .f,.flip .b{
+  position:absolute;inset:0;backface-visibility:hidden;border:4px solid var(--ink);border-radius:18px;padding:16px 18px;display:grid;gap:6px;align-content:center;
+  box-shadow:0 5px 0 var(--ink);
+}
+.flip .f{background:var(--cup)}
+.flip .b{background:var(--blue);transform:rotateY(180deg)}
+.flip .k{font-family:var(--font-hud);font-weight:800;font-size:16px;letter-spacing:.08em;text-transform:uppercase;color:var(--blue-ink)}
+.flip .b .k{color:var(--ink)}
+.flip .t{font-family:var(--font-cute);font-weight:700;font-size:23px;line-height:1.2;color:var(--ink)}
+
+/* ---------- Reduced motion ---------- */
+@media (prefers-reduced-motion: reduce){
+  .sweep,.reticle .ring1,.reticle .ring2,.reticle .ring3,.status .dot{animation:none}
+  .cupwrap .cupinner,.cupwrap.sweet .cupinner,.cupwrap.shiver .cupinner{animation:none}
+  .cupwrap.spill .cupinner{animation:squash .55s ease 1}
+  .cupwrap,.chamber .mini,.foil,.meter i,.dock,.flip .in{transition-duration:.01s}
+  .dock .dcup,.lesson .tcup,.lesson .tcup.nod{animation:none}
+  .bubble.pop{animation:none}
+  .btn:hover{transform:none}
+}
+</style>
+</head>
+<body>
+
+<!-- ============ TOP BAR ============ -->
+<header class="top">
+  <div class="wrap">
+    <a class="brand" href="#top" aria-label="Live Culture Games, home">
+      <img src="cup-360.png" alt="" width="54" height="48">
+      <span>Live <b>Culture</b> Games</span>
+    </a>
+    <span class="status"><span class="dot" aria-hidden="true"></span>Lab online</span>
+    <nav aria-label="Sections">
+      <a href="#dish">Dish</a>
+      <a href="#grow">Grow</a>
+      <a href="#lesson">Lab notes</a>
+      <a href="#incubator">Incubator</a>
+      <a href="#contact">Contact</a>
+    </nav>
+  </div>
+</header>
+
+<main id="top">
+
+<!-- ============ HERO: THE DISH ============ -->
+<section class="hero" id="dish">
+  <div class="wrap">
+    <div class="grid">
+
+      <div class="lab" aria-label="Specimen 001 in a petri dish. Stir it with the pointer, tap the cup to spill.">
+        <svg class="reticle" viewBox="0 0 100 100" aria-hidden="true">
+          <g class="ring1"><circle cx="50" cy="50" r="48" fill="none" stroke="#63AED8" stroke-width="1.2" stroke-dasharray="6 4"/></g>
+          <g class="ring2"><circle cx="50" cy="50" r="45.5" fill="none" stroke="#FF1493" stroke-width=".9" stroke-dasharray="1 3 10 3"/></g>
+          <g class="ring3">
+            <path d="M50 1.5 v6 M50 92.5 v6 M1.5 50 h6 M92.5 50 h6" stroke="#111" stroke-width="2.4" stroke-linecap="round"/>
+            <path d="M15.7 15.7 l4.2 4.2 M84.3 15.7 l-4.2 4.2 M15.7 84.3 l4.2 -4.2 M84.3 84.3 l-4.2 -4.2" stroke="#63AED8" stroke-width="2" stroke-linecap="round"/>
+          </g>
+        </svg>
+
+        <div class="dish" id="dishEl">
+          <div class="sweep" aria-hidden="true"></div>
+          <canvas id="stir" aria-hidden="true"></canvas>
+          <div class="scanlines" aria-hidden="true"></div>
+          <div class="cupwrap" id="cup" role="button" tabindex="0" aria-label="The Live Culture cup. Press to spill some yogurt.">
+            <div class="cupinner">
+              <img src="cup-900.png" alt="" width="900" height="801" draggable="false">
+            </div>
+          </div>
+          <div class="drops" id="drops" aria-hidden="true"></div>
+          <div class="spoon" id="spoon" aria-hidden="true">
+            <svg viewBox="0 0 150 70">
+              <rect x="4" y="27" width="80" height="16" rx="8" fill="#8A8A8A" stroke="#111" stroke-width="5"/>
+              <ellipse cx="112" cy="35" rx="32" ry="22" fill="#EEF2F8" stroke="#111" stroke-width="5"/>
+              <ellipse cx="100" cy="26" rx="10" ry="4.5" fill="#fff" transform="rotate(-20 100 26)"/>
+              <rect x="14" y="31" width="30" height="4" rx="2" fill="#fff" opacity=".9"/>
+            </svg>
+          </div>
+        </div>
+
+        <div class="tags" aria-hidden="true">
+          <span class="chip t1"><span class="dot"></span>Specimen 001</span>
+          <span class="chip t2 blue">Live</span>
+          <span class="chip t3" id="tagDrops">Drops 0</span>
+          <span class="chip t4" id="tagTemp">42°C</span>
+        </div>
+      </div>
+
+      <div class="hero-copy">
+        <span class="hud">Culture lab · Escondido, California</span>
+        <h1>Something is <span class="pink">culturing.</span></h1>
+        <p class="lead">Live Culture Games is a small game studio in Escondido, California. We keep our cultures live, and we let them grow at their own pace.</p>
+        <div class="heroSay">
+          <div class="bubble left" id="heroBubble" aria-live="polite"><span class="who">The cup says</span><span id="heroSayText">Hi. I'm the cup. Tap me, stir me, or turn my dials. I'll tell you how this lab works.</span></div>
+        </div>
+        <div class="actions">
+          <button class="btn" type="button" id="btnSpill">Spill the cup</button>
+          <button class="btn blue" type="button" id="btnStir">Auto stir</button>
+          <a class="btn white" href="#incubator">Peek at the incubator</a>
+        </div>
+      </div>
+
+        <div class="readouts">
+          <label class="dial" for="temp">
+            <div class="row"><span class="hud">Culture temp</span><span class="val"><span id="tempVal">42</span><small>°C</small></span></div>
+            <input type="range" id="temp" min="20" max="50" step="1" value="42">
+            <span class="state" id="tempState">Sweet spot — cultures thrive</span>
+          </label>
+          <label class="dial" for="ph">
+            <div class="row"><span class="hud">Acidity</span><span class="val"><small>pH</small> <span id="phVal">4.5</span></span></div>
+            <input type="range" id="ph" min="3.5" max="7.5" step="0.1" value="4.5">
+            <span class="state" id="phState">Fresh yogurt range</span>
+          </label>
+          <div class="dial vigor">
+            <div class="row"><span class="hud">Culture vigour</span><span class="val"><span id="vigVal">100</span><small>%</small></span></div>
+            <div class="meter" role="img" aria-label="Culture vigour meter"><i id="vigBar"></i></div>
+            <span class="state">Set by the two dials. It drives the growth grid below.</span>
+          </div>
+        </div>
+
+    </div>
+  </div>
+</section>
+
+<!-- ============ GROWTH GRID ============ -->
+<section id="grow">
+  <div class="wrap">
+    <div class="panel bracket">
+      <div class="sechead">
+        <span class="hud">Toy 02 · Culture growth grid</span>
+        <h2>Draw a <span class="pink">culture.</span> Watch it bloom.</h2>
+        <p class="lead">Click or drag on the dish to seed yogurt drops. Press Grow and the colony spreads, blooms, and fades. Warmer dials, faster growth.</p>
+      </div>
+      <div class="growbox">
+        <canvas class="gridcan" id="grid" aria-label="Culture growth grid. Draw with the pointer to seed cells." role="img"></canvas>
+        <div class="toolbar">
+          <button class="btn" type="button" id="btnGrow" aria-pressed="true">Pause</button>
+          <button class="btn blue sm" type="button" id="btnStep">One step</button>
+          <button class="btn white sm" type="button" id="btnSpoon">Spoonful</button>
+          <button class="btn lid sm" type="button" id="btnClear">Rinse</button>
+          <span class="spacer"></span>
+          <div class="stats">
+            <span class="chip" id="statAlive">Alive <b>0</b></span>
+            <span class="chip" id="statBorn">Grown <b>0</b></span>
+            <span class="chip" id="statRate">Rate <b>0</b>/s</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ LAB NOTEBOOK: THE CUP TEACHES ============ -->
+<section id="lesson">
+  <div class="wrap">
+    <div class="panel bracket lesson">
+      <div class="sechead" style="margin:0">
+        <span class="hud">Lab notebook · How we make games with Claude</span>
+        <h2>The cup <span class="pink">explains</span> the lab.</h2>
+      </div>
+      <div class="steps" id="steps" role="tablist" aria-label="Lesson steps">
+        <button type="button" role="tab" aria-current="step" data-step="0">1</button>
+        <button type="button" role="tab" data-step="1">2</button>
+        <button type="button" role="tab" data-step="2">3</button>
+        <button type="button" role="tab" data-step="3">4</button>
+        <button type="button" role="tab" data-step="4">5</button>
+        <span class="lbl" id="stepLbl">Step 1 of 5</span>
+      </div>
+      <div class="stage">
+        <div class="tcup" id="tcup" aria-hidden="true"><img src="cup-360.png" alt="" width="360" height="321" draggable="false"></div>
+        <div style="display:grid;gap:18px;min-width:0">
+          <div class="bubble left pop" id="tBubble" aria-live="polite"><span class="who">The cup says</span><span id="tSay">Hi. I'm the cup. This lab runs on two kinds of hands. Here's the founder's own line.</span></div>
+
+          <div class="card on" data-card="0">
+            <blockquote class="quote" style="margin:0">“AI codes the game and assists me as a disabled person.”<small>The founder, in their own words</small></blockquote>
+            <p class="body">That is the whole studio in one sentence. A human with ideas. Claude, by Anthropic, with the hands.</p>
+          </div>
+
+          <div class="card" data-card="1">
+            <p class="body">The founder does not write code. Not one line. The founder is disabled and lives with ADHD, autism and vision problems. Those limits are real.</p>
+            <p class="body">So the lab is built around them. Nothing here depends on holding a hundred things in your head at once.</p>
+          </div>
+
+          <div class="card" data-card="2">
+            <p class="body">Who does what? Drag each job into the right beaker. Tap a job, then tap a beaker, if dragging is not your thing.</p>
+            <div class="sort">
+              <div class="tray" id="tray" aria-label="Jobs to sort">
+                <button type="button" class="job" data-who="human">Ideas</button>
+                <button type="button" class="job" data-who="claude">Code</button>
+                <button type="button" class="job" data-who="human">Taste</button>
+                <button type="button" class="job" data-who="claude">Checking</button>
+                <button type="button" class="job" data-who="human">Design</button>
+                <button type="button" class="job" data-who="claude">Remembering</button>
+                <button type="button" class="job" data-who="human">Final say</button>
+                <button type="button" class="job" data-who="claude">Keeping track</button>
+              </div>
+              <div class="beakers">
+                <div class="beaker human" data-who="human" data-label="The founder" role="button" tabindex="0" aria-label="The founder's beaker"></div>
+                <div class="beaker claude" data-who="claude" data-label="Claude" role="button" tabindex="0" aria-label="Claude's beaker"></div>
+              </div>
+              <span class="score" id="sortScore">Sorted 0 of 8</span>
+            </div>
+          </div>
+
+          <div class="card" data-card="3">
+            <p class="body">Every limit has a counter-move. Flip each card.</p>
+            <div class="flips">
+              <button class="flip" type="button" aria-pressed="false"><span class="in"><span class="f"><span class="k">The limit</span><span class="t">Walls of text cannot be read.</span></span><span class="b"><span class="k">The move</span><span class="t">Big, readable pages instead. One idea per block.</span></span></span></button>
+              <button class="flip" type="button" aria-pressed="false"><span class="in"><span class="f"><span class="k">The limit</span><span class="t">Too many things at once.</span></span><span class="b"><span class="k">The move</span><span class="t">One thing at a time. Then the next.</span></span></span></button>
+              <button class="flip" type="button" aria-pressed="false"><span class="in"><span class="f"><span class="k">The limit</span><span class="t">Holding it all in your head.</span></span><span class="b"><span class="k">The move</span><span class="t">Claude remembers, so the founder doesn't have to.</span></span></span></button>
+              <button class="flip" type="button" aria-pressed="false"><span class="in"><span class="f"><span class="k">The limit</span><span class="t">Does it actually work?</span></span><span class="b"><span class="k">The move</span><span class="t">The human plays every build and decides before it ships.</span></span></span></button>
+              <button class="flip" type="button" aria-pressed="false"><span class="in"><span class="f"><span class="k">The limit</span><span class="t">Whose memory is right?</span></span><span class="b"><span class="k">The move</span><span class="t">Neither. The source, the real files, is the truth.</span></span></span></button>
+            </div>
+          </div>
+
+          <div class="card" data-card="4">
+            <p class="body">The human brings the ideas, the taste, the design and the final say. Claude brings the hands: code, checking, remembering, keeping track.</p>
+            <p class="body">Limits are real. The teamwork gets past them. That is how this lab makes games.</p>
+            <div class="nav"><a class="btn" href="#incubator">See what's fermenting</a><a class="btn blue" href="/figure-bench/">Try the Figure Bench</a></div>
+          </div>
+
+          <div class="nav">
+            <button class="btn white sm" type="button" id="stepBack">Back</button>
+            <button class="btn sm" type="button" id="stepNext">Next</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ INCUBATOR: THE TEASE ============ -->
+<section id="incubator">
+  <div class="wrap">
+    <div class="sechead">
+      <span class="hud">Chamber 02 · Incubator</span>
+      <h2>Our first <span class="pink">culture</span> is still growing.</h2>
+      <p class="lead">A deep simulation about 100 years of popular culture is fermenting in here. The lid stays on until it is ready. Tap the chamber and see what happens.</p>
+    </div>
+    <div class="incub">
+      <div class="chamber" id="chamber" role="button" tabindex="0" aria-label="The incubator. Tap to peek.">
+        <div class="window">
+          <svg class="ring" viewBox="0 0 160 160" aria-hidden="true">
+            <circle cx="80" cy="80" r="70" fill="none" stroke="#fff" stroke-width="14"/>
+            <circle cx="80" cy="80" r="70" fill="none" stroke="#111" stroke-width="14" stroke-dasharray="439.8" stroke-dashoffset="439.8" id="ringTrack" opacity=".12"/>
+            <circle cx="80" cy="80" r="70" fill="none" stroke="#FF1493" stroke-width="14" stroke-linecap="round" stroke-dasharray="439.8" stroke-dashoffset="200" id="ringFill"/>
+          </svg>
+          <div class="pct"><b id="pct">0.0%</b><span>Fermenting</span></div>
+          <div class="foil" aria-hidden="true"></div>
+        </div>
+        <div class="mini" id="mini">
+          <img src="cup-360.png" alt="" width="360" height="321" draggable="false">
+        </div>
+        <span class="hint" id="chHint">Tap to peek · the cup will too</span>
+      </div>
+      <div class="log" aria-live="polite">
+        <span class="meta">Lab log</span>
+        <p class="line" id="logLine">Our first culture is <span class="pink">still growing.</span></p>
+        <span class="meta" id="logMeta">Peeks this visit: 0</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ FIGURE BENCH ============ -->
+<section id="bench">
+  <div class="wrap">
+    <div class="panel bracket bench">
+      <div class="sechead" style="margin:0">
+        <span class="hud">Toy 03 · Already on the shelf</span>
+        <h2>Build a hero on the <span class="pink">Figure Bench.</span></h2>
+        <p class="lead">A toy you can play with today. Go make something.</p>
+      </div>
+      <a class="btn" href="/figure-bench/">Open the Figure Bench</a>
+    </div>
+  </div>
+</section>
+
+</main>
+
+<!-- ============ THE GUIDE DOCK ============ -->
+<div class="dock" id="dock" aria-live="polite">
+  <div class="dcup" id="dcup" role="button" tabindex="0" aria-label="The cup. Press to make it spill."><img src="cup-360.png" alt="" width="360" height="321" draggable="false"></div>
+  <div class="bubble"><span id="dockSay">I'm the cup. I'll walk you through.</span><button class="x" type="button" id="dockX" aria-label="Hide the cup">×</button></div>
+</div>
+
+<!-- ============ FOOTER ============ -->
+<footer id="contact">
+  <div class="wrap">
+    <div class="row">
+      <img src="cup-360.png" alt="" width="64" height="57">
+      <h3 style="color:var(--ink);font-family:var(--font-cute);text-transform:none;letter-spacing:0;font-size:30px">Live Culture Games</h3>
+    </div>
+    <div class="row">
+      <a href="mailto:ryan@liveculturegames.com">ryan@liveculturegames.com</a>
+      <span>Escondido, California</span>
+      <a href="/figure-bench/">Figure Bench</a>
+    </div>
+    <p class="mono">© 2026 Live Culture Games</p>
+  </div>
+</footer>
+
+<script>
+(function(){
+'use strict';
+const RM = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+const $ = (s, r=document) => r.querySelector(s);
+const clamp = (v,a,b) => v<a?a:v>b?b:v;
+const DPR = Math.min(2, window.devicePixelRatio || 1);
+
+/* ============================================================
+   EYES — overlay a white disc on each painted pupil, add a live one
+   Positions are fractions of the 900x801 logo.
+   ============================================================ */
+const EYE_GEO = [
+  {cx:362/900, cy:505/801, r:19/900},   // left eye
+  {cx:487/900, cy:481/801, r:19/900}    // right eye
+];
+const eyeSets = [];
+function makeEyes(wrap){
+  const inner = wrap.querySelector('.cupinner') || wrap;
+  const eyes = EYE_GEO.map(g => {
+    const e = document.createElement('div');
+    e.className = 'eye';
+    e.style.left = (g.cx*100)+'%';
+    e.style.top  = (g.cy*100)+'%';
+    e.style.width = (g.r*2*100)+'%';
+    e.style.transform = 'translate(-50%,-50%)';
+    const p = document.createElement('div');
+    p.className = 'pupil';
+    e.appendChild(p);
+    inner.appendChild(e);
+    return {el:e, pupil:p, g};
+  });
+  const set = {wrap, eyes, target:null, until:0};
+  eyeSets.push(set);
+  return set;
+}
+let pointer = {x: innerWidth/2, y: innerHeight*0.4, has:false};
+window.addEventListener('pointermove', e => { pointer.x=e.clientX; pointer.y=e.clientY; pointer.has=true; eyesDirty=true; }, {passive:true});
+let eyesDirty = true;
+function updateEyes(now){
+  for (const set of eyeSets){
+    let tx = pointer.x, ty = pointer.y;
+    if (set.target && now < set.until){
+      const r = set.target.getBoundingClientRect();
+      tx = r.left + r.width/2; ty = r.top + r.height/2;
+    }
+    for (const eye of set.eyes){
+      const r = eye.el.getBoundingClientRect();
+      if (!r.width) continue;
+      const ex = r.left + r.width/2, ey = r.top + r.height/2;
+      let dx = tx-ex, dy = ty-ey;
+      const d = Math.hypot(dx,dy) || 1;
+      const travel = r.width*0.22;
+      const k = Math.min(1, d/220) * travel / d;
+      eye.pupil.style.transform = `translate(${(dx*k).toFixed(1)}px, ${(dy*k).toFixed(1)}px)`;
+    }
+  }
+}
+
+/* ============================================================
+   THE CUP — spill droplets on click, mood from the dials
+   ============================================================ */
+const cup = $('#cup');
+const cupEyes = makeEyes(cup);
+const dropsLayer = $('#drops');
+const dish = $('#dishEl');
+let dropsSpilled = 0;
+const tagDrops = $('#tagDrops');
+
+function spill(n){
+  cup.classList.remove('spill'); void cup.offsetWidth; cup.classList.add('spill');
+  const dr = dish.getBoundingClientRect();
+  const cr = cup.getBoundingClientRect();
+  // mouth / rim area in dish coords
+  const ox = cr.left - dr.left + cr.width*0.5;
+  const oy = cr.top  - dr.top  + cr.height*0.42;
+  n = n || (RM ? 5 : 10 + Math.floor(Math.random()*5));
+  for (let i=0;i<n;i++){
+    const d = document.createElement('span');
+    d.className = 'drop';
+    const s = 0.6 + Math.random()*0.9;
+    const ang = -Math.PI/2 + (Math.random()-0.5)*2.2;
+    const sp = 160 + Math.random()*220;
+    const vx = Math.cos(ang)*sp, vy = Math.sin(ang)*sp;
+    const T = RM ? 0.5 : 0.9 + Math.random()*0.3;
+    const g = 900;
+    const frames = [];
+    const steps = 8;
+    for (let k=0;k<=steps;k++){
+      const t = T*k/steps;
+      const x = ox + vx*t, y = oy + vy*t + 0.5*g*t*t;
+      frames.push({transform:`translate(${x}px,${y}px) rotate(${-45 + k*30}deg) scale(${s})`, opacity: k===steps?0:1});
+    }
+    dropsLayer.appendChild(d);
+    const anim = d.animate(frames, {duration:T*1000, easing:'linear', fill:'forwards'});
+    anim.onfinish = () => d.remove();
+    // the swirl canvas gets a kick too
+    addImpulse(ox, oy, vx*0.08, vy*0.08, 0.6);
+  }
+  dropsSpilled += n;
+  tagDrops.textContent = 'Drops ' + dropsSpilled;
+}
+cup.addEventListener('click', () => spill());
+cup.addEventListener('keydown', e => { if (e.key==='Enter'||e.key===' '){ e.preventDefault(); spill(); } });
+$('#btnSpill').addEventListener('click', () => spill());
+
+/* ============================================================
+   THE DIALS — temperature + pH => glow colour, cup mood, vigour
+   ============================================================ */
+const temp = $('#temp'), ph = $('#ph');
+const tempVal=$('#tempVal'), phVal=$('#phVal'), tempState=$('#tempState'), phState=$('#phState');
+const vigVal=$('#vigVal'), vigBar=$('#vigBar'), tagTemp=$('#tagTemp');
+let vigour = 1;
+function tempFactor(t){ // peak at 43, zero-ish at 20 and 50
+  const d = Math.abs(t-43);
+  return clamp(1 - (d/14)**2, 0.05, 1);
+}
+function phFactor(p){ // peak at 4.5
+  const d = Math.abs(p-4.5);
+  return clamp(1 - (d/2.6)**2, 0.05, 1);
+}
+function readDials(){
+  const t = +temp.value, p = +ph.value;
+  tempVal.textContent = t;
+  phVal.textContent = p.toFixed(1);
+  tagTemp.textContent = t + '°C';
+  let ts, mood;
+  if (t < 30){ ts='Chilly — the cup shivers'; mood='shiver'; }
+  else if (t < 38){ ts='Warming up'; mood=''; }
+  else if (t <= 46){ ts='Sweet spot — cultures thrive'; mood='sweet'; }
+  else { ts='Too hot — the cup sweats'; mood='sweat'; }
+  tempState.textContent = ts;
+  let ps;
+  if (p < 4.0) ps='Very tart';
+  else if (p <= 5.0) ps='Fresh yogurt range';
+  else if (p <= 6.2) ps='Mild';
+  else ps='Barely cultured';
+  phState.textContent = ps;
+  vigour = tempFactor(t)*phFactor(p);
+  vigVal.textContent = Math.round(vigour*100);
+  vigBar.style.width = (vigour*100).toFixed(0)+'%';
+  // glow: blue when cold, pink when sweet
+  const warm = clamp((t-28)/16, 0, 1);
+  document.documentElement.style.setProperty('--glow', `color-mix(in srgb, #FF1493 ${Math.round(warm*100)}%, #63AED8)`);
+  cup.classList.toggle('shiver', mood==='shiver');
+  cup.classList.toggle('sweet', mood==='sweet');
+  cup.dataset.mood = mood;
+}
+temp.addEventListener('input', readDials);
+ph.addEventListener('input', readDials);
+readDials();
+// sweat: when too hot, the cup drips now and then
+let sweatTimer = 0;
+
+/* ============================================================
+   STIR — yogurt particles in the dish, swirled by a spoon
+   ============================================================ */
+const stirC = $('#stir');
+const sctx = stirC.getContext('2d');
+const spoon = $('#spoon');
+let W=0,H=0,R=0,CX=0,CY=0;
+const P = [];
+const NP = 230;
+const impulses = [];
+function addImpulse(x,y,vx,vy,life){ impulses.push({x,y,vx,vy,life:life||0.5,age:0}); if (impulses.length>40) impulses.shift(); }
+function sizeStir(){
+  const r = dish.getBoundingClientRect();
+  W = Math.max(1, Math.round(r.width)); H = Math.max(1, Math.round(r.height));
+  stirC.width = W*DPR; stirC.height = H*DPR;
+  sctx.setTransform(DPR,0,0,DPR,0,0);
+  CX=W/2; CY=H/2; R=W/2 - 16;
+  if (!P.length){
+    for (let i=0;i<NP;i++){
+      const a = Math.random()*Math.PI*2, rr = Math.sqrt(Math.random())*R*0.95;
+      P.push({x:CX+Math.cos(a)*rr, y:CY+Math.sin(a)*rr, vx:0, vy:0, s:3+Math.random()*4.5});
+    }
+  } else {
+    for (const p of P){ // keep inside after resize
+      const dx=p.x-CX, dy=p.y-CY, d=Math.hypot(dx,dy);
+      if (d>R-p.s){ p.x=CX+dx/d*(R-p.s-1); p.y=CY+dy/d*(R-p.s-1); }
+    }
+  }
+}
+function stepStir(dt){
+  const idle = RM ? 0 : 0.0022;
+  for (let k=impulses.length-1;k>=0;k--){ const im=impulses[k]; im.age+=dt; if (im.age>im.life) impulses.splice(k,1); }
+  const IR = R*0.55;
+  for (const p of P){
+    // idle slow orbit
+    const dx=p.x-CX, dy=p.y-CY, d=Math.hypot(dx,dy)||1;
+    p.vx += -dy/d*idle*60*dt*(d/R);
+    p.vy +=  dx/d*idle*60*dt*(d/R);
+    // impulses: swirl + push
+    for (const im of impulses){
+      const ex=p.x-im.x, ey=p.y-im.y, ed=Math.hypot(ex,ey);
+      if (ed<IR){
+        const f=(1-ed/IR)*(1-im.age/im.life);
+        p.vx += (-ey/(ed+4))*f*220*dt + im.vx*f*0.9*dt*10;
+        p.vy += ( ex/(ed+4))*f*220*dt + im.vy*f*0.9*dt*10;
+      }
+    }
+    p.vx*=0.965; p.vy*=0.965;
+    p.x+=p.vx*dt*60*0.016*10; p.y+=p.vy*dt*60*0.016*10;
+    // stay in the dish
+    const nx=p.x-CX, ny=p.y-CY, nd=Math.hypot(nx,ny);
+    const lim=R-p.s-2;
+    if (nd>lim){ p.x=CX+nx/nd*lim; p.y=CY+ny/nd*lim; const dot=(p.vx*nx+p.vy*ny)/nd; p.vx-=1.6*dot*nx/nd; p.vy-=1.6*dot*ny/nd; }
+  }
+}
+function drawStir(){
+  sctx.clearRect(0,0,W,H);
+  for (const p of P){
+    sctx.beginPath(); sctx.arc(p.x,p.y,p.s,0,Math.PI*2);
+    sctx.fillStyle='#FF1493'; sctx.fill();
+    sctx.lineWidth=1.6; sctx.strokeStyle='#111'; sctx.stroke();
+    sctx.beginPath(); sctx.ellipse(p.x-p.s*0.32,p.y-p.s*0.36,p.s*0.34,p.s*0.2,-0.6,0,Math.PI*2);
+    sctx.fillStyle='#fff'; sctx.fill();
+  }
+}
+// spoon follows the pointer in the dish
+let lastSp = null, spoonOn=false;
+function dishPos(e){ const r=dish.getBoundingClientRect(); return {x:e.clientX-r.left, y:e.clientY-r.top}; }
+dish.addEventListener('pointerenter', e => { spoon.classList.add('on'); });
+dish.addEventListener('pointerleave', e => { spoon.classList.remove('on'); lastSp=null; });
+dish.addEventListener('pointerdown', e => { if (e.target.closest('.cupwrap')) return; lastSp=dishPos(e); spoon.classList.add('on'); dish.setPointerCapture(e.pointerId); });
+dish.addEventListener('pointerup', e => { lastSp=null; if (e.pointerType!=='mouse') spoon.classList.remove('on'); });
+dish.addEventListener('pointercancel', () => { lastSp=null; });
+dish.addEventListener('pointermove', e => {
+  const q = dishPos(e);
+  spoon.style.transform = `translate(${q.x-120}px, ${q.y-28}px) rotate(-18deg)`;
+  if (e.pointerType!=='mouse' && !lastSp) return;
+  if (lastSp){
+    const vx=q.x-lastSp.x, vy=q.y-lastSp.y;
+    if (Math.abs(vx)+Math.abs(vy)>0.5) addImpulse(q.x,q.y,vx*0.9,vy*0.9,0.5);
+    lastSp=q;
+  } else if (e.pointerType==='mouse'){
+    // hovering with the mouse stirs a little, pressing stirs a lot
+    addImpulse(q.x,q.y,0,0,0.25);
+  }
+}, {passive:true});
+// Auto stir: a spoon sweep round the dish
+let autoUntil = 0;
+$('#btnStir').addEventListener('click', () => { autoUntil = performance.now() + 2600; spoon.classList.add('on'); });
+function autoStir(now){
+  if (now > autoUntil) { if (autoUntil && now < autoUntil+200 && !pointer.has) spoon.classList.remove('on'); return; }
+  const t = (autoUntil - now)/2600;
+  const a = (1-t)*Math.PI*2*1.5;
+  const rr = R*0.62;
+  const x = CX+Math.cos(a)*rr, y = CY+Math.sin(a)*rr;
+  spoon.style.transform = `translate(${x-120}px, ${y-28}px) rotate(${-18 + Math.sin(a)*10}deg)`;
+  addImpulse(x,y,-Math.sin(a)*22, Math.cos(a)*22, 0.4);
+}
+
+/* ============================================================
+   GROWTH GRID — a cellular automaton of yogurt drops
+   ============================================================ */
+const gridC = $('#grid');
+const gctx = gridC.getContext('2d');
+const COLS=40, ROWS=26;
+let cells = new Uint8Array(COLS*ROWS);   // age (0 = empty)
+let next  = new Uint8Array(COLS*ROWS);
+let cellPx = 10, gW=0, gH=0;
+let growing = !RM, born=0, alive=0, tickAcc=0, rate=0, ticksThisSec=0, secAcc=0;
+const btnGrow=$('#btnGrow'), statAlive=$('#statAlive'), statBorn=$('#statBorn'), statRate=$('#statRate');
+function sizeGrid(){
+  const r = gridC.getBoundingClientRect();
+  gW = Math.max(1,Math.round(r.width)); gH = Math.max(1,Math.round(r.height));
+  gridC.width=gW*DPR; gridC.height=gH*DPR; gctx.setTransform(DPR,0,0,DPR,0,0);
+  cellPx = gW/COLS;
+  drawGrid();
+}
+function seedSpoonful(){
+  const cx = 6+Math.floor(Math.random()*(COLS-12)), cy = 4+Math.floor(Math.random()*(ROWS-8));
+  for (let y=-3;y<=3;y++) for (let x=-3;x<=3;x++){
+    if (x*x+y*y<=9 && Math.random()<0.62) set(cx+x,cy+y,1);
+  }
+  drawGrid(); updateStats();
+}
+function set(x,y,v){ if (x<0||y<0||x>=COLS||y>=ROWS) return; const i=y*COLS+x; if (v && !cells[i]) born++; cells[i]=v?Math.max(1,cells[i]||1):0; }
+function stepGrid(){
+  let a=0;
+  for (let y=0;y<ROWS;y++){
+    for (let x=0;x<COLS;x++){
+      let n=0;
+      for (let j=-1;j<=1;j++){ const yy=(y+j+ROWS)%ROWS; for (let i=-1;i<=1;i++){ if(i||j){ const xx=(x+i+COLS)%COLS; if (cells[yy*COLS+xx]) n++; } } }
+      const idx=y*COLS+x, c=cells[idx];
+      let v=0;
+      if (c){ if (n===2||n===3) v=Math.min(c+1,60); }
+      else if (n===3){ v=1; born++; }
+      next[idx]=v; if (v) a++;
+    }
+  }
+  const t=cells; cells=next; next=t; alive=a;
+}
+function drawGrid(){
+  gctx.clearRect(0,0,gW,gH);
+  // faint dot grid
+  gctx.fillStyle='rgba(99,174,216,.35)';
+  for (let y=0;y<ROWS;y++) for (let x=0;x<COLS;x++){ gctx.fillRect(x*cellPx+cellPx/2-1, y*cellPx+cellPx/2-1, 2, 2); }
+  for (let y=0;y<ROWS;y++) for (let x=0;x<COLS;x++){
+    const c=cells[y*COLS+x]; if (!c) continue;
+    const px=x*cellPx+cellPx/2, py=y*cellPx+cellPx/2;
+    const bloom = c>=8;
+    const r = cellPx*(bloom?0.52:0.40);
+    gctx.beginPath(); gctx.arc(px,py,r,0,Math.PI*2);
+    gctx.fillStyle = c<3 ? 'rgba(255,20,147,.55)' : '#FF1493'; gctx.fill();
+    gctx.lineWidth = bloom?2:1.4; gctx.strokeStyle='#111'; gctx.stroke();
+    gctx.beginPath(); gctx.ellipse(px-r*0.3,py-r*0.35,r*0.34,r*0.2,-0.6,0,Math.PI*2); gctx.fillStyle='#fff'; gctx.fill();
+  }
+}
+function updateStats(){
+  let a=0; for (let i=0;i<cells.length;i++) if (cells[i]) a++;
+  alive=a;
+  statAlive.innerHTML='Alive <b>'+alive+'</b>';
+  statBorn.innerHTML='Grown <b>'+born+'</b>';
+  statRate.innerHTML='Rate <b>'+rate+'</b>/s';
+}
+let drawing=false, lastCell=null;
+function gridCell(e){ const r=gridC.getBoundingClientRect(); return {x:Math.floor((e.clientX-r.left)/cellPx), y:Math.floor((e.clientY-r.top)/cellPx)}; }
+function paint(c){
+  for (let j=-1;j<=1;j++) for (let i=-1;i<=1;i++) if (Math.abs(i)+Math.abs(j)<2) set(c.x+i,c.y+j,1);
+  drawGrid(); updateStats();
+}
+gridC.addEventListener('pointerdown', e => { drawing=true; gridC.setPointerCapture(e.pointerId); const c=gridCell(e); lastCell=c; paint(c); e.preventDefault(); });
+gridC.addEventListener('pointermove', e => { if(!drawing) return; const c=gridCell(e); if (!lastCell||c.x!==lastCell.x||c.y!==lastCell.y){ paint(c); lastCell=c; } });
+const stopDraw = () => { drawing=false; lastCell=null; };
+gridC.addEventListener('pointerup', stopDraw); gridC.addEventListener('pointercancel', stopDraw);
+btnGrow.addEventListener('click', () => { growing=!growing; btnGrow.textContent = growing?'Pause':'Grow'; btnGrow.setAttribute('aria-pressed', growing?'true':'false'); });
+$('#btnStep').addEventListener('click', () => { stepGrid(); drawGrid(); updateStats(); });
+$('#btnSpoon').addEventListener('click', seedSpoonful);
+$('#btnClear').addEventListener('click', () => { cells.fill(0); drawGrid(); updateStats(); });
+btnGrow.textContent = growing?'Pause':'Grow'; btnGrow.setAttribute('aria-pressed', growing?'true':'false');
+
+/* ============================================================
+   INCUBATOR — the tease. A ring that never quite finishes.
+   ============================================================ */
+const chamber=$('#chamber'), mini=$('#mini'), ringFill=$('#ringFill'), pct=$('#pct'), logLine=$('#logLine'), logMeta=$('#logMeta');
+const CIRC = 2*Math.PI*70;
+const miniEyes = makeEyes(mini);
+const t0 = performance.now();
+let peeks=0, lastRing=0;
+const LINES = [
+  'Our first culture is <span class="pink">still growing.</span>',
+  'A deep simulation about <span class="pink">100 years</span> of popular culture. Fermenting.',
+  'Lid stays on. Peeking does not <span class="pink">speed up</span> a culture.',
+  'Fresh. Live. Not ready to <span class="pink">spoon out</span> yet.',
+  'Check back. The cultures are <span class="pink">doing their thing.</span>'
+];
+function ringProgress(now){
+  const s = (now - t0)/1000;
+  // creeps toward 99.6% and never lands; peeking nudges it back a hair
+  let p = 0.996 - 0.42*Math.exp(-s/70) - peeks*0.004*Math.exp(-(s - lastPeekAt)/8);
+  p = clamp(p, 0.3, 0.996);
+  ringFill.setAttribute('stroke-dashoffset', (CIRC*(1-p)).toFixed(1));
+  pct.textContent = (p*100).toFixed(1)+'%';
+}
+let lastPeekAt = 0;
+function peek(){
+  peeks++; lastPeekAt=(performance.now()-t0)/1000;
+  chamber.classList.remove('jiggle','peek'); void chamber.offsetWidth;
+  chamber.classList.add('jiggle','peek');
+  setTimeout(() => chamber.classList.remove('jiggle','peek'), 1300);
+  const win = $('.window', chamber);
+  const until = performance.now()+1500;
+  miniEyes.target = win; miniEyes.until = until;
+  cupEyes.target = win; cupEyes.until = until;
+  cup.classList.add('peek'); setTimeout(() => cup.classList.remove('peek'), 1300);
+  logLine.innerHTML = LINES[peeks % LINES.length];
+  logMeta.textContent = 'Peeks this visit: ' + peeks;
+  eyesDirty = true;
+}
+chamber.addEventListener('click', peek);
+chamber.addEventListener('keydown', e => { if (e.key==='Enter'||e.key===' '){ e.preventDefault(); peek(); } });
+
+/* ============================================================
+   THE CUP TALKS — one voice, three mouths (hero, dock, lesson)
+   ============================================================ */
+const heroSayText=$('#heroSayText'), heroBubble=$('#heroBubble'), dockSay=$('#dockSay'), dock=$('#dock'), dcup=$('#dcup');
+const dockEyes = makeEyes(dcup);
+let sayLock = 0;
+function say(html, opts){
+  opts = opts||{};
+  const now = performance.now();
+  if (!opts.force && now < sayLock) return;
+  sayLock = now + (opts.hold||1800);
+  heroSayText.innerHTML = html; dockSay.innerHTML = html;
+  heroBubble.classList.remove('pop'); void heroBubble.offsetWidth; heroBubble.classList.add('pop');
+}
+const CUP_LINES = {
+  spill: ['Oops. That one is on me.', 'Live cultures. Lively spill.', 'I regret nothing.', 'Mind the puddle.'],
+  stir: ['Whoa, easy with the spoon.', 'Stirred, not shaken.', 'Round and round. I love this part.'],
+  cold: 'B-b-brr. Turn me up a bit.',
+  warm: 'Getting there. A touch warmer.',
+  sweet: 'Ahh. That is the spot. Cultures thriving.',
+  hot: 'Too hot. I am sweating over here.',
+  tart: 'Ooh, tart. My kind of pH.',
+  mild: 'A bit mild. Where is the tang?',
+  flat: 'Barely cultured. Rude.',
+  peek: ['Is it done yet? Not yet.', 'Nope. Still fermenting.', 'Peeking does not help, you know.', 'Patience. Good cultures take time.'],
+  grow: 'Draw on the dish. I will grow it for you.',
+  lesson: 'Lesson time. Click Next, I will keep it short.',
+  incub: 'Peek if you must. It is not ready.',
+  bench: 'The Figure Bench is open. Go build a hero.',
+  contact: 'Write to the lab. We read every one.',
+  dish: 'Stir me. Tap me. Turn my dials.'
+};
+const pick = a => Array.isArray(a) ? a[Math.floor(Math.random()*a.length)] : a;
+// hook the toys
+cup.addEventListener('click', () => say(pick(CUP_LINES.spill), {force:true, hold:1200}));
+$('#btnSpill').addEventListener('click', () => say(pick(CUP_LINES.spill), {force:true, hold:1200}));
+$('#btnStir').addEventListener('click', () => say(pick(CUP_LINES.stir), {force:true, hold:2000}));
+let stirSaid = 0;
+dish.addEventListener('pointermove', e => { if (lastSp && performance.now()-stirSaid>4000){ stirSaid=performance.now(); say(pick(CUP_LINES.stir)); } }, {passive:true});
+function sayTemp(){
+  const t=+temp.value;
+  say(t<30?CUP_LINES.cold : t<38?CUP_LINES.warm : t<=46?CUP_LINES.sweet : CUP_LINES.hot, {force:true, hold:900});
+}
+function sayPh(){
+  const p=+ph.value;
+  say(p<4?CUP_LINES.tart : p<=5?CUP_LINES.sweet : p<=6.2?CUP_LINES.mild : CUP_LINES.flat, {force:true, hold:900});
+}
+temp.addEventListener('change', sayTemp); ph.addEventListener('change', sayPh);
+temp.addEventListener('input', () => { if (!sayLockInput()) sayTemp(); });
+ph.addEventListener('input', () => { if (!sayLockInput()) sayPh(); });
+let lastInputSay=0; function sayLockInput(){ const n=performance.now(); if (n-lastInputSay<700) return true; lastInputSay=n; return false; }
+chamber.addEventListener('click', () => say(pick(CUP_LINES.peek), {force:true, hold:1500}));
+dcup.addEventListener('click', () => { dcup.classList.remove('spill'); void dcup.offsetWidth; dcup.classList.add('spill'); say(pick(CUP_LINES.spill), {force:true, hold:1200}); });
+dcup.addEventListener('keydown', e => { if (e.key==='Enter'||e.key===' '){ e.preventDefault(); dcup.click(); } });
+// the dock shows once the hero dish is out of view, and reads the section in view
+let dockDismissed = false;
+$('#dockX').addEventListener('click', () => { dockDismissed=true; dock.classList.add('hidden'); });
+const dishIO = new IntersectionObserver(en => {
+  const inView = en[0].isIntersecting;
+  dock.classList.toggle('show', !inView && !dockDismissed);
+}, {threshold:0.15});
+dishIO.observe($('.lab'));
+const SECTION_LINES = {grow:'grow', lesson:'lesson', incubator:'incub', bench:'bench', contact:'contact', dish:'dish'};
+const bootAt = performance.now();
+const secIO = new IntersectionObserver(en => {
+  if (performance.now() - bootAt < 1500) return; // the greeting stays up first
+  for (const e of en){ if (e.isIntersecting){ const k=SECTION_LINES[e.target.id]; if (k) say(CUP_LINES[k], {hold:600}); } }
+}, {threshold:0.35});
+for (const id of Object.keys(SECTION_LINES)){ const el=document.getElementById(id); if (el) secIO.observe(el); }
+
+/* ============================================================
+   LAB NOTEBOOK — the cup teaches, five steps, two toys
+   ============================================================ */
+const tcup=$('#tcup'), tSay=$('#tSay'), tBubble=$('#tBubble'), stepLbl=$('#stepLbl');
+const tcupEyes = makeEyes(tcup);
+const stepBtns = Array.from($('#steps').querySelectorAll('button'));
+const cards = Array.from(document.querySelectorAll('.lesson .card'));
+const STEP_SAY = [
+  "Hi. I'm the cup. This lab runs on two kinds of hands. Here's the founder's own line.",
+  "No code from the founder. None. And that is fine, because the lab is built for it.",
+  "Who does what? You sort it. I'll check your work.",
+  "Every limit has a move. Flip the cards and I'll show you.",
+  "That's the whole recipe. Fresh, live, and still growing."
+];
+let step=0;
+function showStep(n){
+  step = clamp(n,0,cards.length-1);
+  cards.forEach((c,i)=>c.classList.toggle('on', i===step));
+  stepBtns.forEach((b,i)=>{ if (i===step) b.setAttribute('aria-current','step'); else b.removeAttribute('aria-current'); b.classList.toggle('done', i<step); });
+  stepLbl.textContent = 'Step '+(step+1)+' of '+cards.length;
+  tSay.textContent = STEP_SAY[step];
+  tBubble.classList.remove('pop'); void tBubble.offsetWidth; tBubble.classList.add('pop');
+  tcup.classList.remove('nod'); void tcup.offsetWidth; tcup.classList.add('nod');
+  $('#stepBack').disabled = step===0;
+  $('#stepNext').textContent = step===cards.length-1 ? 'Start over' : 'Next';
+  eyesDirty = true;
+}
+stepBtns.forEach(b => b.addEventListener('click', () => showStep(+b.dataset.step)));
+$('#stepBack').addEventListener('click', () => showStep(step-1));
+$('#stepNext').addEventListener('click', () => showStep(step===cards.length-1 ? 0 : step+1));
+showStep(0);
+
+// --- sort toy: drag or tap-then-tap the jobs into the beakers
+const tray=$('#tray'), beakers=Array.from(document.querySelectorAll('.beaker')), sortScore=$('#sortScore');
+const jobs = Array.from(tray.querySelectorAll('.job'));
+let selJob=null, ghost=null, dragJob=null, dragStart=null, dragging=false;
+const WHO_NAME = {human:"the founder's", claude:"Claude's"};
+function placeJob(job, beaker){
+  const ok = job.dataset.who === beaker.dataset.who;
+  if (ok){
+    job.classList.remove('sel'); job.disabled = true;
+    beaker.appendChild(job);
+    tcup.classList.remove('spill'); void tcup.offsetWidth; tcup.classList.add('spill');
+    const done = beakers.reduce((n,b)=>n+b.querySelectorAll('.job').length,0);
+    sortScore.textContent = 'Sorted '+done+' of '+jobs.length;
+    if (done===jobs.length){ tSay.textContent = 'All sorted. The human calls it. Claude builds it. That is the lab.'; }
+    else { tSay.textContent = 'Yes. '+job.textContent+' is '+WHO_NAME[job.dataset.who]+'.'; }
+  } else {
+    job.classList.remove('wrong'); void job.offsetWidth; job.classList.add('wrong');
+    tSay.textContent = 'Nope. '+job.textContent+' goes in the other beaker.';
+  }
+  tBubble.classList.remove('pop'); void tBubble.offsetWidth; tBubble.classList.add('pop');
+  beakers.forEach(b=>b.classList.remove('armed'));
+  selJob=null;
+}
+function beakerAt(x,y){ return beakers.find(b => { const r=b.getBoundingClientRect(); return x>=r.left&&x<=r.right&&y>=r.top&&y<=r.bottom; }); }
+tray.addEventListener('pointerdown', e => {
+  const job = e.target.closest('.job'); if (!job || job.disabled) return;
+  dragJob=job; dragStart={x:e.clientX,y:e.clientY}; dragging=false;
+  tray.setPointerCapture(e.pointerId);
+});
+tray.addEventListener('pointermove', e => {
+  if (!dragJob) return;
+  if (!dragging && Math.hypot(e.clientX-dragStart.x, e.clientY-dragStart.y) > 8){
+    dragging=true;
+    ghost = dragJob.cloneNode(true); ghost.classList.add('ghost'); document.body.appendChild(ghost);
+    dragJob.classList.add('sel');
+  }
+  if (dragging){
+    ghost.style.transform = `translate(${e.clientX-40}px, ${e.clientY-24}px) rotate(-4deg)`;
+    const b = beakerAt(e.clientX,e.clientY); beakers.forEach(x=>x.classList.toggle('armed', x===b));
+  }
+});
+function endDrag(e){
+  if (!dragJob) return;
+  if (dragging){
+    const b = beakerAt(e.clientX,e.clientY);
+    if (ghost){ ghost.remove(); ghost=null; }
+    dragJob.classList.remove('sel');
+    if (b) placeJob(dragJob,b);
+    beakers.forEach(x=>x.classList.remove('armed'));
+  } else {
+    // tap: select, then tap a beaker
+    jobs.forEach(j=>j.classList.remove('sel'));
+    selJob = dragJob; selJob.classList.add('sel');
+    beakers.forEach(b=>b.classList.add('armed'));
+    tSay.textContent = selJob.textContent+'. Now tap a beaker.';
+  }
+  dragJob=null; dragging=false;
+}
+tray.addEventListener('pointerup', endDrag); tray.addEventListener('pointercancel', endDrag);
+beakers.forEach(b => {
+  b.addEventListener('click', () => { if (selJob) placeJob(selJob,b); });
+  b.addEventListener('keydown', e => { if ((e.key==='Enter'||e.key===' ') && selJob){ e.preventDefault(); placeJob(selJob,b); } });
+});
+
+// --- flip cards
+document.querySelectorAll('.flip').forEach(f => f.addEventListener('click', () => {
+  const on = f.getAttribute('aria-pressed')!=='true';
+  f.setAttribute('aria-pressed', on?'true':'false');
+  if (on){ tcup.classList.remove('nod'); void tcup.offsetWidth; tcup.classList.add('nod'); }
+  const flipped = document.querySelectorAll('.flip[aria-pressed="true"]').length;
+  if (flipped===5) { tSay.textContent='Five limits, five moves. Now you know how we work.'; tBubble.classList.remove('pop'); void tBubble.offsetWidth; tBubble.classList.add('pop'); }
+}));
+
+/* ============================================================
+   ONE LOOP
+   ============================================================ */
+let last = performance.now();
+let stirIdleFrames = 0;
+function loop(now){
+  const dt = Math.min(0.05, (now-last)/1000); last = now;
+  // stir
+  autoStir(now);
+  const active = impulses.length>0 || !RM;
+  if (active || stirIdleFrames<2){ stepStir(dt); drawStir(); stirIdleFrames = active?0:stirIdleFrames+1; }
+  // sweat
+  if (cup.dataset.mood==='sweat' && !RM){ sweatTimer+=dt; if (sweatTimer>1.4){ sweatTimer=0; spill(2); } }
+  // grid
+  if (growing){
+    const tps = 2 + 10*vigour;
+    tickAcc += dt*tps;
+    let n=0; while (tickAcc>=1 && n<4){ stepGrid(); tickAcc-=1; n++; ticksThisSec++; }
+    if (n){ drawGrid(); }
+    secAcc+=dt; if (secAcc>=1){ rate=ticksThisSec; ticksThisSec=0; secAcc=0; updateStats(); }
+  }
+  // incubator
+  if (now-lastRing>150){ lastRing=now; ringProgress(now); }
+  // eyes
+  if (eyesDirty || (cupEyes.target && now<cupEyes.until) || (miniEyes.target && now<miniEyes.until)){ updateEyes(now); eyesDirty=false; }
+  requestAnimationFrame(loop);
+}
+const ro = new ResizeObserver(() => { sizeStir(); sizeGrid(); eyesDirty=true; });
+ro.observe(dish); ro.observe(gridC);
+sizeStir(); sizeGrid();
+seedSpoonful(); seedSpoonful();
+window.addEventListener('scroll', () => { eyesDirty=true; }, {passive:true});
+requestAnimationFrame(loop);
+})();
+</script>
+</body>
+</html>
