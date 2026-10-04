@@ -9,7 +9,7 @@
     if (!lights || still) return;
     var pods = lights.querySelectorAll('.pod');
     pods.forEach(function (p) { p.classList.remove('lit'); });
-    say.textContent = 'FIVE RED LIGHTS…';
+    say.textContent = 'WAIT FOR IT…';
     say.classList.add('waiting');
     pods.forEach(function (p, i) { setTimeout(function () { p.classList.add('lit'); }, 500 + i * 650); });
     setTimeout(function () {
