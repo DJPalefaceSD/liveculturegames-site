@@ -1,0 +1,55 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Odometer · Rostech</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Exo+2:ital,wght@0,500;0,800;1,800;1,900&family=Newsreader:ital,opsz,wght@0,6..72,400;1,6..72,400;1,6..72,600&family=Titillium+Web:wght@400;600;700&family=JetBrains+Mono:wght@500;700&display=swap">
+<link rel="stylesheet" href="site.css">
+</head>
+<body>
+<div class="page car" style="--live: var(--soft)">
+<header class="topbar">
+  <a class="mark" href="index.html" aria-label="Rostech home"><span class="mark-r">Rostech</span><span class="mark-io">.io</span><span class="mark-team">RACING</span></a>
+  <nav class="topnav"><a href="index.html#grid">◀ The grid</a></nav>
+</header>
+<section class="car-hero">
+  <div class="carnum" aria-hidden="true">06</div>
+  <div class="car-copy">
+    <p class="eyebrow">P6 ON THE GRID · SOFT · WHAT THE DASH READS OUT</p>
+    <h1 class="car-name">Odometer</h1>
+    <p class="car-tag">An odometer above the prompt: how long this session has run and what it has cost.</p>
+    <div class="chips"><span class="tyre tyre-soft" title="SOFT · Gauges"><i></i>SOFT · Gauges</span><span class="flag flag-green">ON TRACK</span><span class="chip">v0.1.1</span><span class="chip">tested on Claude Code 2.1.287</span></div>
+  </div>
+  <div class="wheel" aria-label="What it looks like in the terminal">
+    <div class="revs" aria-hidden="true"><i class="rev rev-g"></i><i class="rev rev-g"></i><i class="rev rev-g"></i><i class="rev rev-g"></i><i class="rev rev-g"></i><i class="rev rev-r"></i><i class="rev rev-r"></i><i class="rev rev-r"></i><i class="rev rev-r"></i><i class="rev rev-r"></i><i class="rev rev-b"></i><i class="rev rev-b"></i><i class="rev rev-b"></i><i class="rev rev-b"></i><i class="rev rev-b"></i></div>
+    <div class="wheel-screen"><span class="wheel-label">ON THE DASH</span><pre>🧭 1h 23m  $3.10</pre></div>
+    <div class="wheel-grips" aria-hidden="true"><i></i><i></i></div>
+  </div>
+</section>
+
+<section class="car-tabs">
+  <div class="tabs" role="tablist" aria-label="Odometer">
+    <button class="tab on" role="tab" aria-selected="true" data-panel="radio" type="button">Team radio <em>2</em></button>
+    <button class="tab" role="tab" aria-selected="false" data-panel="notes" type="button">Engineer's notes <em>2</em></button>
+    <button class="tab" role="tab" aria-selected="false" data-panel="pit" type="button">Pit stop</button>
+  </div>
+  <div class="panel" data-panel="radio"><div class="radio-row"><code>/odometer</code><span>prints it.</span><button class="btn btn-copy" type="button" data-copy="/odometer">Copy</button></div><div class="radio-row"><code>/odometer hide</code><span>and <code>/odometer show</code> toggle it.</span><button class="btn btn-copy" type="button" data-copy="/odometer hide">Copy</button></div></div>
+  <div class="panel" data-panel="notes" hidden><details open><summary><span class="lap">L1</span>The cost is the figure <code>/cost</code> totals for the session.</summary><div class="note-body"><p>On a Claude plan that is what the session would cost at API prices, not a charge. The time counts from when the session first began, so a resumed session keeps its miles.</p></div></details><details><summary><span class="lap">L2</span>It sits beside Gas Gauge and Speedometer on the same dash.</summary><div class="note-body"><p>It reads only the figures Claude Code already has, and sends nothing anywhere. The band draws in the terminal and in the Code tab of the Claude desktop app.</p></div></details></div>
+  <div class="panel" data-panel="pit" hidden>
+    <div class="board-sign">
+      <p class="sign-step"><b>BOX 1</b> add the garage (once)</p><div class="copyrow"><code>/plugin marketplace add DJPalefaceSD/rostech-mods</code><button class="btn btn-copy" type="button" data-copy="/plugin marketplace add DJPalefaceSD/rostech-mods">Copy</button></div><p class="sign-step"><b>BOX 2</b> fit Odometer</p><div class="copyrow"><code>/plugin install odometer@rostech</code><button class="btn btn-copy" type="button" data-copy="/plugin install odometer@rostech">Copy</button></div>
+    </div>
+  </div>
+</section>
+<nav class="pager">
+  <a href="hands-off.html" style="--live: var(--inter)"><small>◀ P5</small><b>Hands-Off</b></a>
+  <a href="index.html#grid" class="pager-home"><small>BACK TO</small><b>The grid</b></a>
+  <a href="clip.html" style="--live: var(--medium)"><small>P7 ▶</small><b>Clip</b></a>
+</nav>
+<footer class="foot"><span>Rostech.io · design mockup</span><span>Built Oct 4, 2026, 3:13 PM PT from plugins/odometer/README.md and plugin.json.</span></footer>
+</div>
+<script src="site.js"></script>
+</body>
+</html>

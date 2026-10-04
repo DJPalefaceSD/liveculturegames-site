@@ -1,0 +1,55 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Logo · Rostech</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Exo+2:ital,wght@0,500;0,800;1,800;1,900&family=Newsreader:ital,opsz,wght@0,6..72,400;1,6..72,400;1,6..72,600&family=Titillium+Web:wght@400;600;700&family=JetBrains+Mono:wght@500;700&display=swap">
+<link rel="stylesheet" href="site.css">
+</head>
+<body>
+<div class="page car" style="--live: var(--hard)">
+<header class="topbar">
+  <a class="mark" href="index.html" aria-label="Rostech home"><span class="mark-r">Rostech</span><span class="mark-io">.io</span><span class="mark-team">RACING</span></a>
+  <nav class="topnav"><a href="index.html#grid">◀ The grid</a></nav>
+</header>
+<section class="car-hero">
+  <div class="carnum" aria-hidden="true">11</div>
+  <div class="car-copy">
+    <p class="eyebrow">P11 ON THE GRID · HARD · WHAT RIDES ALONG WITH YOU</p>
+    <h1 class="car-name">Logo</h1>
+    <p class="car-tag">Your own logo on the dash above the prompt, between your other bands.</p>
+    <div class="chips"><span class="tyre tyre-hard" title="HARD · Cabin"><i></i>HARD · Cabin</span><span class="flag flag-green">ON TRACK</span><span class="chip">v0.3.0</span><span class="chip">tested on Claude Code 2.1.288</span></div>
+  </div>
+  <div class="wheel" aria-label="What it looks like in the terminal">
+    <div class="revs" aria-hidden="true"><i class="rev rev-g"></i><i class="rev rev-g"></i><i class="rev rev-g"></i><i class="rev rev-g"></i><i class="rev rev-g"></i><i class="rev rev-r"></i><i class="rev rev-r"></i><i class="rev rev-r"></i><i class="rev rev-r"></i><i class="rev rev-r"></i><i class="rev rev-b"></i><i class="rev rev-b"></i><i class="rev rev-b"></i><i class="rev rev-b"></i><i class="rev rev-b"></i></div>
+    <div class="wheel-screen"><span class="wheel-label">ON THE DASH</span><pre>/logo set C:/path/to/logo.png</pre></div>
+    <div class="wheel-grips" aria-hidden="true"><i></i><i></i></div>
+  </div>
+</section>
+
+<section class="car-tabs">
+  <div class="tabs" role="tablist" aria-label="Logo">
+    <button class="tab on" role="tab" aria-selected="true" data-panel="radio" type="button">Team radio <em>3</em></button>
+    <button class="tab" role="tab" aria-selected="false" data-panel="notes" type="button">Engineer's notes <em>5</em></button>
+    <button class="tab" role="tab" aria-selected="false" data-panel="pit" type="button">Pit stop</button>
+  </div>
+  <div class="panel" data-panel="radio"><div class="radio-row"><code>/logo set C:/path/to/logo.png</code><span>puts a PNG on the dash. A square logo with bold shapes reads best.</span><button class="btn btn-copy" type="button" data-copy="/logo set C:/path/to/logo.png">Copy</button></div><div class="radio-row"><code>/logo</code><span>shows which file is in use.</span><button class="btn btn-copy" type="button" data-copy="/logo">Copy</button></div><div class="radio-row"><code>/logo hide</code><span>and <code>/logo show</code> toggle it.</span><button class="btn btn-copy" type="button" data-copy="/logo hide">Copy</button></div></div>
+  <div class="panel" data-panel="notes" hidden><details open><summary><span class="lap">L1</span>The logo is drawn in coloured block characters, two pixels to a character, so it shows in any terminal that can show colour.</summary><div class="note-body"><p>Pictures are not needed.</p></div></details><details><summary><span class="lap">L2</span>For the sharpest logo, draw a small PNG for the dash yourself, 40 pixels a side or smaller.</summary><div class="note-body"><p>A 16 by 16 PNG is a good size. A small PNG is drawn exactly as you drew it, one pixel to half a character, with nothing blurred.</p></div></details><details><summary><span class="lap">L3</span>A bigger PNG works too.</summary><div class="note-body"><p>Its see-through border is trimmed, and it is shrunk to 16 by 16 pixels. Every pixel comes out either solid colour or clear, never a blur of the two, but thin lines can still break up at that size.</p></div></details><details><summary><span class="lap">L4</span>The PNG is read once when you set it, on your own machine with Windows PowerShell, and the result is kept across sessions in Claude Code's plugin store.</summary><div class="note-body"><p>Nothing is sent anywhere. See-through parts of the PNG take your terminal's own colour.</p></div></details><details><summary><span class="lap">L5</span>Windows only for now, because reading the PNG uses PowerShell.</summary></details></div>
+  <div class="panel" data-panel="pit" hidden>
+    <div class="board-sign">
+      <p class="sign-step"><b>BOX 1</b> add the garage (once)</p><div class="copyrow"><code>/plugin marketplace add DJPalefaceSD/rostech-mods</code><button class="btn btn-copy" type="button" data-copy="/plugin marketplace add DJPalefaceSD/rostech-mods">Copy</button></div><p class="sign-step"><b>BOX 2</b> fit Logo</p><div class="copyrow"><code>/plugin install logo@rostech</code><button class="btn btn-copy" type="button" data-copy="/plugin install logo@rostech">Copy</button></div>
+    </div>
+  </div>
+</section>
+<nav class="pager">
+  <a href="pin.html" style="--live: var(--hard)"><small>◀ P10</small><b>Pin</b></a>
+  <a href="index.html#grid" class="pager-home"><small>BACK TO</small><b>The grid</b></a>
+  <a href="tach.html" style="--live: var(--soft)"><small>P12 ▶</small><b>Tach</b></a>
+</nav>
+<footer class="foot"><span>Rostech.io · design mockup</span><span>Built Oct 4, 2026, 3:13 PM PT from plugins/logo/README.md and plugin.json.</span></footer>
+</div>
+<script src="site.js"></script>
+</body>
+</html>

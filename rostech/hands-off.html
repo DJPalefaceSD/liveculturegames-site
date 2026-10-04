@@ -1,0 +1,55 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Hands-Off · Rostech</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Exo+2:ital,wght@0,500;0,800;1,800;1,900&family=Newsreader:ital,opsz,wght@0,6..72,400;1,6..72,400;1,6..72,600&family=Titillium+Web:wght@400;600;700&family=JetBrains+Mono:wght@500;700&display=swap">
+<link rel="stylesheet" href="site.css">
+</head>
+<body>
+<div class="page car" style="--live: var(--inter)">
+<header class="topbar">
+  <a class="mark" href="index.html" aria-label="Rostech home"><span class="mark-r">Rostech</span><span class="mark-io">.io</span><span class="mark-team">RACING</span></a>
+  <nav class="topnav"><a href="index.html#grid">◀ The grid</a></nav>
+</header>
+<section class="car-hero">
+  <div class="carnum" aria-hidden="true">05</div>
+  <div class="car-copy">
+    <p class="eyebrow">P5 ON THE GRID · INTER · WHO GETS TO TOUCH WHAT</p>
+    <h1 class="car-name">Hands-Off</h1>
+    <p class="car-tag">Files you mark as yours: Claude cannot edit them until you hand them back.</p>
+    <div class="chips"><span class="tyre tyre-inter" title="INTER · Security"><i></i>INTER · Security</span><span class="flag flag-green">ON TRACK</span><span class="chip">v0.1.4</span><span class="chip">tested on Claude Code 2.1.287</span></div>
+  </div>
+  <div class="wheel" aria-label="What it looks like in the terminal">
+    <div class="revs" aria-hidden="true"><i class="rev rev-g"></i><i class="rev rev-g"></i><i class="rev rev-g"></i><i class="rev rev-g"></i><i class="rev rev-g"></i><i class="rev rev-r"></i><i class="rev rev-r"></i><i class="rev rev-r"></i><i class="rev rev-r"></i><i class="rev rev-r"></i><i class="rev rev-b"></i><i class="rev rev-b"></i><i class="rev rev-b"></i><i class="rev rev-b"></i><i class="rev rev-b"></i></div>
+    <div class="wheel-screen"><span class="wheel-label">ON THE DASH</span><pre>/hands-off notes/plan.md</pre></div>
+    <div class="wheel-grips" aria-hidden="true"><i></i><i></i></div>
+  </div>
+</section>
+
+<section class="car-tabs">
+  <div class="tabs" role="tablist" aria-label="Hands-Off">
+    <button class="tab on" role="tab" aria-selected="true" data-panel="radio" type="button">Team radio <em>3</em></button>
+    <button class="tab" role="tab" aria-selected="false" data-panel="notes" type="button">Engineer's notes <em>2</em></button>
+    <button class="tab" role="tab" aria-selected="false" data-panel="pit" type="button">Pit stop</button>
+  </div>
+  <div class="panel" data-panel="radio"><div class="radio-row"><code>/hands-off notes/plan.md</code><span>marks a file. A folder covers everything inside it.</span><button class="btn btn-copy" type="button" data-copy="/hands-off notes/plan.md">Copy</button></div><div class="radio-row"><code>/hands-off list</code><span>shows what is marked.</span><button class="btn btn-copy" type="button" data-copy="/hands-off list">Copy</button></div><div class="radio-row"><code>/hands-off release notes/plan.md</code><span>hands one back. <code>/hands-off release all</code> hands back everything.</span><button class="btn btn-copy" type="button" data-copy="/hands-off release notes/plan.md">Copy</button></div></div>
+  <div class="panel" data-panel="notes" hidden><details open><summary><span class="lap">L1</span>It guards Claude's Edit, Write and NotebookEdit tools: an edit to a marked path is refused, with a message telling Claude to ask you first.</summary><div class="note-body"><p>The marks are kept across sessions on your own machine, in Claude Code's plugin store. It sends nothing anywhere.</p></div></details><details><summary><span class="lap">L2</span>Why this exists</summary><div class="note-body"><p>I edit my own files by hand, in Notepad++.</p><p>I direct Claude Code all day. I do not write the code.</p><p>I run Claude like a workshop, and Claude is the foreman. On 15 August 2026, half in character, I told the foreman this, at 1:23 in the afternoon:</p><p>&gt; &quot;Next time i come in here and 2 minutes later some idiot AI is [messing] with MY files in any way that i dont approve then you habndel it&quot;</p><p>Nothing had been wrecked yet. That was the point. I wanted it fixed before it happened.</p><p>The rule it made: when I say a file is mine, no Claude writes to it. Not a typo. Not a reformat. Not because the change is obviously right. And I release it. Nobody else does.</p><p>The first version was a flag and a warning. A shell script kept the list, and a hook printed it above every turn. It could not stop a write. It only made a write deliberate instead of an accident.</p><p>This mod is the version that stops it.</p></div></details></div>
+  <div class="panel" data-panel="pit" hidden>
+    <div class="board-sign">
+      <p class="sign-step"><b>BOX 1</b> add the garage (once)</p><div class="copyrow"><code>/plugin marketplace add DJPalefaceSD/rostech-mods</code><button class="btn btn-copy" type="button" data-copy="/plugin marketplace add DJPalefaceSD/rostech-mods">Copy</button></div><p class="sign-step"><b>BOX 2</b> fit Hands-Off</p><div class="copyrow"><code>/plugin install hands-off@rostech</code><button class="btn btn-copy" type="button" data-copy="/plugin install hands-off@rostech">Copy</button></div>
+    </div>
+  </div>
+</section>
+<nav class="pager">
+  <a href="radio.html" style="--live: var(--hard)"><small>◀ P4</small><b>Radio</b></a>
+  <a href="index.html#grid" class="pager-home"><small>BACK TO</small><b>The grid</b></a>
+  <a href="odometer.html" style="--live: var(--soft)"><small>P6 ▶</small><b>Odometer</b></a>
+</nav>
+<footer class="foot"><span>Rostech.io · design mockup</span><span>Built Oct 4, 2026, 3:13 PM PT from plugins/hands-off/README.md and plugin.json.</span></footer>
+</div>
+<script src="site.js"></script>
+</body>
+</html>

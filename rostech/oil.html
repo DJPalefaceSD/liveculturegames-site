@@ -1,0 +1,55 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Oil · Rostech</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Exo+2:ital,wght@0,500;0,800;1,800;1,900&family=Newsreader:ital,opsz,wght@0,6..72,400;1,6..72,400;1,6..72,600&family=Titillium+Web:wght@400;600;700&family=JetBrains+Mono:wght@500;700&display=swap">
+<link rel="stylesheet" href="site.css">
+</head>
+<body>
+<div class="page car" style="--live: var(--soft)">
+<header class="topbar">
+  <a class="mark" href="index.html" aria-label="Rostech home"><span class="mark-r">Rostech</span><span class="mark-io">.io</span><span class="mark-team">RACING</span></a>
+  <nav class="topnav"><a href="index.html#grid">◀ The grid</a></nav>
+</header>
+<section class="car-hero">
+  <div class="carnum" aria-hidden="true">18</div>
+  <div class="car-copy">
+    <p class="eyebrow">P18 ON THE GRID · SOFT · WHAT THE DASH READS OUT</p>
+    <h1 class="car-name">Oil</h1>
+    <p class="car-tag">An oil gauge above the prompt: this week's Fable use, beside Gas Gauge.</p>
+    <div class="chips"><span class="tyre tyre-soft" title="SOFT · Gauges"><i></i>SOFT · Gauges</span><span class="flag flag-pit">IN THE GARAGE</span><span class="chip">v0.1.0</span></div>
+  </div>
+  <div class="wheel" aria-label="What it looks like in the terminal">
+    <div class="revs" aria-hidden="true"><i class="rev rev-g"></i><i class="rev rev-g"></i><i class="rev rev-g"></i><i class="rev rev-g"></i><i class="rev rev-g"></i><i class="rev rev-r"></i><i class="rev rev-r"></i><i class="rev rev-r"></i><i class="rev rev-r"></i><i class="rev rev-r"></i><i class="rev rev-b"></i><i class="rev rev-b"></i><i class="rev rev-b"></i><i class="rev rev-b"></i><i class="rev rev-b"></i></div>
+    <div class="wheel-screen"><span class="wheel-label">ON THE DASH</span><pre>/oil</pre></div>
+    <div class="wheel-grips" aria-hidden="true"><i></i><i></i></div>
+  </div>
+</section>
+<p class="car-lede">Gas Gauge's neighbour. A band above the prompt that shows this week's Fable use.</p>
+<section class="car-tabs">
+  <div class="tabs" role="tablist" aria-label="Oil">
+    <button class="tab on" role="tab" aria-selected="true" data-panel="radio" type="button">Team radio <em>2</em></button>
+    <button class="tab" role="tab" aria-selected="false" data-panel="notes" type="button">Engineer's notes <em>3</em></button>
+    <button class="tab" role="tab" aria-selected="false" data-panel="pit" type="button">Pit stop</button>
+  </div>
+  <div class="panel" data-panel="radio"><div class="radio-row"><code>/oil</code><span>prints the numbers.</span><button class="btn btn-copy" type="button" data-copy="/oil">Copy</button></div><div class="radio-row"><code>/oil hide</code><span>moves it to the status line. <code>/oil show</code> brings the band back.</span><button class="btn btn-copy" type="button" data-copy="/oil hide">Copy</button></div></div>
+  <div class="panel" data-panel="notes" hidden><details open><summary><span class="lap">L1</span>What it shows</summary><div class="note-body"><ul><li><strong>Fable's token count this week.</strong> Oil counts every model response itself, the main thread and subagents alike, and adds up the ones Fable answered. Cache reads are left out.</li><li><strong>The week</strong> runs to your plan's weekly refill, read off the same window Gas Gauge reads.</li><li><strong>Your Fable limit, when it can.</strong> Claude plans have a separate weekly limit for Fable. Claude Code does not yet give that window to plugins, so Oil says so instead of guessing. If it ever arrives, Oil draws it as a gauge, like Gas Gauge.</li></ul></div></details><details><summary><span class="lap">L2</span>Commands</summary><div class="note-body"><ul><li><code>/oil</code> prints the numbers.</li><li><code>/oil hide</code> moves it to the status line. <code>/oil show</code> brings the band back.</li></ul></div></details><details><summary><span class="lap">L3</span>Privacy</summary><div class="note-body"><p>Everything stays on your machine: a count in the plugin's own store. Nothing is sent anywhere.</p></div></details></div>
+  <div class="panel" data-panel="pit" hidden>
+    <div class="board-sign">
+      <p class="sign-step"><b>IN THE GARAGE</b> Oil is built but not in the marketplace yet.</p>
+    </div>
+  </div>
+</section>
+<nav class="pager">
+  <a href="horn.html" style="--live: var(--medium)"><small>◀ P17</small><b>Horn</b></a>
+  <a href="index.html#grid" class="pager-home"><small>BACK TO</small><b>The grid</b></a>
+  <a href="gas-gauge.html" style="--live: var(--soft)"><small>P1 ▶</small><b>Gas Gauge</b></a>
+</nav>
+<footer class="foot"><span>Rostech.io · design mockup</span><span>Built Oct 4, 2026, 3:13 PM PT from plugins/oil/README.md and plugin.json.</span></footer>
+</div>
+<script src="site.js"></script>
+</body>
+</html>

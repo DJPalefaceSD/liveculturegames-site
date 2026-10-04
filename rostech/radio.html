@@ -1,0 +1,55 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Radio · Rostech</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Exo+2:ital,wght@0,500;0,800;1,800;1,900&family=Newsreader:ital,opsz,wght@0,6..72,400;1,6..72,400;1,6..72,600&family=Titillium+Web:wght@400;600;700&family=JetBrains+Mono:wght@500;700&display=swap">
+<link rel="stylesheet" href="site.css">
+</head>
+<body>
+<div class="page car" style="--live: var(--hard)">
+<header class="topbar">
+  <a class="mark" href="index.html" aria-label="Rostech home"><span class="mark-r">Rostech</span><span class="mark-io">.io</span><span class="mark-team">RACING</span></a>
+  <nav class="topnav"><a href="index.html#grid">◀ The grid</a></nav>
+</header>
+<section class="car-hero">
+  <div class="carnum" aria-hidden="true">04</div>
+  <div class="car-copy">
+    <p class="eyebrow">P4 ON THE GRID · HARD · WHAT RIDES ALONG WITH YOU</p>
+    <h1 class="car-name">Radio</h1>
+    <p class="car-tag">A chime when Claude finishes a long turn, so you can look away.</p>
+    <div class="chips"><span class="tyre tyre-hard" title="HARD · Cabin"><i></i>HARD · Cabin</span><span class="flag flag-green">ON TRACK</span><span class="chip">v0.2.0</span><span class="chip">tested on Claude Code 2.1.287 on Windows</span></div>
+  </div>
+  <div class="wheel" aria-label="What it looks like in the terminal">
+    <div class="revs" aria-hidden="true"><i class="rev rev-g"></i><i class="rev rev-g"></i><i class="rev rev-g"></i><i class="rev rev-g"></i><i class="rev rev-g"></i><i class="rev rev-r"></i><i class="rev rev-r"></i><i class="rev rev-r"></i><i class="rev rev-r"></i><i class="rev rev-r"></i><i class="rev rev-b"></i><i class="rev rev-b"></i><i class="rev rev-b"></i><i class="rev rev-b"></i><i class="rev rev-b"></i></div>
+    <div class="wheel-screen"><span class="wheel-label">ON THE DASH</span><pre>/radio sound C:/path/to/chime.wav</pre></div>
+    <div class="wheel-grips" aria-hidden="true"><i></i><i></i></div>
+  </div>
+</section>
+
+<section class="car-tabs">
+  <div class="tabs" role="tablist" aria-label="Radio">
+    <button class="tab on" role="tab" aria-selected="true" data-panel="radio" type="button">Team radio <em>5</em></button>
+    <button class="tab" role="tab" aria-selected="false" data-panel="notes" type="button">Engineer's notes <em>2</em></button>
+    <button class="tab" role="tab" aria-selected="false" data-panel="pit" type="button">Pit stop</button>
+  </div>
+  <div class="panel" data-panel="radio"><div class="radio-row"><code>/radio sound C:/path/to/chime.wav</code><span>makes it play your own sound. It plays the file once so you hear it, then keeps it across sessions.</span><button class="btn btn-copy" type="button" data-copy="/radio sound C:/path/to/chime.wav">Copy</button></div><div class="radio-row"><code>/radio sound default</code><span>goes back to the bundled chime.</span><button class="btn btn-copy" type="button" data-copy="/radio sound default">Copy</button></div><div class="radio-row"><code>/radio test</code><span>plays the done chime, then the whistle.</span><button class="btn btn-copy" type="button" data-copy="/radio test">Copy</button></div><div class="radio-row"><code>/radio off</code><span>and <code>/radio on</code> switch it.</span><button class="btn btn-copy" type="button" data-copy="/radio off">Copy</button></div><div class="radio-row"><code>/radio</code><span>says whether it is on, and which sound it plays.</span><button class="btn btn-copy" type="button" data-copy="/radio">Copy</button></div></div>
+  <div class="panel" data-panel="notes" hidden><details open><summary><span class="lap">L1</span>The chime plays only when a turn took longer than 20 seconds, so quick answers stay quiet.</summary></details><details><summary><span class="lap">L2</span>Your own sound has to be a .wav file.</summary><div class="note-body"><p>On Windows it is played with Windows' own SoundPlayer, through PowerShell, because Claude Code's player does not play in a Windows terminal. The path is passed as a setting, never inside the command. Elsewhere Claude Code plays the bundled chime. It reads only the sound file you name and sends nothing anywhere.</p></div></details></div>
+  <div class="panel" data-panel="pit" hidden>
+    <div class="board-sign">
+      <p class="sign-step"><b>BOX 1</b> add the garage (once)</p><div class="copyrow"><code>/plugin marketplace add DJPalefaceSD/rostech-mods</code><button class="btn btn-copy" type="button" data-copy="/plugin marketplace add DJPalefaceSD/rostech-mods">Copy</button></div><p class="sign-step"><b>BOX 2</b> fit Radio</p><div class="copyrow"><code>/plugin install radio@rostech</code><button class="btn btn-copy" type="button" data-copy="/plugin install radio@rostech">Copy</button></div>
+    </div>
+  </div>
+</section>
+<nav class="pager">
+  <a href="sticky-note.html" style="--live: var(--hard)"><small>◀ P3</small><b>Sticky Note</b></a>
+  <a href="index.html#grid" class="pager-home"><small>BACK TO</small><b>The grid</b></a>
+  <a href="hands-off.html" style="--live: var(--inter)"><small>P5 ▶</small><b>Hands-Off</b></a>
+</nav>
+<footer class="foot"><span>Rostech.io · design mockup</span><span>Built Oct 4, 2026, 3:13 PM PT from plugins/radio/README.md and plugin.json.</span></footer>
+</div>
+<script src="site.js"></script>
+</body>
+</html>

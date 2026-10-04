@@ -1,0 +1,55 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Tach · Rostech</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Exo+2:ital,wght@0,500;0,800;1,800;1,900&family=Newsreader:ital,opsz,wght@0,6..72,400;1,6..72,400;1,6..72,600&family=Titillium+Web:wght@400;600;700&family=JetBrains+Mono:wght@500;700&display=swap">
+<link rel="stylesheet" href="site.css">
+</head>
+<body>
+<div class="page car" style="--live: var(--soft)">
+<header class="topbar">
+  <a class="mark" href="index.html" aria-label="Rostech home"><span class="mark-r">Rostech</span><span class="mark-io">.io</span><span class="mark-team">RACING</span></a>
+  <nav class="topnav"><a href="index.html#grid">◀ The grid</a></nav>
+</header>
+<section class="car-hero">
+  <div class="carnum" aria-hidden="true">12</div>
+  <div class="car-copy">
+    <p class="eyebrow">P12 ON THE GRID · SOFT · WHAT THE DASH READS OUT</p>
+    <h1 class="car-name">Tach</h1>
+    <p class="car-tag">A tachometer above the prompt: how fast you are burning tokens, over a window you choose.</p>
+    <div class="chips"><span class="tyre tyre-soft" title="SOFT · Gauges"><i></i>SOFT · Gauges</span><span class="flag flag-green">ON TRACK</span><span class="chip">v0.1.0</span><span class="chip">tested on Claude Code 2.1.287</span></div>
+  </div>
+  <div class="wheel" aria-label="What it looks like in the terminal">
+    <div class="revs" aria-hidden="true"><i class="rev rev-g"></i><i class="rev rev-g"></i><i class="rev rev-g"></i><i class="rev rev-g"></i><i class="rev rev-g"></i><i class="rev rev-r"></i><i class="rev rev-r"></i><i class="rev rev-r"></i><i class="rev rev-r"></i><i class="rev rev-r"></i><i class="rev rev-b"></i><i class="rev rev-b"></i><i class="rev rev-b"></i><i class="rev rev-b"></i><i class="rev rev-b"></i></div>
+    <div class="wheel-screen"><span class="wheel-label">ON THE DASH</span><pre>/tach</pre></div>
+    <div class="wheel-grips" aria-hidden="true"><i></i><i></i></div>
+  </div>
+</section>
+<p class="car-lede">A tachometer above the prompt. It shows how fast you are burning tokens right now, as tokens a minute over the last few minutes, on a ten-segment bar.</p>
+<section class="car-tabs">
+  <div class="tabs" role="tablist" aria-label="Tach">
+    <button class="tab on" role="tab" aria-selected="true" data-panel="radio" type="button">Team radio <em>3</em></button>
+    <button class="tab" role="tab" aria-selected="false" data-panel="notes" type="button">Engineer's notes <em>4</em></button>
+    <button class="tab" role="tab" aria-selected="false" data-panel="pit" type="button">Pit stop</button>
+  </div>
+  <div class="panel" data-panel="radio"><div class="radio-row"><code>/tach</code><span>prints the rate and your busiest rate.</span><button class="btn btn-copy" type="button" data-copy="/tach">Copy</button></div><div class="radio-row"><code>/tach 15m</code><span>or <code>/tach 1h</code> changes the window. The default is 5 minutes.</span><button class="btn btn-copy" type="button" data-copy="/tach 15m">Copy</button></div><div class="radio-row"><code>/tach hide</code><span>and <code>/tach show</code> toggle the band.</span><button class="btn btn-copy" type="button" data-copy="/tach hide">Copy</button></div></div>
+  <div class="panel" data-panel="notes" hidden><details open><summary><span class="lap">L1</span>Green is easy going.</summary><div class="note-body"><p>Amber is the upper half. The top two segments are the red zone.</p></div></details><details><summary><span class="lap">L2</span>The red zone is measured against your own busiest rate, which Tach remembers across sessions.</summary><div class="note-body"><p>It is your redline, not someone else's.</p></div></details><details><summary><span class="lap">L3</span>Tach counts fresh tokens: what each turn reads new, writes to the prompt cache, and generates.</summary><div class="note-body"><p>Cache reads are left out, because they are cheap and would swamp the needle. It updates when a turn ends, and slides back toward zero while you are idle. Nothing leaves your machine.</p></div></details><details><summary><span class="lap">L4</span>It pairs with Gas Gauge (how much plan is left), Speedometer (how full the context is) and Odometer (the session total).</summary></details></div>
+  <div class="panel" data-panel="pit" hidden>
+    <div class="board-sign">
+      <p class="sign-step"><b>BOX 1</b> add the garage (once)</p><div class="copyrow"><code>/plugin marketplace add DJPalefaceSD/rostech-mods</code><button class="btn btn-copy" type="button" data-copy="/plugin marketplace add DJPalefaceSD/rostech-mods">Copy</button></div><p class="sign-step"><b>BOX 2</b> fit Tach</p><div class="copyrow"><code>/plugin install tach@rostech</code><button class="btn btn-copy" type="button" data-copy="/plugin install tach@rostech">Copy</button></div>
+    </div>
+  </div>
+</section>
+<nav class="pager">
+  <a href="logo.html" style="--live: var(--hard)"><small>◀ P11</small><b>Logo</b></a>
+  <a href="index.html#grid" class="pager-home"><small>BACK TO</small><b>The grid</b></a>
+  <a href="valet-mode.html" style="--live: var(--inter)"><small>P13 ▶</small><b>Valet Mode</b></a>
+</nav>
+<footer class="foot"><span>Rostech.io · design mockup</span><span>Built Oct 4, 2026, 3:13 PM PT from plugins/tach/README.md and plugin.json.</span></footer>
+</div>
+<script src="site.js"></script>
+</body>
+</html>

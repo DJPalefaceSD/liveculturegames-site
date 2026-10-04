@@ -1,0 +1,56 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Pin · Rostech</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Exo+2:ital,wght@0,500;0,800;1,800;1,900&family=Newsreader:ital,opsz,wght@0,6..72,400;1,6..72,400;1,6..72,600&family=Titillium+Web:wght@400;600;700&family=JetBrains+Mono:wght@500;700&display=swap">
+<link rel="stylesheet" href="site.css">
+</head>
+<body>
+<div class="page car" style="--live: var(--hard)">
+<header class="topbar">
+  <a class="mark" href="index.html" aria-label="Rostech home"><span class="mark-r">Rostech</span><span class="mark-io">.io</span><span class="mark-team">RACING</span></a>
+  <nav class="topnav"><a href="index.html#grid">◀ The grid</a></nav>
+</header>
+<section class="car-hero">
+  <div class="carnum" aria-hidden="true">10</div>
+  <div class="car-copy">
+    <p class="eyebrow">P10 ON THE GRID · HARD · WHAT RIDES ALONG WITH YOU</p>
+    <h1 class="car-name">Pin</h1>
+    <p class="car-tag">A short to-do list pinned above the prompt, ticked off with one click.</p>
+    <div class="chips"><span class="tyre tyre-hard" title="HARD · Cabin"><i></i>HARD · Cabin</span><span class="flag flag-green">ON TRACK</span><span class="chip">v0.1.0</span><span class="chip">tested on Claude Code 2.1.287</span></div>
+  </div>
+  <div class="wheel" aria-label="What it looks like in the terminal">
+    <div class="revs" aria-hidden="true"><i class="rev rev-g"></i><i class="rev rev-g"></i><i class="rev rev-g"></i><i class="rev rev-g"></i><i class="rev rev-g"></i><i class="rev rev-r"></i><i class="rev rev-r"></i><i class="rev rev-r"></i><i class="rev rev-r"></i><i class="rev rev-r"></i><i class="rev rev-b"></i><i class="rev rev-b"></i><i class="rev rev-b"></i><i class="rev rev-b"></i><i class="rev rev-b"></i></div>
+    <div class="wheel-screen"><span class="wheel-label">ON THE DASH</span><pre>📋 1. call the printer   [Done]
+📋 2. send the invoice   [Done]</pre></div>
+    <div class="wheel-grips" aria-hidden="true"><i></i><i></i></div>
+  </div>
+</section>
+
+<section class="car-tabs">
+  <div class="tabs" role="tablist" aria-label="Pin">
+    <button class="tab on" role="tab" aria-selected="true" data-panel="radio" type="button">Team radio <em>4</em></button>
+    <button class="tab" role="tab" aria-selected="false" data-panel="notes" type="button">Engineer's notes <em>1</em></button>
+    <button class="tab" role="tab" aria-selected="false" data-panel="pit" type="button">Pit stop</button>
+  </div>
+  <div class="panel" data-panel="radio"><div class="radio-row"><code>/pin &lt;text&gt;</code><span>pins a to-do at the bottom of the list.</span><button class="btn btn-copy" type="button" data-copy="/pin &lt;text&gt;">Copy</button></div><div class="radio-row"><code>/pin</code><span>shows the list with its numbers.</span><button class="btn btn-copy" type="button" data-copy="/pin">Copy</button></div><div class="radio-row"><code>/pin done 2</code><span>, or the Done button beside it, ticks one off.</span><button class="btn btn-copy" type="button" data-copy="/pin done 2">Copy</button></div><div class="radio-row"><code>/pin clear</code><span>clears the list.</span><button class="btn btn-copy" type="button" data-copy="/pin clear">Copy</button></div></div>
+  <div class="panel" data-panel="notes" hidden><details open><summary><span class="lap">L1</span>When you tick a to-do off, your next message carries one visible line naming it and the time, so Claude knows what you just finished.</summary><div class="note-body"><p>The list is kept across sessions on your own machine, in Claude Code's plugin store, and nothing is sent anywhere. The band draws in the terminal and in the Code tab of the Claude desktop app.</p></div></details></div>
+  <div class="panel" data-panel="pit" hidden>
+    <div class="board-sign">
+      <p class="sign-step"><b>BOX 1</b> add the garage (once)</p><div class="copyrow"><code>/plugin marketplace add DJPalefaceSD/rostech-mods</code><button class="btn btn-copy" type="button" data-copy="/plugin marketplace add DJPalefaceSD/rostech-mods">Copy</button></div><p class="sign-step"><b>BOX 2</b> fit Pin</p><div class="copyrow"><code>/plugin install pin@rostech</code><button class="btn btn-copy" type="button" data-copy="/plugin install pin@rostech">Copy</button></div>
+    </div>
+  </div>
+</section>
+<nav class="pager">
+  <a href="shot.html" style="--live: var(--medium)"><small>◀ P9</small><b>Shot</b></a>
+  <a href="index.html#grid" class="pager-home"><small>BACK TO</small><b>The grid</b></a>
+  <a href="logo.html" style="--live: var(--hard)"><small>P11 ▶</small><b>Logo</b></a>
+</nav>
+<footer class="foot"><span>Rostech.io · design mockup</span><span>Built Oct 4, 2026, 3:13 PM PT from plugins/pin/README.md and plugin.json.</span></footer>
+</div>
+<script src="site.js"></script>
+</body>
+</html>

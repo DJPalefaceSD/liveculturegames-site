@@ -1,0 +1,55 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Valet Mode · Rostech</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Exo+2:ital,wght@0,500;0,800;1,800;1,900&family=Newsreader:ital,opsz,wght@0,6..72,400;1,6..72,400;1,6..72,600&family=Titillium+Web:wght@400;600;700&family=JetBrains+Mono:wght@500;700&display=swap">
+<link rel="stylesheet" href="site.css">
+</head>
+<body>
+<div class="page car" style="--live: var(--inter)">
+<header class="topbar">
+  <a class="mark" href="index.html" aria-label="Rostech home"><span class="mark-r">Rostech</span><span class="mark-io">.io</span><span class="mark-team">RACING</span></a>
+  <nav class="topnav"><a href="index.html#grid">◀ The grid</a></nav>
+</header>
+<section class="car-hero">
+  <div class="carnum" aria-hidden="true">13</div>
+  <div class="car-copy">
+    <p class="eyebrow">P13 ON THE GRID · INTER · WHO GETS TO TOUCH WHAT</p>
+    <h1 class="car-name">Valet Mode</h1>
+    <p class="car-tag">A look-only mode for someone else at your PC: Claude can read and answer, but cannot change anything until you unlock it.</p>
+    <div class="chips"><span class="tyre tyre-inter" title="INTER · Security"><i></i>INTER · Security</span><span class="flag flag-green">ON TRACK</span><span class="chip">v0.2.0</span><span class="chip">tested on Claude Code 2.1.288</span></div>
+  </div>
+  <div class="wheel" aria-label="What it looks like in the terminal">
+    <div class="revs" aria-hidden="true"><i class="rev rev-g"></i><i class="rev rev-g"></i><i class="rev rev-g"></i><i class="rev rev-g"></i><i class="rev rev-g"></i><i class="rev rev-r"></i><i class="rev rev-r"></i><i class="rev rev-r"></i><i class="rev rev-r"></i><i class="rev rev-r"></i><i class="rev rev-b"></i><i class="rev rev-b"></i><i class="rev rev-b"></i><i class="rev rev-b"></i><i class="rev rev-b"></i></div>
+    <div class="wheel-screen"><span class="wheel-label">ON THE DASH</span><pre>/valet on 4821</pre></div>
+    <div class="wheel-grips" aria-hidden="true"><i></i><i></i></div>
+  </div>
+</section>
+<p class="car-lede">A look-only mode for when someone else is at your PC. Like the valet key for a car: they can drive Claude's questions and answers, but they cannot open the trunk.</p>
+<section class="car-tabs">
+  <div class="tabs" role="tablist" aria-label="Valet Mode">
+    <button class="tab on" role="tab" aria-selected="true" data-panel="radio" type="button">Team radio <em>3</em></button>
+    <button class="tab" role="tab" aria-selected="false" data-panel="notes" type="button">Engineer's notes <em>2</em></button>
+    <button class="tab" role="tab" aria-selected="false" data-panel="pit" type="button">Pit stop</button>
+  </div>
+  <div class="panel" data-panel="radio"><div class="radio-row"><code>/valet on 4821</code><span>turns it on with a code you pick, 4 characters or more.</span><button class="btn btn-copy" type="button" data-copy="/valet on 4821">Copy</button></div><div class="radio-row"><code>/valet off 4821</code><span>turns it off. The wrong code leaves it on.</span><button class="btn btn-copy" type="button" data-copy="/valet off 4821">Copy</button></div><div class="radio-row"><code>/valet</code><span>says whether it is on.</span><button class="btn btn-copy" type="button" data-copy="/valet">Copy</button></div></div>
+  <div class="panel" data-panel="notes" hidden><details open><summary><span class="lap">L1</span>While it is on, Claude can still read files, search and answer questions.</summary><div class="note-body"><p>It cannot edit or write files, run shell commands, or use connectors that act for you, such as sending email. A yellow VALET MODE band sits above the prompt so nobody forgets it is on.</p></div></details><details><summary><span class="lap">L2</span>It locks every Claude Code window on the PC at once, including windows that were already open, and the band shows up in each of them within a couple of seconds.</summary><div class="note-body"><p>It stays on through a restart, so closing Claude Code does not unlock it. The lock and its code are kept in one small file on your own machine, <code>.claude/rostech/valet-mode.json</code> in your user folder. If that file is damaged, Valet Mode stays locked rather than opening up. It is a simple lock for a guest at your desk, not a security system. It sends nothing anywhere.</p></div></details></div>
+  <div class="panel" data-panel="pit" hidden>
+    <div class="board-sign">
+      <p class="sign-step"><b>BOX 1</b> add the garage (once)</p><div class="copyrow"><code>/plugin marketplace add DJPalefaceSD/rostech-mods</code><button class="btn btn-copy" type="button" data-copy="/plugin marketplace add DJPalefaceSD/rostech-mods">Copy</button></div><p class="sign-step"><b>BOX 2</b> fit Valet Mode</p><div class="copyrow"><code>/plugin install valet-mode@rostech</code><button class="btn btn-copy" type="button" data-copy="/plugin install valet-mode@rostech">Copy</button></div>
+    </div>
+  </div>
+</section>
+<nav class="pager">
+  <a href="tach.html" style="--live: var(--soft)"><small>◀ P12</small><b>Tach</b></a>
+  <a href="index.html#grid" class="pager-home"><small>BACK TO</small><b>The grid</b></a>
+  <a href="bumper-sticker.html" style="--live: var(--hard)"><small>P14 ▶</small><b>Bumper Sticker</b></a>
+</nav>
+<footer class="foot"><span>Rostech.io · design mockup</span><span>Built Oct 4, 2026, 3:13 PM PT from plugins/valet-mode/README.md and plugin.json.</span></footer>
+</div>
+<script src="site.js"></script>
+</body>
+</html>
