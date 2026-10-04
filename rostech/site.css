@@ -364,3 +364,35 @@ th, td { text-align: left; padding: 6px 10px; border-bottom: 1px solid #e3e3e0; 
 @media (prefers-reduced-motion: reduce) {
   *, *::before, *::after { transition: none !important; animation: none !important; }
 }
+
+/* ------------------------------------------------------------ onboard camera
+   His SHOT, 4 Oct 2026: the real dash in his terminal, Gas Gauge and Speedometer. */
+.onboard { padding: clamp(36px, 5vw, 64px) var(--gutter); }
+.onboard-frame {
+  margin: 0; position: relative;
+  background: #050506; border: 1px solid var(--line);
+  padding: clamp(14px, 2vw, 22px);
+  box-shadow: 0 24px 60px rgba(0,0,0,.55);
+}
+.onboard-frame::before {
+  content: ""; position: absolute; left: 0; right: 0; top: 0; height: 5px;
+  background: linear-gradient(90deg, var(--red) 0 60%, var(--orange) 60% 80%, var(--lime) 80%);
+}
+.onboard-frame img { display: block; width: 100%; height: auto; max-width: 100%; border-radius: 6px; }
+.rec {
+  position: absolute; right: 18px; top: 16px; z-index: 1;
+  font-family: var(--f-race); font-weight: 900; font-style: italic; font-size: .72rem; letter-spacing: .14em;
+  background: var(--red); color: var(--white); padding: 4px 10px; transform: skewX(-12deg);
+  animation: rec-blink 1.6s steps(2, start) infinite;
+}
+@keyframes rec-blink { 50% { opacity: .35; } }
+.onboard-frame figcaption { display: flex; flex-wrap: wrap; gap: 10px; margin-top: 14px; }
+.onboard-tag {
+  display: grid; gap: 2px; min-width: 0; min-height: 2.6rem;
+  padding: 10px 16px; text-decoration: none;
+  background: var(--carbon-3); border-left: 5px solid var(--live);
+}
+.onboard-tag:hover { background: var(--red); }
+.onboard-tag b { font-family: var(--f-race); font-weight: 900; font-style: italic; text-transform: uppercase; }
+.onboard-tag span { color: var(--mute); font-size: .9rem; }
+.onboard-tag:hover span { color: var(--white); }
