@@ -15,12 +15,12 @@
   <nav class="topnav"><a href="index.html#grid">◀ The grid</a></nav>
 </header>
 <section class="car-hero">
-  <div class="carnum" aria-hidden="true">15</div>
+  <div class="carnum" aria-hidden="true">19</div>
   <div class="car-copy">
-    <p class="eyebrow">P15 ON THE GRID · MEDIUM · WHAT YOUR HANDS DO</p>
+    <p class="eyebrow">P19 ON THE GRID · MEDIUM · WHAT YOUR HANDS DO</p>
     <h1 class="car-name">Steering Wheel</h1>
     <p class="car-tag">Steer Claude mid-turn with one chord. /steering-wheel sets Ctrl+X Ctrl+X to send a waiting message right away, and the hint under the prompt says so.</p>
-    <div class="chips"><span class="tyre tyre-medium" title="MEDIUM · Controls"><i></i>MEDIUM · Controls</span><span class="flag flag-green">ON TRACK</span><span class="chip">v0.1.2</span></div>
+    <div class="chips"><span class="tyre tyre-medium" title="MEDIUM · Controls"><i></i>MEDIUM · Controls</span><span class="flag flag-pit">IN THE GARAGE</span><span class="chip">v0.1.3</span></div>
   </div>
   <div class="wheel" aria-label="What it looks like in the terminal">
     <div class="revs" aria-hidden="true"><i class="rev rev-g"></i><i class="rev rev-g"></i><i class="rev rev-g"></i><i class="rev rev-g"></i><i class="rev rev-g"></i><i class="rev rev-r"></i><i class="rev rev-r"></i><i class="rev rev-r"></i><i class="rev rev-r"></i><i class="rev rev-r"></i><i class="rev rev-b"></i><i class="rev rev-b"></i><i class="rev rev-b"></i><i class="rev rev-b"></i><i class="rev rev-b"></i></div>
@@ -39,16 +39,16 @@
   <div class="panel" data-panel="notes" hidden><details open><summary><span class="lap">L1</span>When Claude is working and you have typed your next message, Claude Code holds it until the turn ends.</summary><div class="note-body"><p>Steering Wheel lets you send it right away and steer the work. Press Ctrl+X, then Ctrl+X again.</p></div></details><details><summary><span class="lap">L2</span>What it does</summary><div class="note-body"><ul><li><code>/steering-wheel</code> adds Ctrl+X Ctrl+X to your own <code>~/.claude/keybindings.json</code>. That chord then sends a waiting message now.</li><li>Everything else in that file stays as you had it. The default chord, Ctrl+X Ctrl+S, keeps working too.</li><li>The hint under the prompt then reads <strong>tap Ctrl+X Ctrl+X to send now</strong>. It reads the key from your keybindings file, so if you change the key yourself, the hint follows.</li></ul></div></details><details><summary><span class="lap">L3</span>Why not F5</summary><div class="note-body"><p>Versions 0.1.1 and before used F5. Claude Code does not take function keys, so F5 did nothing. Version 0.1.0 used Alt+Enter, which Windows Terminal keeps for full screen. Ctrl+X Ctrl+X works in any terminal.</p><p>If an older version left F5 in your file, or switched Ctrl+X Ctrl+S off, <code>/steering-wheel</code> takes those two lines back out. It touches nothing else.</p></div></details><details><summary><span class="lap">L4</span>Notes</summary><div class="note-body"><ul><li>A plugin cannot bind keys by itself. Your keys live in your own keybindings file, which is why Steering Wheel writes there only when you run <code>/steering-wheel</code>.</li><li>Esc stays the stop button.</li></ul><p>MIT licensed. Made by Rostech.</p></div></details></div>
   <div class="panel" data-panel="pit" hidden>
     <div class="board-sign">
-      <p class="sign-step"><b>BOX 1</b> add the garage (once)</p><div class="copyrow"><code>/plugin marketplace add DJPalefaceSD/rostech-mods</code><button class="btn btn-copy" type="button" data-copy="/plugin marketplace add DJPalefaceSD/rostech-mods">Copy</button></div><p class="sign-step"><b>BOX 2</b> fit Steering Wheel</p><div class="copyrow"><code>/plugin install steering-wheel@rostech</code><button class="btn btn-copy" type="button" data-copy="/plugin install steering-wheel@rostech">Copy</button></div>
+      <p class="sign-step"><b>IN THE GARAGE</b> Steering Wheel is built but not in the marketplace yet.</p>
     </div>
   </div>
 </section>
 <nav class="pager">
-  <a href="bumper-sticker.html" style="--live: var(--hard)"><small>◀ P14</small><b>Bumper Sticker</b></a>
+  <a href="oil.html" style="--live: var(--soft)"><small>◀ P18</small><b>Oil</b></a>
   <a href="index.html#grid" class="pager-home"><small>BACK TO</small><b>The grid</b></a>
-  <a href="glovebox.html" style="--live: var(--hard)"><small>P16 ▶</small><b>Glovebox</b></a>
+  <a href="gas-gauge.html" style="--live: var(--soft)"><small>P1 ▶</small><b>Gas Gauge</b></a>
 </nav>
-<footer class="foot"><span>Rostech.io · design mockup</span><span>Built Oct 4, 2026, 3:27 PM PT from plugins/steering-wheel/README.md and plugin.json.</span></footer>
+<footer class="foot"><span>Rostech.io · design mockup</span><span>Built Oct 5, 2026, 9:07 AM PT from plugins/steering-wheel/README.md and plugin.json.</span></footer>
 </div>
 <script src="site.js"></script>
 </body>
