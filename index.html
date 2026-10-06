@@ -4,9 +4,9 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <title>Live Culture Games</title>
-<meta name="description" content="Live Culture Games is a small game studio in Escondido, California. Five little sites to play with. Something is fermenting.">
+<meta name="description" content="Live Culture Games is a small game studio in Escondido, California. Something is fermenting.">
 <meta property="og:title" content="Live Culture Games">
-<meta property="og:description" content="A small game studio in Escondido, California. Five little sites to play with. Something is fermenting.">
+<meta property="og:description" content="A small game studio in Escondido, California. Something is fermenting.">
 <meta property="og:type" content="website">
 <meta property="og:url" content="https://liveculturegames.com/">
 <meta property="og:image" content="https://liveculturegames.com/cup-360.png">
@@ -97,7 +97,7 @@
 </head>
 <body>
   <header class="bar">
-    <a class="brand" href="./" aria-label="Live Culture Games, home">
+    <a class="brand" href="./?site=desktop" aria-label="Live Culture Games, home">
       <img src="cup-360.png" alt="">
       <span>Live Culture Games</span>
     </a>
@@ -111,14 +111,18 @@
   // The five sites, in the order the bar shows them. The swatch is two of the
   // site's own colours so a chip can be told apart before its word is read.
   var SITES = [
-    { id: "lab",     name: "Lab",     file: "sites/lab.html",     a: "#ffffff", b: "#63aed8" },
-    { id: "arcade",  name: "Arcade",  file: "sites/arcade.html",  a: "#ff1493", b: "#1a0b2e" },
-    { id: "desktop", name: "Desktop", file: "sites/desktop.html", a: "#eef2f8", b: "#ff1493" },
-    { id: "toybox",  name: "Toybox",  file: "sites/toybox.html",  a: "#fff6e8", b: "#ff1493" },
-    { id: "space",   name: "Space",   file: "sites/space.html",   a: "#0b1024", b: "#ff1493" },
+    // 🖥️ His ruling, 6 Oct 2026: "make the main LCG site now the Desktop site, thats our
+    // choice." Desktop is home: the cup and name on the left open it. Lab, Arcade, Toybox
+    // and Space live on as toys in the Desktop's Toys/ folder, and ?site=<id> still opens
+    // any of them whole. His SHOT crossed out their five chips; only the plug-ins chip stays.
+    { id: "desktop", name: "Desktop", file: "sites/desktop.html", a: "#eef2f8", b: "#ff1493", chip: false },
+    { id: "lab",     name: "Lab",     file: "sites/lab.html",     a: "#ffffff", b: "#63aed8", chip: false },
+    { id: "arcade",  name: "Arcade",  file: "sites/arcade.html",  a: "#ff1493", b: "#1a0b2e", chip: false },
+    { id: "toybox",  name: "Toybox",  file: "sites/toybox.html",  a: "#fff6e8", b: "#ff1493", chip: false },
+    { id: "space",   name: "Space",   file: "sites/space.html",   a: "#0b1024", b: "#ff1493", chip: false },
     // 🏎️ Rostech Racing, his ask 4 Oct 2026: "throw this up on the LCG site". Built by
     // ComicBookStudioSimulator/.claude/slate/rostech-site/build.js --standalone rostech
-    { id: "racing",  name: "Racing",  file: "rostech/index.html",  a: "#e8102e", b: "#0b0b0d" }
+    { id: "racing",  name: "Rostech.io", file: "rostech/index.html",  a: "#e8102e", b: "#0b0b0d", chip: true }
   ];
   var KEY = "lcg-site";
   var frame = document.getElementById("frame");
@@ -136,6 +140,7 @@
   }
 
   SITES.forEach(function (site) {
+    if (!site.chip) return;
     var b = document.createElement("button");
     b.type = "button";
     b.className = "chip";
@@ -184,7 +189,8 @@
   });
 
   var asked = new URLSearchParams(location.search).get("site");
-  show(find(asked) ? asked : (find(remembered()) ? remembered() : SITES[0].id), false);
+  var back = find(remembered());
+  show(find(asked) ? asked : (back && back.chip ? back.id : "desktop"), false);
 </script>
 </body>
 </html>

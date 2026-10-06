@@ -142,7 +142,9 @@ img{display:block}
 
 /* hero cup */
 .hero{
-  position:absolute;right:5%;bottom:28px;z-index:2;
+  /* The cup picture (cup-900.png) is cut flat along its bottom row: tuck that edge under the
+     taskbar so the spill runs under the bar, his SHOT 6 Oct 2026 "fix this". */
+  position:absolute;right:5%;bottom:-14px;z-index:2;
   width:clamp(220px,30vw,440px);border:0;background:transparent;padding:0;cursor:pointer;
   border-radius:40px;
 }
@@ -179,6 +181,11 @@ img{display:block}
 .win-bar .wb{width:40px;height:40px;border:3px solid var(--ink);border-radius:12px;background:#fff;font-family:var(--head);font-size:24px;line-height:1;cursor:pointer;display:grid;place-items:center}
 .win-bar .wb:hover{background:var(--blue)}
 .win-body{padding:18px;overflow:auto;min-height:0}
+.toy-body{padding:0;display:flex;flex-direction:column}
+.toy-body iframe{display:block;width:100%;height:min(68vh,620px);border:0;background:#fff}
+.toy-out{margin:0;padding:8px 14px;font-weight:800}
+.toy-out a{color:var(--ink)}
+.toy-row{flex-wrap:wrap}
 .win-body h3{font-size:26px;color:var(--pink);-webkit-text-stroke:1px var(--ink);paint-order:stroke fill;margin-bottom:.4em}
 
 /* about */
@@ -427,6 +434,7 @@ img{display:block}
       <li><button class="icon" type="button" data-open="spill"><span class="ico"><svg aria-hidden="true"><use href="#i-spill"/></svg></span><span class="lab">Spill.exe</span></button></li>
       <li><button class="icon" type="button" data-open="pet"><span class="ico"><span class="petico"><img src="cup-360.png" alt="" width="360" height="321"></span></span><span class="lab">Cup Pet</span></button></li>
       <li><button class="icon" type="button" data-open="howto"><span class="ico"><svg aria-hidden="true"><use href="#i-team"/></svg></span><span class="lab">How we work</span></button></li>
+      <li><button class="icon" type="button" data-open="toys"><span class="ico"><svg aria-hidden="true"><use href="#i-folder"/></svg></span><span class="lab">Toys/</span></button></li>
       <li><a class="icon" href="/figure-bench/"><span class="ico"><svg aria-hidden="true"><use href="#i-hero"/></svg></span><span class="lab">Figure Bench</span></a></li>
       <li><button class="icon" type="button" data-open="culture" aria-describedby="culture-hint"><span class="ico"><svg aria-hidden="true"><use href="#i-folder"/></svg></span><span class="lab">first_culture/</span></button><span id="culture-hint" class="sr">Locked folder. Still fermenting.</span></li>
     </ul>
@@ -437,6 +445,36 @@ img{display:block}
     </button>
 
     <div class="wins" id="wins">
+
+      <!-- Toys/ — the four other LCG sites, each a little toy in its own window (his ask, 6 Oct 2026) -->
+      <section class="win" data-app="toys" style="--w:520px" role="dialog" aria-labelledby="t-toys" tabindex="-1" hidden>
+        <header class="win-bar" tabindex="0" aria-label="Toys title bar. Drag, or use the arrow keys, to move the window.">
+          <h2 id="t-toys"><svg aria-hidden="true"><use href="#i-folder"/></svg>Toys/</h2>
+          <button class="wb" type="button" data-act="min" aria-label="Minimise Toys">–</button>
+          <button class="wb" type="button" data-act="close" aria-label="Close Toys">×</button>
+        </header>
+        <div class="win-body">
+          <p class="txt">Four more little sites we made. Each one opens as a toy on this desk.</p>
+          <div class="row toy-row">
+            <button class="btn" type="button" data-toy="lab">Lab</button>
+            <button class="btn" type="button" data-toy="arcade">Arcade</button>
+            <button class="btn" type="button" data-toy="toybox">Toybox</button>
+            <button class="btn" type="button" data-toy="space">Space</button>
+          </div>
+        </div>
+      </section>
+
+      <section class="win" data-app="toy" style="--w:960px" role="dialog" aria-labelledby="t-toy" tabindex="-1" hidden>
+        <header class="win-bar" tabindex="0" aria-label="Toy title bar. Drag, or use the arrow keys, to move the window.">
+          <h2 id="t-toy"><svg aria-hidden="true"><use href="#i-folder"/></svg><span id="toy-name">Toy</span></h2>
+          <button class="wb" type="button" data-act="min" aria-label="Minimise the toy">–</button>
+          <button class="wb" type="button" data-act="close" aria-label="Close the toy">×</button>
+        </header>
+        <div class="win-body toy-body">
+          <iframe id="toy-frame" title="Toy" loading="lazy"></iframe>
+          <p class="toy-out"><a id="toy-full" href="#" target="_top">Open it full size ▸</a></p>
+        </div>
+      </section>
 
       <!-- About.txt -->
       <section class="win" data-app="about" style="--w:540px" role="dialog" aria-labelledby="t-about" tabindex="-1" hidden>
@@ -681,7 +719,7 @@ const state = {};            // open | min | closed
 const pos = {};
 const hooks = {};
 let z = 10;
-const defaults = { about: [150, 24], mail: [220, 70], spill: [170, 40], pet: [260, 60], howto: [240, 30], culture: [300, 80] };
+const defaults = { toys: [200, 50], toy: [90, 20], about: [150, 24], mail: [220, 70], spill: [170, 40], pet: [260, 60], howto: [240, 30], culture: [300, 80] };
 
 function clampPos(w) {
   const p = pos[w.dataset.app];
@@ -829,8 +867,20 @@ const appLines = {
   spill: 'Drag in the tray. Go on, make a mess.',
   pet: 'That is me, but smaller. Feed me.',
   howto: 'This one matters. Let me show you how we work.',
-  culture: 'Locked. Still fermenting. Peel the lid if you must.'
+  culture: 'Locked. Still fermenting. Peel the lid if you must.',
+  toys: 'Our other little sites. Pick one to play with.'
 };
+/* 🧸 Toys/: each of the four other sites opens in one toy window. */
+const TOYS = { lab: 'Lab', arcade: 'Arcade', toybox: 'Toybox', space: 'Space' };
+$('[data-toy]').forEach(b => b.addEventListener('click', () => {
+  const id = b.dataset.toy;
+  const f = $('#toy-frame');
+  if (f.getAttribute('src') !== id + '.html') f.setAttribute('src', id + '.html');
+  f.title = TOYS[id];
+  $('#toy-name').textContent = TOYS[id];
+  $('#toy-full').href = '/?site=' + id;
+  openApp('toy');
+}));
 const pokeLines = ['Hey! I spill, you know.', 'I am the cup. Careful.', 'Ok. That one was fun.', 'Try the folder that wiggles.', 'Still here. Still live.'];
 function resetIdle() {
   clearTimeout(idleT);
