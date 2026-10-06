@@ -163,9 +163,13 @@
     e.preventDefault();
   });
 
+  var LOADED = Date.now();
+
   function show(id, fromClick) {
     var site = find(id) || SITES[0];
-    if (frame.getAttribute("src") !== site.file) frame.setAttribute("src", site.file);
+    // A fresh copy every visit: a cached frame kept the old, broken Desktop on his screen after the fix went live, 6 Oct 2026.
+    var want = site.file + "?t=" + LOADED;
+    if (frame.getAttribute("src") !== want) frame.setAttribute("src", want);
     Array.prototype.forEach.call(chips.querySelectorAll(".chip"), function (c) {
       var on = c.dataset.site === site.id;
       c.setAttribute("aria-pressed", on ? "true" : "false");
