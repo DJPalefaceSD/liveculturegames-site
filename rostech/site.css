@@ -407,3 +407,22 @@ th, td { text-align: left; padding: 6px 10px; border-bottom: 1px solid #e3e3e0; 
 .official-head h3 em { font-style: normal; opacity: .7; font-size: 1rem; }
 .official-head p { margin: .25rem 0 0; opacity: .8; }
 .rest-head { margin-top: 2.2rem; }
+
+/* ✨ The official line is lime and glints like the game's call to action (his ask, 6 Oct 2026).
+   Same timing as cta_shimmer.gdshader (#1136): a soft white band sweeps across in 45% of a
+   3.2 s period, then rests; under it a slow 2.4 s breath. Driven by time alone, no dice. */
+.official-line a { color: var(--lime); border-bottom-color: var(--lime); animation: official-breath 2.4s ease-in-out infinite; }
+.official-line a b,
+.official-line a .official-text {
+  background: linear-gradient(105deg, var(--lime) 0%, var(--lime) 42%, #fffbe6 50%, var(--lime) 58%, var(--lime) 100%);
+  background-size: 300% 100%;
+  background-position: 100% 0;
+  -webkit-background-clip: text; background-clip: text;
+  color: transparent;
+  animation: official-glint 3.2s linear infinite;
+}
+@keyframes official-glint { 0% { background-position: 100% 0; } 45% { background-position: 0% 0; } 100% { background-position: 0% 0; } }
+@keyframes official-breath { 0%, 100% { filter: brightness(1); } 50% { filter: brightness(1.1); } }
+@media (prefers-reduced-motion: reduce) {
+  .official-line a, .official-line a b, .official-line a .official-text { animation: none; }
+}
