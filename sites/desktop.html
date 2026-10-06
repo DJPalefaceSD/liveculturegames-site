@@ -194,11 +194,6 @@ img{display:block}
 .caret{display:inline-block;width:.6em;height:1.1em;background:var(--pink);vertical-align:-.2em;animation:blink 1s steps(2) infinite}
 @keyframes blink{to{opacity:0}}
 
-/* spill */
-.stage-wrap{position:relative;height:300px;border:3px solid var(--ink);border-radius:14px;background:#fff;overflow:hidden;cursor:crosshair;touch-action:none}
-.stage-wrap canvas{position:absolute;inset:0;width:100%;height:100%;filter:url(#goo);pointer-events:none}
-.stage-wrap .hint{position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);pointer-events:none;background:var(--blue);border:3px solid var(--ink);border-radius:999px;padding:.3em 1em;font-family:var(--head);font-weight:600;transition:opacity .3s}
-.stage-wrap.used .hint{opacity:0}
 
 /* pet */
 .pet-stage{position:relative;height:250px;display:grid;place-items:center;border:3px solid var(--ink);border-radius:14px;background:linear-gradient(#fff,#dfeaf6);overflow:hidden;margin-bottom:14px}
@@ -342,12 +337,6 @@ img{display:block}
       <path d="M12 44l12-9M52 44l-12-9" stroke="#111" stroke-width="5" stroke-linecap="round"/>
       <path d="M14 22l6 4" stroke="#fff" stroke-width="3" stroke-linecap="round"/>
     </symbol>
-    <symbol id="i-spill" viewBox="0 0 64 64">
-      <path d="M8 44C4 32 18 28 26 34c2-12 22-14 26-2 10-2 12 14 2 18-12 6-36 6-46-6z" fill="#FF1493" stroke="#111" stroke-width="5" stroke-linejoin="round"/>
-      <ellipse cx="14" cy="22" rx="4" ry="5.5" fill="#FF1493" stroke="#111" stroke-width="4"/>
-      <ellipse cx="50" cy="14" rx="4.5" ry="6" fill="#FF1493" stroke="#111" stroke-width="4"/>
-      <path d="M16 42c6-3 12-4 20-3" stroke="#fff" stroke-width="4" stroke-linecap="round"/>
-    </symbol>
     <symbol id="i-folder" viewBox="0 0 64 64">
       <path d="M6 16h16l6 6h30v32H6z" fill="#FF1493" stroke="#111" stroke-width="5" stroke-linejoin="round"/>
       <path d="M11 28h10" stroke="#fff" stroke-width="4" stroke-linecap="round"/>
@@ -431,7 +420,6 @@ img{display:block}
     <ul class="icons" aria-label="Desktop">
       <li><button class="icon" type="button" data-open="about"><span class="ico"><svg aria-hidden="true"><use href="#i-doc"/></svg></span><span class="lab">About.txt</span></button></li>
       <li><button class="icon" type="button" data-open="mail"><span class="ico"><svg aria-hidden="true"><use href="#i-mail"/></svg></span><span class="lab">Mail</span></button></li>
-      <li><button class="icon" type="button" data-open="spill"><span class="ico"><svg aria-hidden="true"><use href="#i-spill"/></svg></span><span class="lab">Spill.exe</span></button></li>
       <li><button class="icon" type="button" data-open="pet"><span class="ico"><span class="petico"><img src="cup-360.png" alt="" width="360" height="321"></span></span><span class="lab">Cup Pet</span></button></li>
       <li><button class="icon" type="button" data-open="howto"><span class="ico"><svg aria-hidden="true"><use href="#i-team"/></svg></span><span class="lab">How we work</span></button></li>
       <li><button class="icon" type="button" data-open="toys"><span class="ico"><svg aria-hidden="true"><use href="#i-folder"/></svg></span><span class="lab">Toys/</span></button></li>
@@ -489,7 +477,7 @@ img{display:block}
 We grow games the way yogurt grows:
 with live cultures, a lid you peel, and a spoon.
 
-Toys on this desk: Spill.exe, Cup Pet,
+Toys on this desk: the Cup Pet
 and the Figure Bench.
 
 We make them with Claude. The cup explains how
@@ -498,7 +486,6 @@ in How we work.
 Something is fermenting in first_culture/<span class="caret" aria-hidden="true"></span></p>
           <div class="row">
             <button class="btn" type="button" data-open="howto">How we work</button>
-            <button class="btn" type="button" data-open="spill">Open Spill.exe</button>
             <button class="btn blue" type="button" data-open="pet">Meet the Cup Pet</button>
             <a class="btn white" href="/figure-bench/">Build a hero on the Figure Bench</a>
           </div>
@@ -520,28 +507,6 @@ Something is fermenting in first_culture/<span class="caret" aria-hidden="true">
           <div class="row">
             <a class="btn" id="m-send" href="mailto:ryan@liveculturegames.com">Send in your mail app ▸</a>
             <span>Opens your own email. Nothing is sent from here.</span>
-          </div>
-        </div>
-      </section>
-
-      <!-- Spill.exe -->
-      <section class="win" data-app="spill" style="--w:660px" role="dialog" aria-labelledby="t-spill" tabindex="-1" hidden>
-        <header class="win-bar" tabindex="0" aria-label="Spill.exe title bar. Drag, or use the arrow keys, to move the window.">
-          <h2 id="t-spill"><svg aria-hidden="true"><use href="#i-spill"/></svg>Spill.exe</h2>
-          <button class="wb" type="button" data-act="min" aria-label="Minimise Spill">–</button>
-          <button class="wb" type="button" data-act="close" aria-label="Close Spill">×</button>
-        </header>
-        <div class="win-body">
-          <h3>Pour the pink</h3>
-          <p>Drag across the tray to pour. It pools. It goos. Keys: arrows move the spout, Space pours.</p>
-          <div class="stage-wrap" id="spill-stage" tabindex="0" role="application" aria-label="Spill tray. Drag to pour yogurt. Arrow keys move the spout, Space pours.">
-            <canvas id="spill-ink"></canvas>
-            <canvas id="spill-pink"></canvas>
-            <span class="hint">drag here to pour</span>
-          </div>
-          <div class="row" style="margin-top:12px">
-            <span class="pill"><span id="spill-count">0</span> drops in the tray</span>
-            <button class="btn blue" type="button" id="spill-wipe">Wipe the tray</button>
           </div>
         </div>
       </section>
@@ -647,7 +612,6 @@ Something is fermenting in first_culture/<span class="caret" aria-hidden="true">
             <p>Not a test suite. Not Claude. Not me. The human.</p>
             <p>That is how a small studio with real limits makes a big, careful game. Proudly.</p>
             <div class="row">
-              <button class="btn" type="button" data-open="spill">Now go make a mess</button>
               <button class="btn blue" type="button" data-open="culture">Peek at what is fermenting</button>
             </div>
           </div>
@@ -719,7 +683,7 @@ const state = {};            // open | min | closed
 const pos = {};
 const hooks = {};
 let z = 10;
-const defaults = { toys: [200, 50], toy: [90, 20], about: [150, 24], mail: [220, 70], spill: [170, 40], pet: [260, 60], howto: [240, 30], culture: [300, 80] };
+const defaults = { toys: [200, 50], toy: [90, 20], about: [150, 24], mail: [220, 70], pet: [260, 60], howto: [240, 30], culture: [300, 80] };
 
 function clampPos(w) {
   const p = pos[w.dataset.app];
@@ -864,7 +828,6 @@ function cupSay(text, hold) {
 const appLines = {
   about: 'That is us. Small studio. Big spoon.',
   mail: 'Say hi. A real human reads it.',
-  spill: 'Drag in the tray. Go on, make a mess.',
   pet: 'That is me, but smaller. Feed me.',
   howto: 'This one matters. Let me show you how we work.',
   culture: 'Locked. Still fermenting. Peel the lid if you must.',
@@ -872,7 +835,7 @@ const appLines = {
 };
 /* 🧸 Toys/: each of the four other sites opens in one toy window. */
 const TOYS = { lab: 'Lab', arcade: 'Arcade', toybox: 'Toybox', space: 'Space' };
-$('[data-toy]').forEach(b => b.addEventListener('click', () => {
+$$('[data-toy]').forEach(b => b.addEventListener('click', () => {
   const id = b.dataset.toy;
   const f = $('#toy-frame');
   if (f.getAttribute('src') !== id + '.html') f.setAttribute('src', id + '.html');
@@ -884,7 +847,7 @@ $('[data-toy]').forEach(b => b.addEventListener('click', () => {
 const pokeLines = ['Hey! I spill, you know.', 'I am the cup. Careful.', 'Ok. That one was fun.', 'Try the folder that wiggles.', 'Still here. Still live.'];
 function resetIdle() {
   clearTimeout(idleT);
-  idleT = setTimeout(() => cupSay(['Still here. Try Spill.exe.', 'The wiggly folder is locked. Try anyway.', 'Open How we work. I explain things.'][pokes % 3], 5000), 28000);
+  idleT = setTimeout(() => cupSay(['Still here. Try the Cup Pet.', 'The wiggly folder is locked. Try anyway.', 'Open How we work. I explain things.'][pokes % 3], 5000), 28000);
 }
 hero.addEventListener('click', () => {
   splash(hero, 8, 140);
@@ -898,92 +861,6 @@ function buildMail() {
   mSend.href = 'mailto:ryan@liveculturegames.com?subject=' + encodeURIComponent(mSubj.value) + '&body=' + encodeURIComponent(mBody.value);
 }
 mSubj.addEventListener('input', buildMail); mBody.addEventListener('input', buildMail); buildMail();
-
-/* ---------- Spill.exe — metaball goo ---------- */
-const spill = (() => {
-  const wrap = $('#spill-stage'), ink = $('#spill-ink'), pink = $('#spill-pink');
-  const ictx = ink.getContext('2d'), pctx = pink.getContext('2d');
-  const countEl = $('#spill-count');
-  let W = 1, H = 1, blobs = [], pouring = false, px = 0, py = 0, lastX = 0, count = 0, phase = 0, raf = 0, keySpout = null;
-  function size() {
-    const r = wrap.getBoundingClientRect();
-    W = ink.width = pink.width = Math.max(1, Math.round(r.width));
-    H = ink.height = pink.height = Math.max(1, Math.round(r.height));
-    draw();
-  }
-  function add(x, y, vx) {
-    phase++;
-    const r = 9 + 7 * Math.abs(Math.sin(phase * 0.9));      // variety from a phase, never a dice roll
-    blobs.push({ x, y, vx: clamp(vx, -3, 3), vy: 0, r, rest: false });
-    if (blobs.length > 240) blobs.shift();
-    count++; countEl.textContent = count;
-    wrap.classList.add('used');
-    loop();
-  }
-  function step() {
-    let moving = false;
-    for (const b of blobs) {
-      if (RM) { b.rest = true; continue; }
-      if (b.rest) continue;
-      b.vy += 0.42; b.y += b.vy; b.x += b.vx;
-      if (b.x < b.r) { b.x = b.r; b.vx *= -0.5; }
-      if (b.x > W - b.r) { b.x = W - b.r; b.vx *= -0.5; }
-      if (b.y >= H - b.r) {
-        b.y = H - b.r;
-        if (Math.abs(b.vy) > 2) { b.vx += (b.vx >= 0 ? 1 : -1) * 0.6; }   // spread on landing
-        b.vy *= -0.18; b.vx *= 0.9;
-        if (Math.abs(b.vy) < 0.6 && Math.abs(b.vx) < 0.15) { b.vy = 0; b.vx = 0; b.rest = true; }
-      }
-      moving = true;
-    }
-    return moving;
-  }
-  function draw() {
-    ictx.clearRect(0, 0, W, H); pctx.clearRect(0, 0, W, H);
-    ictx.fillStyle = '#111'; pctx.fillStyle = '#FF1493';
-    for (const b of blobs) {
-      ictx.beginPath(); ictx.arc(b.x, b.y, b.r + 5, 0, 6.2832); ictx.fill();
-      pctx.beginPath(); pctx.arc(b.x, b.y, b.r, 0, 6.2832); pctx.fill();
-    }
-    pctx.fillStyle = '#fff';
-    for (const b of blobs) {
-      if (b.r < 12) continue;
-      pctx.beginPath();
-      pctx.ellipse(b.x - b.r * 0.35, b.y - b.r * 0.4, b.r * 0.45, b.r * 0.18, -0.6, 0, 6.2832);
-      pctx.fill();
-    }
-  }
-  function loop() {
-    if (raf) return;
-    const frame = () => {
-      raf = 0;
-      if (pouring) { add(px, py, (px - lastX) * 0.25); lastX = px; }
-      const moving = step();
-      draw();
-      if (moving || pouring) raf = requestAnimationFrame(frame);
-    };
-    raf = requestAnimationFrame(frame);
-  }
-  function local(e) { const r = wrap.getBoundingClientRect(); px = clamp(e.clientX - r.left, 4, W - 4); py = clamp(e.clientY - r.top, 4, H - 4); }
-  wrap.addEventListener('pointerdown', e => { wrap.setPointerCapture(e.pointerId); local(e); lastX = px; pouring = true; add(px, py, 0); });
-  wrap.addEventListener('pointermove', e => {
-    if (!pouring) return;
-    const ox = px, oy = py; local(e);
-    if (Math.hypot(px - ox, py - oy) > 10) { add(px, py, (px - lastX) * 0.25); lastX = px; }   // a fast drag still pours
-  });
-  const stop = () => { pouring = false; };
-  wrap.addEventListener('pointerup', stop); wrap.addEventListener('pointercancel', stop); wrap.addEventListener('lostpointercapture', stop);
-  wrap.addEventListener('keydown', e => {
-    if (!keySpout) keySpout = { x: W / 2, y: 30 };
-    const m = { ArrowLeft: [-16, 0], ArrowRight: [16, 0], ArrowUp: [0, -16], ArrowDown: [0, 16] }[e.key];
-    if (m) { e.preventDefault(); keySpout.x = clamp(keySpout.x + m[0], 8, W - 8); keySpout.y = clamp(keySpout.y + m[1], 8, H - 8); }
-    if (e.key === ' ' || e.key === 'Enter') { e.preventDefault(); for (let i = 0; i < 3; i++) add(keySpout.x + (i - 1) * 6, keySpout.y, (i - 1) * 0.8); }
-  });
-  $('#spill-wipe').addEventListener('click', () => { blobs = []; count = 0; countEl.textContent = '0'; wrap.classList.remove('used'); draw(); });
-  new ResizeObserver(size).observe(wrap);
-  return { size };
-})();
-hooks.spill = () => spill.size();
 
 /* ---------- Cup Pet ---------- */
 const pet = (() => {
