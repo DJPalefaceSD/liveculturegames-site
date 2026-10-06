@@ -20,7 +20,7 @@
     <p class="eyebrow">P8 ON THE GRID · MEDIUM · WHAT YOUR HANDS DO</p>
     <h1 class="car-name">Pop</h1>
     <p class="car-tag">Open a link or a file in its own window, straight from the prompt.</p>
-    <div class="chips"><span class="tyre tyre-medium" title="MEDIUM · Controls"><i></i>MEDIUM · Controls</span><span class="flag flag-green">ON TRACK</span><span class="chip">v0.1.0</span><span class="chip">tested on Claude Code 2.1.287 on Windows</span></div>
+    <div class="chips"><span class="tyre tyre-medium" title="MEDIUM · Controls"><i></i>MEDIUM · Controls</span><span class="flag flag-green">ON TRACK</span><span class="chip">v0.1.1</span><span class="chip">tested on Claude Code 2.1.287 on Windows</span></div>
   </div>
   <div class="wheel" aria-label="What it looks like in the terminal">
     <div class="revs" aria-hidden="true"><i class="rev rev-g"></i><i class="rev rev-g"></i><i class="rev rev-g"></i><i class="rev rev-g"></i><i class="rev rev-g"></i><i class="rev rev-r"></i><i class="rev rev-r"></i><i class="rev rev-r"></i><i class="rev rev-r"></i><i class="rev rev-r"></i><i class="rev rev-b"></i><i class="rev rev-b"></i><i class="rev rev-b"></i><i class="rev rev-b"></i><i class="rev rev-b"></i></div>
@@ -32,11 +32,11 @@
 <section class="car-tabs">
   <div class="tabs" role="tablist" aria-label="Pop">
     <button class="tab on" role="tab" aria-selected="true" data-panel="radio" type="button">Team radio <em>2</em></button>
-    <button class="tab" role="tab" aria-selected="false" data-panel="notes" type="button">Engineer's notes <em>1</em></button>
+    <button class="tab" role="tab" aria-selected="false" data-panel="notes" type="button">Engineer's notes <em>2</em></button>
     <button class="tab" role="tab" aria-selected="false" data-panel="pit" type="button">Pit stop</button>
   </div>
   <div class="panel" data-panel="radio"><div class="radio-row"><code>/pop example.com</code><span>opens a web page. A bare domain gets https in front.</span><button class="btn btn-copy" type="button" data-copy="/pop example.com">Copy</button></div><div class="radio-row"><code>/pop C:/notes/plan.md</code><span>opens a file in the app your system uses for it.</span><button class="btn btn-copy" type="button" data-copy="/pop C:/notes/plan.md">Copy</button></div></div>
-  <div class="panel" data-panel="notes" hidden><details open><summary><span class="lap">L1</span>It uses your system's own opener: Start-Process on Windows, open on macOS, and xdg-open on Linux.</summary><div class="note-body"><p>The address goes to that program as an environment value, never pasted into a command line. Nothing is sent anywhere else.</p></div></details></div>
+  <div class="panel" data-panel="notes" hidden><details open><summary><span class="lap">L1</span>It uses your system's own opener: Start-Process on Windows, open on macOS, and xdg-open on Linux.</summary><div class="note-body"><p>The address goes to that program as an environment value, never pasted into a command line. Nothing is sent anywhere else.</p></div></details><details><summary><span class="lap">L2</span>What it runs and sends</summary><div class="note-body"><p>Nothing goes to any service from the mod itself. Here is each thing, plainly.</p><p><strong>What it sends, and where.</strong></p><ul><li>The link or path you give <code>/pop</code> goes to your system's own opener program, on this machine. That is the only place the mod sends it.</li><li>The opener then opens it: a link in your web browser, a file in the app your system uses for it. That is the same as clicking it yourself.</li><li>The way out is <code>$.process.run</code>, Claude Code's call for starting a program on your machine. Pop uses it only to start the opener below.</li></ul><p><strong>Which programs it runs, and why.</strong></p><ul><li>One opener program, to open your link or file. It tries these in order and stops at the first that works:</li><li>Windows: <code>powershell.exe -NoProfile -Command &quot;Start-Process -FilePath $env:POP_TARGET&quot;</code></li><li>macOS: <code>open &lt;your link or path&gt;</code></li><li>Linux: <code>xdg-open &lt;your link or path&gt;</code></li><li>On Windows the command is fixed text. Your link goes in as the environment value <code>POP_TARGET</code>, never inside the command.</li><li>On macOS and Linux the program name is fixed. Your link or path is its one argument, passed straight to it, never through a shell.</li><li>Each try stops after 8 seconds. It runs only when you type <code>/pop</code>.</li></ul><p><strong>What it puts in the prompts it submits.</strong></p><ul><li>It submits no prompts. It never touches your prompt box.</li></ul><p><strong>What each hook does.</strong></p><ul><li><code>session.start</code>: adds the <code>/pop</code> command.</li><li><code>command.run</code> for <code>pop</code>: puts https in front of a bare domain, runs the opener, and says whether it opened.</li></ul></div></details></div>
   <div class="panel" data-panel="pit" hidden>
     <div class="board-sign">
       <p class="sign-step"><b>BOX 1</b> add the garage (once)</p><div class="copyrow"><code>/plugin marketplace add DJPalefaceSD/rostech-mods</code><button class="btn btn-copy" type="button" data-copy="/plugin marketplace add DJPalefaceSD/rostech-mods">Copy</button></div><p class="sign-step"><b>BOX 2</b> fit Pop</p><div class="copyrow"><code>/plugin install pop@rostech</code><button class="btn btn-copy" type="button" data-copy="/plugin install pop@rostech">Copy</button></div>
@@ -48,7 +48,7 @@
   <a href="index.html#grid" class="pager-home"><small>BACK TO</small><b>The grid</b></a>
   <a href="shot.html" style="--live: var(--medium)"><small>P9 ▶</small><b>Shot</b></a>
 </nav>
-<footer class="foot"><span>Rostech.io · design mockup</span><span>Built Oct 5, 2026, 9:07 AM PT from plugins/pop/README.md and plugin.json.</span></footer>
+<footer class="foot"><span>Rostech.io · design mockup</span><span>Built Oct 6, 2026, 11:03 AM PT from plugins/pop/README.md and plugin.json.</span></footer>
 </div>
 <script src="site.js"></script>
 </body>

@@ -20,7 +20,7 @@
     <p class="eyebrow">P2 ON THE GRID · SOFT · WHAT THE DASH READS OUT</p>
     <h1 class="car-name">Speedometer</h1>
     <p class="car-tag">A speedometer above the prompt: how full the context window is, from 0 to MAX.</p>
-    <div class="chips"><span class="tyre tyre-soft" title="SOFT · Gauges"><i></i>SOFT · Gauges</span><span class="flag flag-green">ON TRACK</span><span class="chip">v0.1.9</span><span class="chip">tested on Claude Code 2.1.287</span></div>
+    <div class="chips"><span class="tyre tyre-soft" title="SOFT · Gauges"><i></i>SOFT · Gauges</span><span class="flag flag-green">ON TRACK</span><span class="chip">v0.1.10</span><span class="chip">tested on Claude Code 2.1.287</span></div>
   </div>
   <div class="wheel" aria-label="What it looks like in the terminal">
     <div class="revs" aria-hidden="true"><i class="rev rev-g"></i><i class="rev rev-g"></i><i class="rev rev-g"></i><i class="rev rev-g"></i><i class="rev rev-g"></i><i class="rev rev-r"></i><i class="rev rev-r"></i><i class="rev rev-r"></i><i class="rev rev-r"></i><i class="rev rev-r"></i><i class="rev rev-b"></i><i class="rev rev-b"></i><i class="rev rev-b"></i><i class="rev rev-b"></i><i class="rev rev-b"></i></div>
@@ -32,11 +32,11 @@
 <section class="car-tabs">
   <div class="tabs" role="tablist" aria-label="Speedometer">
     <button class="tab on" role="tab" aria-selected="true" data-panel="radio" type="button">Team radio <em>2</em></button>
-    <button class="tab" role="tab" aria-selected="false" data-panel="notes" type="button">Engineer's notes <em>2</em></button>
+    <button class="tab" role="tab" aria-selected="false" data-panel="notes" type="button">Engineer's notes <em>3</em></button>
     <button class="tab" role="tab" aria-selected="false" data-panel="pit" type="button">Pit stop</button>
   </div>
   <div class="panel" data-panel="radio"><div class="radio-row"><code>/speed</code><span>or <code>/speedometer</code> prints the dial.</span><button class="btn btn-copy" type="button" data-copy="/speed">Copy</button></div><div class="radio-row"><code>/speed hide</code><span>and <code>/speed show</code> toggle the band.</span><button class="btn btn-copy" type="button" data-copy="/speed hide">Copy</button></div></div>
-  <div class="panel" data-panel="notes" hidden><details open><summary><span class="lap">L1</span>Read it like a car's dash: 0 on the left, MAX on the right.</summary><div class="note-body"><p>Green while there is room, yellow from 60%, red from 85%, with one toast when it redlines so you can <code>/compact</code> before Claude does it for you.</p></div></details><details><summary><span class="lap">L2</span>Gas Gauge's sibling on the same dash.</summary><div class="note-body"><p>The band draws in the terminal and in the Code tab of the Claude desktop app. It reads only the figures Claude Code already has, and sends nothing anywhere.</p></div></details></div>
+  <div class="panel" data-panel="notes" hidden><details open><summary><span class="lap">L1</span>Read it like a car's dash: 0 on the left, MAX on the right.</summary><div class="note-body"><p>Green while there is room, yellow from 60%, red from 85%, with one toast when it redlines so you can <code>/compact</code> before Claude does it for you.</p></div></details><details><summary><span class="lap">L2</span>Gas Gauge's sibling on the same dash.</summary><div class="note-body"><p>The band draws in the terminal and in the Code tab of the Claude desktop app. It reads only the figures Claude Code already has, and sends nothing anywhere.</p></div></details><details><summary><span class="lap">L3</span>What it runs and sends</summary><div class="note-body"><p>Nothing goes anywhere. Here is each thing, plainly.</p><p><strong>What it sends, and where.</strong></p><ul><li>Nothing. It reads how full the context window is from Claude Code, with <code>$.session.usage</code>, and shows it on your screen.</li><li>It stores nothing on disk.</li></ul><p><strong>Which programs it runs, and why.</strong></p><ul><li>None. It runs no programs.</li></ul><p><strong>What it puts in the prompts it submits.</strong></p><ul><li>It submits no prompts, and changes none of yours.</li></ul><p><strong>What each hook does.</strong></p><ul><li><code>session.start</code>: adds the <code>/speed</code> and <code>/speedometer</code> commands and reads the context fill.</li><li><code>session.measure</code>: takes the new fill, and shows one toast when it crosses 85%.</li><li><code>command.run</code> for <code>speed</code>, and for <code>speedometer</code>: prints the dial, or hides or shows the band.</li><li><code>ui.render</code> for <code>AbovePrompt</code>: draws the dial above the prompt.</li></ul></div></details></div>
   <div class="panel" data-panel="pit" hidden>
     <div class="board-sign">
       <p class="sign-step"><b>BOX 1</b> add the garage (once)</p><div class="copyrow"><code>/plugin marketplace add DJPalefaceSD/rostech-mods</code><button class="btn btn-copy" type="button" data-copy="/plugin marketplace add DJPalefaceSD/rostech-mods">Copy</button></div><p class="sign-step"><b>BOX 2</b> fit Speedometer</p><div class="copyrow"><code>/plugin install speedometer@rostech</code><button class="btn btn-copy" type="button" data-copy="/plugin install speedometer@rostech">Copy</button></div>
@@ -48,7 +48,7 @@
   <a href="index.html#grid" class="pager-home"><small>BACK TO</small><b>The grid</b></a>
   <a href="sticky-note.html" style="--live: var(--hard)"><small>P3 ▶</small><b>Sticky Note</b></a>
 </nav>
-<footer class="foot"><span>Rostech.io · design mockup</span><span>Built Oct 5, 2026, 9:07 AM PT from plugins/speedometer/README.md and plugin.json.</span></footer>
+<footer class="foot"><span>Rostech.io · design mockup</span><span>Built Oct 6, 2026, 11:03 AM PT from plugins/speedometer/README.md and plugin.json.</span></footer>
 </div>
 <script src="site.js"></script>
 </body>

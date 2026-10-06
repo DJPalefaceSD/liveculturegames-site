@@ -396,3 +396,14 @@ th, td { text-align: left; padding: 6px 10px; border-bottom: 1px solid #e3e3e0; 
 .onboard-tag b { font-family: var(--f-race); font-weight: 900; font-style: italic; text-transform: uppercase; }
 .onboard-tag span { color: var(--mute); font-size: .9rem; }
 .onboard-tag:hover span { color: var(--white); }
+
+/* 🏁 Official: listed in Anthropic's Claude Code plugin directory (his ask, 6 Oct 2026). */
+.official-line { margin: 0 0 1rem; font-size: 1.05rem; }
+.official-line a { color: var(--white); text-decoration: none; display: inline-flex; gap: .5rem; align-items: baseline; border-bottom: 2px solid var(--lime); padding-bottom: 2px; }
+.official-line a:hover { color: var(--lime); }
+.official-check { color: var(--lime); font-weight: 800; }
+.official-head { margin: 1.2rem 0 .6rem; }
+.official-head h3 { margin: 0; font-size: 1.35rem; display: flex; gap: .5rem; align-items: baseline; }
+.official-head h3 em { font-style: normal; opacity: .7; font-size: 1rem; }
+.official-head p { margin: .25rem 0 0; opacity: .8; }
+.rest-head { margin-top: 2.2rem; }

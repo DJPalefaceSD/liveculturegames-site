@@ -20,7 +20,7 @@
     <p class="eyebrow">P3 ON THE GRID · HARD · WHAT RIDES ALONG WITH YOU</p>
     <h1 class="car-name">Sticky Note</h1>
     <p class="car-tag">A note above the prompt that stays until you clear it.</p>
-    <div class="chips"><span class="tyre tyre-hard" title="HARD · Cabin"><i></i>HARD · Cabin</span><span class="flag flag-green">ON TRACK</span><span class="chip">v0.1.2</span><span class="chip">tested on Claude Code 2.1.287</span></div>
+    <div class="chips"><span class="tyre tyre-hard" title="HARD · Cabin"><i></i>HARD · Cabin</span><span class="flag flag-green">ON TRACK</span><span class="chip">v0.1.3</span><span class="chip">tested on Claude Code 2.1.287</span></div>
   </div>
   <div class="wheel" aria-label="What it looks like in the terminal">
     <div class="revs" aria-hidden="true"><i class="rev rev-g"></i><i class="rev rev-g"></i><i class="rev rev-g"></i><i class="rev rev-g"></i><i class="rev rev-g"></i><i class="rev rev-r"></i><i class="rev rev-r"></i><i class="rev rev-r"></i><i class="rev rev-r"></i><i class="rev rev-r"></i><i class="rev rev-b"></i><i class="rev rev-b"></i><i class="rev rev-b"></i><i class="rev rev-b"></i><i class="rev rev-b"></i></div>
@@ -32,11 +32,11 @@
 <section class="car-tabs">
   <div class="tabs" role="tablist" aria-label="Sticky Note">
     <button class="tab on" role="tab" aria-selected="true" data-panel="radio" type="button">Team radio <em>3</em></button>
-    <button class="tab" role="tab" aria-selected="false" data-panel="notes" type="button">Engineer's notes <em>1</em></button>
+    <button class="tab" role="tab" aria-selected="false" data-panel="notes" type="button">Engineer's notes <em>2</em></button>
     <button class="tab" role="tab" aria-selected="false" data-panel="pit" type="button">Pit stop</button>
   </div>
   <div class="panel" data-panel="radio"><div class="radio-row"><code>/note &lt;text&gt;</code><span>sticks a note.</span><button class="btn btn-copy" type="button" data-copy="/note &lt;text&gt;">Copy</button></div><div class="radio-row"><code>/note</code><span>shows the note you have.</span><button class="btn btn-copy" type="button" data-copy="/note">Copy</button></div><div class="radio-row"><code>/note done</code><span>, or the Done button, clears it. Your next message then carries one visible line saying which note you cleared and when, so Claude knows you are back.</span><button class="btn btn-copy" type="button" data-copy="/note done">Copy</button></div></div>
-  <div class="panel" data-panel="notes" hidden><details open><summary><span class="lap">L1</span>The note is kept across sessions on your own machine, in Claude Code's plugin store, until you clear it.</summary><div class="note-body"><p>It sends nothing anywhere. The band draws in the terminal and in the Code tab of the Claude desktop app.</p></div></details></div>
+  <div class="panel" data-panel="notes" hidden><details open><summary><span class="lap">L1</span>The note is kept across sessions on your own machine, in Claude Code's plugin store, until you clear it.</summary><div class="note-body"><p>It sends nothing anywhere. The band draws in the terminal and in the Code tab of the Claude desktop app.</p></div></details><details><summary><span class="lap">L2</span>What it runs and sends</summary><div class="note-body"><p>Nothing goes to any service from the mod itself. Here is each thing, plainly.</p><p><strong>What it sends, and where.</strong></p><ul><li>Your note stays on this machine, in Claude Code's plugin store, under the key <code>note</code>.</li><li>When you clear the note, your next message carries one added line naming it. That line goes to Anthropic inside your message, through Claude Code's own request. It makes no new connection.</li><li>It sends nothing else, anywhere.</li></ul><p><strong>Which programs it runs, and why.</strong></p><ul><li>None. It runs no programs.</li></ul><p><strong>What it puts in the prompts it submits.</strong></p><ul><li>It submits no prompts of its own.</li><li>It adds to the message you send, only after you clear a note: a blank line, then <code>(📌 Sticky note cleared at &lt;time&gt;: &quot;&lt;note&gt;&quot;)</code>.</li><li>That line is added once. Your next message goes out unchanged.</li></ul><p><strong>What each hook does.</strong></p><ul><li><code>session.start</code>: adds the <code>/note</code> command and loads your note from the plugin store.</li><li><code>command.run</code> for <code>note</code>: sets, shows or clears the note.</li><li><code>prompt.submit</code>: adds the cleared-note line to your message. With no note cleared, it passes your message on unchanged.</li><li><code>ui.render</code> for <code>AbovePrompt</code>: draws the note, with a Done button, above the prompt.</li></ul></div></details></div>
   <div class="panel" data-panel="pit" hidden>
     <div class="board-sign">
       <p class="sign-step"><b>BOX 1</b> add the garage (once)</p><div class="copyrow"><code>/plugin marketplace add DJPalefaceSD/rostech-mods</code><button class="btn btn-copy" type="button" data-copy="/plugin marketplace add DJPalefaceSD/rostech-mods">Copy</button></div><p class="sign-step"><b>BOX 2</b> fit Sticky Note</p><div class="copyrow"><code>/plugin install sticky-note@rostech</code><button class="btn btn-copy" type="button" data-copy="/plugin install sticky-note@rostech">Copy</button></div>
@@ -48,7 +48,7 @@
   <a href="index.html#grid" class="pager-home"><small>BACK TO</small><b>The grid</b></a>
   <a href="radio.html" style="--live: var(--hard)"><small>P4 ▶</small><b>Radio</b></a>
 </nav>
-<footer class="foot"><span>Rostech.io · design mockup</span><span>Built Oct 5, 2026, 9:07 AM PT from plugins/sticky-note/README.md and plugin.json.</span></footer>
+<footer class="foot"><span>Rostech.io · design mockup</span><span>Built Oct 6, 2026, 11:03 AM PT from plugins/sticky-note/README.md and plugin.json.</span></footer>
 </div>
 <script src="site.js"></script>
 </body>

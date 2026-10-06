@@ -20,7 +20,7 @@
     <p class="eyebrow">P6 ON THE GRID · SOFT · WHAT THE DASH READS OUT</p>
     <h1 class="car-name">Odometer</h1>
     <p class="car-tag">An odometer above the prompt: how long this session has run and what it has cost.</p>
-    <div class="chips"><span class="tyre tyre-soft" title="SOFT · Gauges"><i></i>SOFT · Gauges</span><span class="flag flag-green">ON TRACK</span><span class="chip">v0.1.1</span><span class="chip">tested on Claude Code 2.1.287</span></div>
+    <div class="chips"><span class="tyre tyre-soft" title="SOFT · Gauges"><i></i>SOFT · Gauges</span><span class="flag flag-green">ON TRACK</span><span class="chip">v0.1.2</span><span class="chip">tested on Claude Code 2.1.287</span></div>
   </div>
   <div class="wheel" aria-label="What it looks like in the terminal">
     <div class="revs" aria-hidden="true"><i class="rev rev-g"></i><i class="rev rev-g"></i><i class="rev rev-g"></i><i class="rev rev-g"></i><i class="rev rev-g"></i><i class="rev rev-r"></i><i class="rev rev-r"></i><i class="rev rev-r"></i><i class="rev rev-r"></i><i class="rev rev-r"></i><i class="rev rev-b"></i><i class="rev rev-b"></i><i class="rev rev-b"></i><i class="rev rev-b"></i><i class="rev rev-b"></i></div>
@@ -32,11 +32,11 @@
 <section class="car-tabs">
   <div class="tabs" role="tablist" aria-label="Odometer">
     <button class="tab on" role="tab" aria-selected="true" data-panel="radio" type="button">Team radio <em>2</em></button>
-    <button class="tab" role="tab" aria-selected="false" data-panel="notes" type="button">Engineer's notes <em>2</em></button>
+    <button class="tab" role="tab" aria-selected="false" data-panel="notes" type="button">Engineer's notes <em>3</em></button>
     <button class="tab" role="tab" aria-selected="false" data-panel="pit" type="button">Pit stop</button>
   </div>
   <div class="panel" data-panel="radio"><div class="radio-row"><code>/odometer</code><span>prints it.</span><button class="btn btn-copy" type="button" data-copy="/odometer">Copy</button></div><div class="radio-row"><code>/odometer hide</code><span>and <code>/odometer show</code> toggle it.</span><button class="btn btn-copy" type="button" data-copy="/odometer hide">Copy</button></div></div>
-  <div class="panel" data-panel="notes" hidden><details open><summary><span class="lap">L1</span>The cost is the figure <code>/cost</code> totals for the session.</summary><div class="note-body"><p>On a Claude plan that is what the session would cost at API prices, not a charge. The time counts from when the session first began, so a resumed session keeps its miles.</p></div></details><details><summary><span class="lap">L2</span>It sits beside Gas Gauge and Speedometer on the same dash.</summary><div class="note-body"><p>It reads only the figures Claude Code already has, and sends nothing anywhere. The band draws in the terminal and in the Code tab of the Claude desktop app.</p></div></details></div>
+  <div class="panel" data-panel="notes" hidden><details open><summary><span class="lap">L1</span>The cost is the figure <code>/cost</code> totals for the session.</summary><div class="note-body"><p>On a Claude plan that is what the session would cost at API prices, not a charge. The time counts from when the session first began, so a resumed session keeps its miles.</p></div></details><details><summary><span class="lap">L2</span>It sits beside Gas Gauge and Speedometer on the same dash.</summary><div class="note-body"><p>It reads only the figures Claude Code already has, and sends nothing anywhere. The band draws in the terminal and in the Code tab of the Claude desktop app.</p></div></details><details><summary><span class="lap">L3</span>What it runs and sends</summary><div class="note-body"><p>Nothing goes anywhere. Here is each thing, plainly.</p><p><strong>What it sends, and where.</strong></p><ul><li>Nothing. It reads the session's start time and cost from Claude Code, with <code>$.session.usage</code>, and shows them on your screen.</li><li>It stores nothing on disk.</li></ul><p><strong>Which programs it runs, and why.</strong></p><ul><li>None. It runs no programs.</li></ul><p><strong>What it puts in the prompts it submits.</strong></p><ul><li>It submits no prompts, and changes none of yours.</li></ul><p><strong>What each hook does.</strong></p><ul><li><code>session.start</code>: adds the <code>/odometer</code> command and reads the start time and cost.</li><li><code>session.measure</code>: takes the new cost each time Claude Code measures it.</li><li><code>command.run</code> for <code>odometer</code>: prints the reading, or hides or shows the band.</li><li><code>ui.render</code> for <code>AbovePrompt</code>: draws the dial above the prompt.</li></ul></div></details></div>
   <div class="panel" data-panel="pit" hidden>
     <div class="board-sign">
       <p class="sign-step"><b>BOX 1</b> add the garage (once)</p><div class="copyrow"><code>/plugin marketplace add DJPalefaceSD/rostech-mods</code><button class="btn btn-copy" type="button" data-copy="/plugin marketplace add DJPalefaceSD/rostech-mods">Copy</button></div><p class="sign-step"><b>BOX 2</b> fit Odometer</p><div class="copyrow"><code>/plugin install odometer@rostech</code><button class="btn btn-copy" type="button" data-copy="/plugin install odometer@rostech">Copy</button></div>
@@ -48,7 +48,7 @@
   <a href="index.html#grid" class="pager-home"><small>BACK TO</small><b>The grid</b></a>
   <a href="clip.html" style="--live: var(--medium)"><small>P7 ▶</small><b>Clip</b></a>
 </nav>
-<footer class="foot"><span>Rostech.io · design mockup</span><span>Built Oct 5, 2026, 9:07 AM PT from plugins/odometer/README.md and plugin.json.</span></footer>
+<footer class="foot"><span>Rostech.io · design mockup</span><span>Built Oct 6, 2026, 11:03 AM PT from plugins/odometer/README.md and plugin.json.</span></footer>
 </div>
 <script src="site.js"></script>
 </body>

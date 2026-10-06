@@ -20,6 +20,7 @@
     <p class="eyebrow">MODS FOR CLAUDE CODE · ROUND 01</p>
     <h1><span class="h1-race">Lights out.</span><span class="h1-serif">Your terminal is the cockpit.</span></h1>
     <p class="lede">Small mods that put a dash above the prompt: a fuel gauge, a speedometer, a tach, a glovebox for the notes that matter. Read it at a glance and keep your eyes on the road.</p>
+    <p class="official-line"><a href="#official"><span class="official-check" aria-hidden="true">✔</span><b>6 official mods</b> listed in Anthropic's Claude Code plugin directory ▸</a></p>
     <div class="hero-cta"><a class="btn btn-go" href="#grid">See the grid</a><a class="btn btn-ghost" href="#pitboard">Pit board: install</a></div>
   </div>
   <div class="gantry" aria-label="Start lights">
@@ -51,13 +52,14 @@
     <button class="tab on" role="tab" aria-selected="true" data-filter="all" type="button"><span class="tyre tyre-all"><i></i>ALL</span><em>19</em></button><button class="tab" role="tab" aria-selected="false" data-filter="soft" type="button"><span class="tyre tyre-soft" title="SOFT · Gauges"><i></i>SOFT · Gauges</span><em>5</em></button><button class="tab" role="tab" aria-selected="false" data-filter="medium" type="button"><span class="tyre tyre-medium" title="MEDIUM · Controls"><i></i>MEDIUM · Controls</span><em>6</em></button><button class="tab" role="tab" aria-selected="false" data-filter="hard" type="button"><span class="tyre tyre-hard" title="HARD · Cabin"><i></i>HARD · Cabin</span><em>6</em></button><button class="tab" role="tab" aria-selected="false" data-filter="inter" type="button"><span class="tyre tyre-inter" title="INTER · Security"><i></i>INTER · Security</span><em>2</em></button>
   </div>
   <p class="tab-say" id="tab-say">All 19 mods. Pick a tyre to see one family.</p>
+  <div class="official-head" id="official"><h3><span class="official-check" aria-hidden="true">✔</span> Official · in Anthropic's plugin directory <em>6</em></h3><p>These 6 passed Anthropic's review and are listed in the Claude Code plugin directory, as of Oct 6, 2026.</p></div>
   <div class="tower" id="tower">
 <a class="tower-row" href="gas-gauge.html" data-compound="soft" style="--live: var(--soft)">
     <span class="pos">P1</span>
     <span class="livery"></span>
     <span class="tower-name"><b>Gas Gauge</b><small>A fuel gauge above the prompt: how much of your Claude plan is left, and when it refills.</small></span>
     <span class="tyre tyre-soft tyre-sm" title="SOFT · Gauges"><i></i>Gauges</span>
-    <span class="ver">v0.2.1</span>
+    <span class="ver">v0.2.2</span>
     <span class="flag flag-green">ON TRACK</span>
   </a>
 <a class="tower-row" href="speedometer.html" data-compound="soft" style="--live: var(--soft)">
@@ -65,7 +67,7 @@
     <span class="livery"></span>
     <span class="tower-name"><b>Speedometer</b><small>A speedometer above the prompt: how full the context window is, from 0 to MAX.</small></span>
     <span class="tyre tyre-soft tyre-sm" title="SOFT · Gauges"><i></i>Gauges</span>
-    <span class="ver">v0.1.9</span>
+    <span class="ver">v0.1.10</span>
     <span class="flag flag-green">ON TRACK</span>
   </a>
 <a class="tower-row" href="sticky-note.html" data-compound="hard" style="--live: var(--hard)">
@@ -73,15 +75,42 @@
     <span class="livery"></span>
     <span class="tower-name"><b>Sticky Note</b><small>A note above the prompt that stays until you clear it.</small></span>
     <span class="tyre tyre-hard tyre-sm" title="HARD · Cabin"><i></i>Cabin</span>
+    <span class="ver">v0.1.3</span>
+    <span class="flag flag-green">ON TRACK</span>
+  </a>
+<a class="tower-row" href="odometer.html" data-compound="soft" style="--live: var(--soft)">
+    <span class="pos">P6</span>
+    <span class="livery"></span>
+    <span class="tower-name"><b>Odometer</b><small>An odometer above the prompt: how long this session has run and what it has cost.</small></span>
+    <span class="tyre tyre-soft tyre-sm" title="SOFT · Gauges"><i></i>Gauges</span>
     <span class="ver">v0.1.2</span>
     <span class="flag flag-green">ON TRACK</span>
   </a>
+<a class="tower-row" href="tach.html" data-compound="soft" style="--live: var(--soft)">
+    <span class="pos">P12</span>
+    <span class="livery"></span>
+    <span class="tower-name"><b>Tach</b><small>A tachometer above the prompt: how fast you are burning tokens, over a window you choose.</small></span>
+    <span class="tyre tyre-soft tyre-sm" title="SOFT · Gauges"><i></i>Gauges</span>
+    <span class="ver">v0.1.1</span>
+    <span class="flag flag-green">ON TRACK</span>
+  </a>
+<a class="tower-row" href="bumper-sticker.html" data-compound="hard" style="--live: var(--hard)">
+    <span class="pos">P14</span>
+    <span class="livery"></span>
+    <span class="tower-name"><b>Bumper Sticker</b><small>Your own words on the busy line while Claude works, in place of Baking, Brewing and the rest.</small></span>
+    <span class="tyre tyre-hard tyre-sm" title="HARD · Cabin"><i></i>Cabin</span>
+    <span class="ver">v0.1.1</span>
+    <span class="flag flag-green">ON TRACK</span>
+  </a>
+  </div>
+  <div class="official-head rest-head"><h3>The rest of the grid <em>13</em></h3><p>Built by Rostech and installed from our own garage. Not in Anthropic's directory yet.</p></div>
+  <div class="tower" id="tower-rest">
 <a class="tower-row" href="radio.html" data-compound="hard" style="--live: var(--hard)">
     <span class="pos">P4</span>
     <span class="livery"></span>
     <span class="tower-name"><b>Radio</b><small>A chime when Claude finishes a long turn, so you can look away.</small></span>
     <span class="tyre tyre-hard tyre-sm" title="HARD · Cabin"><i></i>Cabin</span>
-    <span class="ver">v0.2.0</span>
+    <span class="ver">v0.2.1</span>
     <span class="flag flag-green">ON TRACK</span>
   </a>
 <a class="tower-row" href="hands-off.html" data-compound="inter" style="--live: var(--inter)">
@@ -92,20 +121,12 @@
     <span class="ver">v0.1.4</span>
     <span class="flag flag-green">ON TRACK</span>
   </a>
-<a class="tower-row" href="odometer.html" data-compound="soft" style="--live: var(--soft)">
-    <span class="pos">P6</span>
-    <span class="livery"></span>
-    <span class="tower-name"><b>Odometer</b><small>An odometer above the prompt: how long this session has run and what it has cost.</small></span>
-    <span class="tyre tyre-soft tyre-sm" title="SOFT · Gauges"><i></i>Gauges</span>
-    <span class="ver">v0.1.1</span>
-    <span class="flag flag-green">ON TRACK</span>
-  </a>
 <a class="tower-row" href="clip.html" data-compound="medium" style="--live: var(--medium)">
     <span class="pos">P7</span>
     <span class="livery"></span>
     <span class="tower-name"><b>Clip</b><small>Put text on your clipboard from the prompt, cleaned of terminal clutter.</small></span>
     <span class="tyre tyre-medium tyre-sm" title="MEDIUM · Controls"><i></i>Controls</span>
-    <span class="ver">v0.1.0</span>
+    <span class="ver">v0.1.1</span>
     <span class="flag flag-green">ON TRACK</span>
   </a>
 <a class="tower-row" href="pop.html" data-compound="medium" style="--live: var(--medium)">
@@ -113,7 +134,7 @@
     <span class="livery"></span>
     <span class="tower-name"><b>Pop</b><small>Open a link or a file in its own window, straight from the prompt.</small></span>
     <span class="tyre tyre-medium tyre-sm" title="MEDIUM · Controls"><i></i>Controls</span>
-    <span class="ver">v0.1.0</span>
+    <span class="ver">v0.1.1</span>
     <span class="flag flag-green">ON TRACK</span>
   </a>
 <a class="tower-row" href="shot.html" data-compound="medium" style="--live: var(--medium)">
@@ -121,7 +142,7 @@
     <span class="livery"></span>
     <span class="tower-name"><b>Shot</b><small>Hand Claude the picture on your clipboard in one command.</small></span>
     <span class="tyre tyre-medium tyre-sm" title="MEDIUM · Controls"><i></i>Controls</span>
-    <span class="ver">v0.1.0</span>
+    <span class="ver">v0.1.1</span>
     <span class="flag flag-green">ON TRACK</span>
   </a>
 <a class="tower-row" href="pin.html" data-compound="hard" style="--live: var(--hard)">
@@ -129,7 +150,7 @@
     <span class="livery"></span>
     <span class="tower-name"><b>Pin</b><small>A short to-do list pinned above the prompt, ticked off with one click.</small></span>
     <span class="tyre tyre-hard tyre-sm" title="HARD · Cabin"><i></i>Cabin</span>
-    <span class="ver">v0.1.0</span>
+    <span class="ver">v0.1.1</span>
     <span class="flag flag-green">ON TRACK</span>
   </a>
 <a class="tower-row" href="logo.html" data-compound="hard" style="--live: var(--hard)">
@@ -140,14 +161,6 @@
     <span class="ver">v0.3.0</span>
     <span class="flag flag-green">ON TRACK</span>
   </a>
-<a class="tower-row" href="tach.html" data-compound="soft" style="--live: var(--soft)">
-    <span class="pos">P12</span>
-    <span class="livery"></span>
-    <span class="tower-name"><b>Tach</b><small>A tachometer above the prompt: how fast you are burning tokens, over a window you choose.</small></span>
-    <span class="tyre tyre-soft tyre-sm" title="SOFT · Gauges"><i></i>Gauges</span>
-    <span class="ver">v0.1.0</span>
-    <span class="flag flag-green">ON TRACK</span>
-  </a>
 <a class="tower-row" href="valet-mode.html" data-compound="inter" style="--live: var(--inter)">
     <span class="pos">P13</span>
     <span class="livery"></span>
@@ -156,20 +169,12 @@
     <span class="ver">v0.2.0</span>
     <span class="flag flag-green">ON TRACK</span>
   </a>
-<a class="tower-row" href="bumper-sticker.html" data-compound="hard" style="--live: var(--hard)">
-    <span class="pos">P14</span>
-    <span class="livery"></span>
-    <span class="tower-name"><b>Bumper Sticker</b><small>Your own words on the busy line while Claude works, in place of Baking, Brewing and the rest.</small></span>
-    <span class="tyre tyre-hard tyre-sm" title="HARD · Cabin"><i></i>Cabin</span>
-    <span class="ver">v0.1.0</span>
-    <span class="flag flag-green">ON TRACK</span>
-  </a>
 <a class="tower-row" href="horn.html" data-compound="medium" style="--live: var(--medium)">
     <span class="pos">P15</span>
     <span class="livery"></span>
     <span class="tower-name"><b>Horn</b><small>One chord to send now: /horn sets Ctrl+X Ctrl+X to send a waiting message right away, like a tap on the horn, and the hint under the prompt says so.</small></span>
     <span class="tyre tyre-medium tyre-sm" title="MEDIUM · Controls"><i></i>Controls</span>
-    <span class="ver">v0.2.0</span>
+    <span class="ver">v0.2.1</span>
     <span class="flag flag-green">ON TRACK</span>
   </a>
 <a class="tower-row" href="glovebox.html" data-compound="hard" style="--live: var(--hard)">
@@ -185,7 +190,7 @@
     <span class="livery"></span>
     <span class="tower-name"><b>Dashboard</b><small>A Dashboard button above the prompt that opens a panel you fill yourself: effort, helper model, launch buttons and a status row. Fully customisable: just ask your Claude to put what you want in it.</small></span>
     <span class="tyre tyre-medium tyre-sm" title="MEDIUM · Controls"><i></i>Controls</span>
-    <span class="ver">v0.1.1</span>
+    <span class="ver">v0.1.2</span>
     <span class="flag flag-green">ON TRACK</span>
   </a>
 <a class="tower-row" href="oil.html" data-compound="soft" style="--live: var(--soft)">
@@ -218,7 +223,7 @@
   </div>
 </section>
 
-<footer class="foot"><span>Rostech.io · design mockup</span><span>Built Oct 5, 2026, 9:07 AM PT from DJPalefaceSD/rostech-mods: every mod, version and word read off the repo.</span></footer>
+<footer class="foot"><span>Rostech.io · design mockup</span><span>Built Oct 6, 2026, 11:03 AM PT from DJPalefaceSD/rostech-mods: every mod, version and word read off the repo.</span></footer>
 </div>
 <script src="site.js"></script>
 </body>
