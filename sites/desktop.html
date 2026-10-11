@@ -351,6 +351,12 @@ img{display:block}
       <path d="M27 36h10" stroke="#fff" stroke-width="4" stroke-linecap="round"/>
       <path d="M26 48v10M38 48v10" stroke="#111" stroke-width="6" stroke-linecap="round"/>
     </symbol>
+    <!-- 🏎️ Rostech.io, a checkered flag. His words, 11 Oct 2026: "make the Rostech door a little icon on the desktop". -->
+    <symbol id="i-flag" viewBox="0 0 64 64">
+      <path d="M14 58V8" stroke="#111" stroke-width="5" stroke-linecap="round"/>
+      <path d="M16 10h36l-6 12 6 12H16z" fill="#fff" stroke="#111" stroke-width="5" stroke-linejoin="round"/>
+      <path d="M16 10h9v12h-9zM34 10h9v12h-9zM25 22h9v12h-9zM43 22h6l3 6-3 6h-6z" fill="#FF1493"/>
+    </symbol>
     <symbol id="i-lock" viewBox="0 0 64 64">
       <path d="M20 30V20a12 12 0 0124 0v10" fill="none" stroke="#111" stroke-width="6"/>
       <rect x="12" y="28" width="40" height="30" rx="8" fill="#8A8A8A" stroke="#111" stroke-width="5"/>
@@ -408,7 +414,7 @@ img{display:block}
     </div>
     <span class="studio">Live Culture Games</span>
     <div class="right">
-      <span class="chip" title="Drops spilled (a toy counter)"><svg aria-hidden="true"><use href="#i-drop"/></svg><span id="drops">0</span><span class="sr"> drops spilled</span></span>
+      <!-- 🗄️ RETIRED 11 Oct 2026, his words: "remove the little 10 drop counter thing at the top". The drops still fall; nothing counts them. -->
       <span class="chip"><span class="sr">Clock </span><time id="clock">--:--</time></span>
       <a class="btn small" href="mailto:ryan@liveculturegames.com">Mail us</a>
     </div>
@@ -424,7 +430,10 @@ img{display:block}
       <li><button class="icon" type="button" data-open="howto"><span class="ico"><svg aria-hidden="true"><use href="#i-team"/></svg></span><span class="lab">How we work</span></button></li>
       <li><button class="icon" type="button" data-open="toys"><span class="ico"><svg aria-hidden="true"><use href="#i-folder"/></svg></span><span class="lab">Toys/</span></button></li>
       <li><a class="icon" href="/figure-bench/"><span class="ico"><svg aria-hidden="true"><use href="#i-hero"/></svg></span><span class="lab">Figure Bench</span></a></li>
-      <li><button class="icon" type="button" data-open="culture" aria-describedby="culture-hint"><span class="ico"><svg aria-hidden="true"><use href="#i-folder"/></svg></span><span class="lab">first_culture/</span></button><span id="culture-hint" class="sr">Locked folder. Still fermenting.</span></li>
+      <!-- 🗄️ RETIRED 11 Oct 2026, his words: "remove first_culture off the littler home page". The folder's
+           window stays, and "Peek at what is fermenting" still opens it from the other places. Was:
+      <li><button class="icon" type="button" data-open="culture" aria-describedby="culture-hint">…first_culture/…</button></li> -->
+      <li><a class="icon" href="/rostech/"><span class="ico"><svg aria-hidden="true"><use href="#i-flag"/></svg></span><span class="lab">Rostech.io</span></a></li>
     </ul>
 
     <div class="say" id="cup-say" role="status" aria-live="polite"></div>
@@ -475,7 +484,7 @@ img{display:block}
 <p class="txt"><span class="h">Live Culture Games</span>A small game studio in Escondido, California.
 
 We grow games the way yogurt grows:
-with live cultures, a lid you peel, and a spoon.
+with live cultures.
 
 Toys on this desk: the Cup Pet
 and the Figure Bench.
@@ -805,7 +814,7 @@ function splash(host, n, size) {
     host.appendChild(d);
     if (RM) setTimeout(() => d.remove(), 300);
   }
-  drops += n; dropsEl.textContent = drops;
+  drops += n; if (dropsEl) dropsEl.textContent = drops;
   void r;
 }
 if (!RM) {

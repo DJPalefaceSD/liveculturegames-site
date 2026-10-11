@@ -73,6 +73,7 @@
   .chip[aria-pressed="true"] { background: var(--pink); border-color: var(--pink); color: #fff; }
   .sw { width: 28px; height: 28px; border-radius: 50%; border: 2px solid #000; flex: 0 0 auto; box-shadow: inset 0 0 0 2px rgba(255,255,255,.35); }
 
+  .chips[hidden] { display: none; }
   .stage { flex: 1 1 auto; position: relative; min-height: 0; }
   iframe { position: absolute; inset: 0; width: 100%; height: 100%; border: 0; display: block; background: #fff; }
 
@@ -96,14 +97,10 @@
 </style>
 </head>
 <body>
-  <header class="bar">
-    <a class="brand" href="./?site=desktop" aria-label="Live Culture Games, home">
-      <img src="cup-360.png" alt="">
-      <span>Live Culture Games</span>
-    </a>
-    <span class="label" id="pick">Pick a site</span>
-    <nav class="chips" aria-labelledby="pick" id="chips"></nav>
-  </header>
+  <!-- 🗄️ RETIRED 11 Oct 2026, his words: "remove the pick a site top bar and make the Rostech door a
+       little icon on the desktop". The bar (cup, "Pick a site", the Rostech.io chip) is gone; Rostech.io
+       is an icon on the Desktop now. git show 7367464:index.html has the bar. -->
+  <nav class="chips" id="chips" hidden></nav>
   <main class="stage">
     <iframe id="frame" title="Live Culture Games" allow="autoplay"></iframe>
   </main>
@@ -122,7 +119,7 @@
     { id: "space",   name: "Space",   file: "sites/space.html",   a: "#0b1024", b: "#ff1493", chip: false },
     // 🏎️ Rostech Racing, his ask 4 Oct 2026: "throw this up on the LCG site". Built by
     // ComicBookStudioSimulator/.claude/slate/rostech-site/build.js --standalone rostech
-    { id: "racing",  name: "Rostech.io", file: "rostech/index.html",  a: "#e8102e", b: "#0b0b0d", chip: true }
+    { id: "racing",  name: "Rostech.io", file: "rostech/index.html",  a: "#e8102e", b: "#0b0b0d", chip: false }  // 11 Oct 2026: an icon on the Desktop now, no chip
   ];
   var KEY = "lcg-site";
   var frame = document.getElementById("frame");
@@ -177,8 +174,8 @@
     });
     remember(site.id);
     var url = new URL(location.href);
-    url.searchParams.set("site", site.id);
-    history.replaceState(null, "", url);
+    if (site.id === "desktop") url.searchParams.delete("site"); else url.searchParams.set("site", site.id);
+    history.replaceState(null, "", url.pathname + url.search + url.hash);
   }
 
   // A link inside a site that leaves it (the Figure Bench, another page) opens
@@ -192,9 +189,11 @@
     } catch (e) {}
   });
 
+  // 🧼 Home is always the Desktop, at the bare address. His words, 11 Oct 2026: "I also want it to all
+  // resolve to liveculturegames.com not ?site=desktop". ?site=<id> still opens a toy whole; the
+  // Desktop never writes itself into the address, and a remembered pick no longer overrides home.
   var asked = new URLSearchParams(location.search).get("site");
-  var back = find(remembered());
-  show(find(asked) ? asked : (back && back.chip ? back.id : "desktop"), false);
+  show(find(asked) ? asked : "desktop", false);
 </script>
 </body>
 </html>
