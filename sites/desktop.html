@@ -707,11 +707,19 @@ function raise(w) {
   $$('.win').forEach(x => x.classList.toggle('front', x === w));
   updateTasks();
 }
+let centred = false;
 function openApp(key) {
   const w = wins[key]; if (!w) return;
   w.hidden = false; state[key] = 'open';
   if (!isMobile()) {
     if (!pos[key]) { const d = defaults[key] || [60, 60]; pos[key] = { x: d[0], y: d[1] }; }
+    // 🎯 About opens centred across the desk, clear of the icon columns. His SHOT and words, 11 Oct 2026:
+    // "see if the big about.txt window that opens with the site can be centered".
+    if (key === 'about' && !centred) {
+      centred = true;
+      const st = stage.getBoundingClientRect(), r = w.getBoundingClientRect();
+      pos[key].x = Math.max(0, Math.round((st.width - r.width) / 2));
+    }
     clampPos(w); apply(w);
   }
   raise(w);
