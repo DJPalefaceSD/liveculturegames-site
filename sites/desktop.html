@@ -132,6 +132,7 @@ img{display:block}
 .icon .ico svg,.icon .ico img{width:100%;height:100%}
 .icon .lab{font-family:var(--head);font-weight:600;font-size:18px;line-height:1.1;text-align:center;background:#fff;border:2px solid var(--ink);border-radius:999px;padding:3px 10px;max-width:100%}
 .icon:hover .ico{transform:translateY(-3px) scale(1.06)}
+.icon[href*="rostech.app"] .lab{max-width:none;white-space:nowrap} /* 11 Oct 2026: "rostech.app" fits its pill */
 .icon.sel,.icon:focus-visible{background:var(--blue);border-color:var(--ink)}
 .icon.sel .lab{background:var(--blue)}
 .icon[data-open="culture"] .ico{animation:wiggle 2.6s ease-in-out infinite}
@@ -433,7 +434,8 @@ img{display:block}
       <!-- 🗄️ RETIRED 11 Oct 2026, his words: "remove first_culture off the littler home page". The folder's
            window stays, and "Peek at what is fermenting" still opens it from the other places. Was:
       <li><button class="icon" type="button" data-open="culture" aria-describedby="culture-hint">…first_culture/…</button></li> -->
-      <li><a class="icon" href="/rostech/"><span class="ico"><svg aria-hidden="true"><use href="#i-flag"/></svg></span><span class="lab">Rostech</span></a></li>
+      <!-- 🏁 11 Oct 2026, his SHOT: "change this to rostech.app". The flag opens the real domain now. -->
+      <li><a class="icon" href="https://rostech.app/" rel="noopener"><span class="ico"><svg aria-hidden="true"><use href="#i-flag"/></svg></span><span class="lab">rostech.app</span></a></li>
     </ul>
 
     <div class="say" id="cup-say" role="status" aria-live="polite"></div>
